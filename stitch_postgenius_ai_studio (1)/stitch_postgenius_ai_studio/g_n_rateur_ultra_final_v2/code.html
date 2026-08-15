@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="fr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>PostGenius AI - Créez votre prochain hit</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@500&amp;family=Hanken+Grotesk:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        "colors": {
+                "error": "#ffb4ab",
+                "on-secondary-fixed-variant": "#47464a",
+                "surface": "#020205",
+                "secondary-fixed": "#e4e2e5",
+                "on-primary": "#3c0091",
+                "surface-container-highest": "#353437",
+                "outline-variant": "#494454",
+                "on-primary-fixed-variant": "#5516be",
+                "on-error": "#690005",
+                "secondary": "#c8c6c9",
+                "inverse-primary": "#6d3bd7",
+                "primary-container": "#a078ff",
+                "surface-container-lowest": "#0e0e10",
+                "primary": "#d0bcff",
+                "on-surface": "#e5e1e4",
+                "tertiary": "#ffb869",
+                "on-tertiary-fixed": "#2c1700",
+                "inverse-on-surface": "#313032",
+                "on-secondary": "#303033",
+                "primary-fixed-dim": "#d0bcff",
+                "secondary-container": "#47464a",
+                "surface-container": "#201f21",
+                "on-error-container": "#ffdad6",
+                "background": "#020205",
+                "surface-variant": "#353437",
+                "primary-fixed": "#e9ddff",
+                "on-primary-fixed": "#23005c",
+                "tertiary-container": "#ca801e",
+                "on-tertiary-container": "#3f2300",
+                "secondary-fixed-dim": "#c8c6c9",
+                "on-surface-variant": "#cbc3d7",
+                "tertiary-fixed-dim": "#ffb869",
+                "on-secondary-fixed": "#1b1b1e",
+                "inverse-surface": "#e5e1e4",
+                "outline": "#958ea0",
+                "on-primary-container": "#340080",
+                "surface-container-low": "#1c1b1d",
+                "on-secondary-container": "#b6b4b8",
+                "surface-bright": "#39393b",
+                "surface-tint": "#d0bcff",
+                "on-tertiary-fixed-variant": "#673d00",
+                "on-tertiary": "#482900",
+                "surface-container-high": "#2a2a2c",
+                "surface-dim": "#020205",
+                "tertiary-fixed": "#ffdcbb",
+                "on-background": "#e5e1e4",
+                "error-container": "#93000a"
+        },
+        "borderRadius": {
+                "DEFAULT": "0.125rem",
+                "lg": "0.25rem",
+                "xl": "0.5rem",
+                "full": "0.75rem"
+        },
+        "spacing": {
+                "gutter": "24px",
+                "margin": "40px",
+                "unit": "4px",
+                "container-max": "1200px"
+        },
+        "fontFamily": {
+                "body-base": [
+                        "Hanken Grotesk"
+                ],
+                "headline-md": [
+                        "Hanken Grotesk"
+                ],
+                "headline-lg-mobile": [
+                        "Hanken Grotesk"
+                ],
+                "label-sm": [
+                        "JetBrains Mono"
+                ],
+                "display-lg": [
+                        "Hanken Grotesk"
+                ],
+                "data-mono": [
+                        "Hanken Grotesk"
+                ],
+                "headline-lg": [
+                        "Hanken Grotesk"
+                ],
+                "body-md": [
+                        "Hanken Grotesk"
+                ],
+                "body-lg": [
+                        "Hanken Grotesk"
+                ],
+                "label-caps": [
+                        "Hanken Grotesk"
+                ],
+                "headline-sm": [
+                        "Hanken Grotesk"
+                ]
+        }
+    },
+  }
+</script>
+<style>
+        body {
+            background-color: #020205;
+            color: theme('colors.on-surface');
+            position: relative;
+            overflow-x: hidden;
+            min-height: 100vh;
+            font-family: 'Hanken Grotesk', sans-serif;
+        }
+
+        /* Glassmorphism Luxe Components */
+        .glass-card {
+            background-color: rgba(2, 2, 5, 0.5) !important;
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: theme('borderRadius.xl');
+        }
+
+        .glass-input {
+            background-color: rgba(2, 2, 5, 0.6) !important;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            color: theme('colors.on-surface');
+            transition: all 0.2s ease;
+        }
+        
+        .glass-input:focus {
+            border-color: #8B5CF6;
+            box-shadow: 0 0 0 1px #8B5CF6;
+            outline: none;
+        }
+
+        .glass-button-primary {
+            background-color: #8B5CF6;
+            color: #e5e1e4;
+            transition: background-color 0.2s ease;
+            border: none;
+        }
+        
+        .glass-button-primary:hover {
+            background-color: #7C3AED;
+        }
+
+        .glass-button-ghost {
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            color: theme('colors.on-surface-variant');
+            transition: all 0.2s ease;
+        }
+
+        .glass-button-ghost:hover {
+            background: rgba(2, 2, 5, 0.8);
+            color: theme('colors.on-surface');
+        }
+
+        .selectable-card {
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background-color: rgba(2, 2, 5, 0.6) !important;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .selectable-card.active {
+            border-color: #8B5CF6;
+            background-color: rgba(139, 92, 246, 0.15) !important;
+            color: #8B5CF6;
+        }
+        
+        /* Custom Range Slider */
+        input[type=range] {
+            -webkit-appearance: none;
+            background: transparent;
+        }
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 16px;
+            width: 16px;
+            border-radius: 50%;
+            background: #8B5CF6;
+            cursor: pointer;
+            margin-top: -6px;
+        }
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 4px;
+            cursor: pointer;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 2px;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+    #webgl-canvas {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        z-index: -1;
+        pointer-events: none;
+        background-color: #020205;
+    }
+  </style>
+</head>
+<body class="antialiased min-h-screen pb-24 md:pb-0 font-body-base text-on-surface bg-[#020205]">
+{{DATA:ANIMATION:ANIMATION_31}}
+<!-- TopAppBar -->
+<header class="w-full sticky top-0 z-50 backdrop-blur-xl border-b border-white/10 flex justify-between items-center px-6 py-1 h-16 bg-transparent">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full overflow-hidden border border-white/10 relative cursor-pointer hover:opacity-80 transition-opacity active:scale-95 duration-400 cubic-bezier(0.2, 0.8, 0.2, 1)">
+<img class="w-full h-full object-cover" data-alt="User profile" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBsPektUMF4e-b3qFV--gl_PkK5gG2RbzNnHaYjO6pfMFoq3R0k8EqDH707BHjkxbwfXzj4Yo0cBxaOK2qZeftDIHahJAqLDhBZBGUYj0XVW8O2bP4tIdeV1GZLn4YrIcOSbooAKdMf1USU5RmWp8bS7qs_ecyJpbwcz4NdQJow6YONNG1gpLZpEVoocZM3R526NJT9HLhitRk9WbRuG-79sd1ny1IB5CdZmOEWOzHPy45-V_4bHYsUng"/>
+<div class="absolute bottom-0 right-0 w-2.5 h-2.5 bg-green-500 rounded-full border-2 border-surface"></div>
+</div>
+<h1 class="text-[20px] font-extrabold text-primary tracking-tighter cursor-pointer hover:opacity-80 transition-opacity">PostGenius AI</h1>
+</div>
+<div class="flex items-center gap-3">
+<div class="px-3 py-1.5 flex items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity active:scale-95 duration-400">
+<span class="text-primary font-headline-sm">⚡ 450 Credits</span>
+</div>
+</div>
+</header>
+<!-- Main Layout -->
+<main class="max-w-[1200px] mx-auto px-6 py-10">
+<!-- Header Section -->
+<div class="mb-10">
+<h2 class="text-3xl font-bold text-gray-200 mb-2 tracking-tight">Créez votre prochain hit</h2>
+<p class="text-base text-gray-400">Configurez l'IA pour générer un script viral sur mesure.</p>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+<!-- Left Column: Form Controls (8 cols) -->
+<div class="lg:col-span-8 space-y-8">
+<!-- Section 1: Subject & Network -->
+<div class="glass-card p-8 space-y-6">
+<div>
+<label class="block text-xs font-semibold text-gray-400 uppercase tracking-[0.1em] mb-3">Sujet de la vidéo</label>
+<textarea class="glass-input w-full rounded-lg p-4 text-base min-h-[120px] resize-none" placeholder="Ex: Les 3 secrets pour devenir développeur freelance en 2024..."></textarea>
+</div>
+<div class="pt-2">
+<label class="block text-xs font-semibold text-gray-400 uppercase tracking-[0.1em] mb-3">Réseau cible</label>
+<div class="grid grid-cols-3 gap-4">
+<div class="selectable-card active p-4 flex flex-col items-center justify-center gap-2 rounded-lg text-center" onclick="toggleActive(this)">
+<span class="material-symbols-outlined text-xl mb-1">music_note</span>
+<span class="text-sm font-medium">TikTok</span>
+</div>
+<div class="selectable-card p-4 flex flex-col items-center justify-center gap-2 rounded-lg text-center" onclick="toggleActive(this)">
+<span class="material-symbols-outlined text-xl mb-1">photo_camera</span>
+<span class="text-sm font-medium">Reels</span>
+</div>
+<div class="selectable-card p-4 flex flex-col items-center justify-center gap-2 rounded-lg text-center" onclick="toggleActive(this)">
+<span class="material-symbols-outlined text-xl mb-1">play_circle</span>
+<span class="text-sm font-medium">Shorts</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Section 2: Market & Tone -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+<div class="glass-card p-8 space-y-5">
+<label class="block text-xs font-semibold text-gray-400 uppercase tracking-[0.1em]">Marché &amp; Culture</label>
+<div class="space-y-3">
+<label class="flex items-center gap-3 p-3 glass-input rounded-lg cursor-pointer hover:bg-white/5">
+<input checked="" class="text-[#8B5CF6] bg-transparent border-white/10 focus:ring-[#8B5CF6] focus:ring-offset-transparent" name="market" type="radio"/>
+<span class="text-sm text-gray-300">🌍 Afrique de l'Ouest</span>
+</label>
+<label class="flex items-center gap-3 p-3 glass-input rounded-lg cursor-pointer hover:bg-white/5">
+<input class="text-[#8B5CF6] bg-transparent border-white/10 focus:ring-[#8B5CF6] focus:ring-offset-transparent" name="market" type="radio"/>
+<span class="text-sm text-gray-300">🇫🇷 France</span>
+</label>
+<label class="flex items-center gap-3 p-3 glass-input rounded-lg cursor-pointer hover:bg-white/5">
+<input class="text-[#8B5CF6] bg-transparent border-white/10 focus:ring-[#8B5CF6] focus:ring-offset-transparent" name="market" type="radio"/>
+<span class="text-sm text-gray-300">🇨🇦 Canada</span>
+</label>
+<label class="flex items-center gap-3 p-3 glass-input rounded-lg cursor-pointer hover:bg-white/5">
+<input class="text-[#8B5CF6] bg-transparent border-white/10 focus:ring-[#8B5CF6] focus:ring-offset-transparent" name="market" type="radio"/>
+<span class="text-sm text-gray-300">🇺🇸 USA</span>
+</label>
+</div>
+</div>
+<div class="glass-card p-8 space-y-5">
+<label class="block text-xs font-semibold text-gray-400 uppercase tracking-[0.1em]">Ton de la vidéo</label>
+<div class="grid grid-cols-2 gap-3">
+<div class="selectable-card active p-3 text-center rounded-lg text-sm font-medium" onclick="toggleActive(this)">Éducatif</div>
+<div class="selectable-card p-3 text-center rounded-lg text-sm font-medium" onclick="toggleActive(this)">Humoristique</div>
+<div class="selectable-card p-3 text-center rounded-lg text-sm font-medium" onclick="toggleActive(this)">Inspirant</div>
+<div class="selectable-card p-3 text-center rounded-lg text-sm font-medium" onclick="toggleActive(this)">Polémique</div>
+<div class="selectable-card p-3 text-center rounded-lg text-sm font-medium" onclick="toggleActive(this)">Storytelling</div>
+<div class="selectable-card p-3 text-center rounded-lg text-sm font-medium" onclick="toggleActive(this)">Vlog</div>
+</div>
+</div>
+</div>
+<!-- Section 3: Details (Format, Duration, CTA) -->
+<div class="glass-card p-8 space-y-8">
+<div>
+<div class="flex justify-between mb-4">
+<label class="text-xs font-semibold text-gray-400 uppercase tracking-[0.1em]">Durée estimée</label>
+<span class="text-sm font-medium text-[#8B5CF6]" id="duration-val">45 secondes</span>
+</div>
+<input class="w-full" max="90" min="15" oninput="document.getElementById('duration-val').innerText = this.value + ' secondes'" step="15" type="range" value="45"/>
+<div class="flex justify-between text-xs text-gray-500 mt-3 font-medium">
+<span>15s</span>
+<span>30s</span>
+<span>45s</span>
+<span>60s</span>
+<span>90s+</span>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div>
+<label class="block text-xs font-semibold text-gray-400 uppercase tracking-[0.1em] mb-3">Appel à l'action (CTA)</label>
+<select class="glass-input w-full rounded-lg p-3 text-sm appearance-none">
+<option class="bg-[#020205]">Abonnement</option>
+<option class="bg-[#020205]">Lien en bio</option>
+<option class="bg-[#020205]">Commentaire</option>
+<option class="bg-[#020205]">Sauvegarde</option>
+<option class="bg-[#020205]">Partage</option>
+</select>
+</div>
+<div>
+<label class="block text-xs font-semibold text-gray-400 uppercase tracking-[0.1em] mb-3">Audience</label>
+<input class="glass-input w-full rounded-lg p-3 text-sm" placeholder="Ex: Débutants, Pro, Ados..." type="text"/>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Column: Summary & Actions (4 cols) -->
+<div class="lg:col-span-4 space-y-6">
+<!-- Generation Widget -->
+<div class="glass-card p-8 sticky top-24">
+<div class="flex flex-col mb-8">
+<h3 class="text-lg font-semibold text-gray-200 mb-1 tracking-tight">Prêt à générer</h3>
+<p class="text-sm text-gray-400">Coût estimé: 15 credits</p>
+</div>
+<!-- Progress/Credits -->
+<div class="mb-8">
+<div class="flex justify-between text-xs font-semibold text-gray-400 uppercase tracking-wide mb-3">
+<span>Crédits</span>
+<span class="text-gray-200">450 / 500</span>
+</div>
+<div class="h-1.5 w-full bg-white/10 rounded-full overflow-hidden">
+<div class="h-full bg-[#8B5CF6] rounded-full" style="width: 90%;"></div>
+</div>
+</div>
+<div class="space-y-4">
+<button class="glass-button-primary w-full py-3.5 rounded-lg text-base font-semibold flex items-center justify-center gap-2">
+                            Générer le Script
+                        </button>
+<button class="glass-button-ghost w-full py-3 rounded-lg text-sm font-medium">
+                            Sauvegarder le brouillon
+                        </button>
+</div>
+<div class="mt-6 p-4 rounded-lg bg-white/5 border border-white/5 flex gap-3 items-start">
+<span class="material-symbols-outlined text-gray-400 text-sm mt-0.5">info</span>
+<p class="text-xs text-gray-400 leading-relaxed">
+                            Astuce: Les formats "Storytelling" performent 40% mieux sur le marché Français en ce moment.
+                        </p>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 w-full z-50 backdrop-blur-xl border-t border-white/10 bg-[#020205]/60 shadow-[0_-10px_40px_rgba(139,92,246,0.1)] flex justify-around items-center h-20 pb-safe px-2">
+<a class="flex flex-col items-center justify-center text-[#8B5CF6] font-bold bg-[#8B5CF6]/10 rounded-xl px-3 py-1 hover:text-[#8B5CF6]/80 active:scale-90 transition-all duration-400 cubic-bezier(0.2,0.8,0.2,1)" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+<span class="text-[10px] mt-1 font-data-mono">Studio</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant/70 hover:text-[#8B5CF6] active:scale-90 transition-all duration-400 cubic-bezier(0.2,0.8,0.2,1)" href="#">
+<span class="material-symbols-outlined">trending_up</span>
+<span class="text-[10px] mt-1 font-data-mono">Trending</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant/70 hover:text-[#8B5CF6] active:scale-90 transition-all duration-400 cubic-bezier(0.2,0.8,0.2,1)" href="#">
+<span class="material-symbols-outlined">history</span>
+<span class="text-[10px] mt-1 font-data-mono">History</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant/70 hover:text-[#8B5CF6] active:scale-90 transition-all duration-400 cubic-bezier(0.2,0.8,0.2,1)" href="#">
+<span class="material-symbols-outlined">account_balance_wallet</span>
+<span class="text-[10px] mt-1 font-data-mono">Wallet</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant/70 hover:text-[#8B5CF6] active:scale-90 transition-all duration-400 cubic-bezier(0.2,0.8,0.2,1)" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="text-[10px] mt-1 font-data-mono">Profile</span>
+</a>
+</nav>
+<script>
+    function toggleActive(element) {
+        const container = element.parentElement;
+        const siblings = container.querySelectorAll('.selectable-card');
+        siblings.forEach(el => el.classList.remove('active'));
+        element.classList.add('active');
+    }
+</script>
+</body></html>

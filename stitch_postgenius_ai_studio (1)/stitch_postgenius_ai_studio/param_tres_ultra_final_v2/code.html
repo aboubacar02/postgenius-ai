@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>PostGenius AI - Settings</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "error": "#ffb4ab",
+                        "primary-fixed": "#e9ddff",
+                        "surface-bright": "#39393b",
+                        "tertiary": "#ffb869",
+                        "surface": "#131315",
+                        "primary-container": "#a078ff",
+                        "outline": "#958ea0",
+                        "background": "#131315",
+                        "secondary-fixed": "#e4e2e5",
+                        "surface-variant": "#353437",
+                        "surface-tint": "#d0bcff",
+                        "inverse-on-surface": "#313032",
+                        "surface-container-lowest": "#0e0e10",
+                        "on-primary-fixed-variant": "#5516be",
+                        "surface-container": "#201f21",
+                        "outline-variant": "#494454",
+                        "inverse-primary": "#6d3bd7",
+                        "secondary": "#c8c6c9",
+                        "on-tertiary-fixed-variant": "#673d00",
+                        "primary": "#d0bcff",
+                        "surface-container-low": "#1c1b1d",
+                        "on-secondary-container": "#b6b4b8",
+                        "on-surface-variant": "#cbc3d7",
+                        "on-tertiary": "#482900",
+                        "on-background": "#e5e1e4",
+                        "surface-container-highest": "#353437",
+                        "on-tertiary-container": "#3f2300",
+                        "secondary-container": "#47464a",
+                        "inverse-surface": "#e5e1e4",
+                        "error-container": "#93000a",
+                        "surface-container-high": "#2a2a2c",
+                        "on-primary-fixed": "#23005c",
+                        "tertiary-fixed": "#ffdcbb",
+                        "on-surface": "#e5e1e4",
+                        "on-tertiary-fixed": "#2c1700",
+                        "on-secondary-fixed": "#1b1b1e",
+                        "on-primary": "#3c0091",
+                        "secondary-fixed-dim": "#c8c6c9",
+                        "surface-dim": "#131315",
+                        "on-primary-container": "#340080",
+                        "on-error": "#690005",
+                        "on-secondary-fixed-variant": "#47464a",
+                        "primary-fixed-dim": "#d0bcff",
+                        "on-secondary": "#303033",
+                        "tertiary-fixed-dim": "#ffb869",
+                        "tertiary-container": "#ca801e",
+                        "on-error-container": "#ffdad6"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "margin": "40px",
+                        "unit": "4px",
+                        "gutter": "24px",
+                        "container-max": "1200px"
+                    },
+                    "fontFamily": {
+                        "headline-lg-mobile": ["Hanken Grotesk"],
+                        "label-sm": ["JetBrains Mono"],
+                        "body-base": ["Hanken Grotesk"],
+                        "headline-md": ["Hanken Grotesk"],
+                        "display-lg": ["Hanken Grotesk"]
+                    },
+                    "fontSize": {
+                        "headline-lg-mobile": ["32px", { "lineHeight": "1.2", "fontWeight": "600" }],
+                        "label-sm": ["12px", { "lineHeight": "1.0", "letterSpacing": "0.05em", "fontWeight": "500" }],
+                        "body-base": ["16px", { "lineHeight": "1.6", "letterSpacing": "-0.01em", "fontWeight": "400" }],
+                        "headline-md": ["24px", { "lineHeight": "1.3", "letterSpacing": "-0.02em", "fontWeight": "500" }],
+                        "display-lg": ["48px", { "lineHeight": "1.1", "letterSpacing": "-0.04em", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            background-color: #020205;
+            color: #cbc3d7;
+        }
+        /* Custom Checkbox/Toggle Styles */
+        .toggle-checkbox:checked {
+            right: 0;
+            border-color: #8B5CF6;
+        }
+        .toggle-checkbox:checked + .toggle-label {
+            background-color: #8B5CF6;
+        }
+        .toggle-checkbox:checked + .toggle-label::after {
+            transform: translateX(100%);
+            border-color: #020205;
+        }
+        
+        .premium-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(139, 92, 246, 0.3), transparent);
+            z-index: 10;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="antialiased min-h-screen relative font-body-base overflow-x-hidden selection:bg-primary-container selection:text-[#020205]">
+<!-- Background Shader -->
+<div class="fixed inset-0 z-[-1] pointer-events-none opacity-60">
+    {{DATA:ANIMATION:ANIMATION_31}}
+</div>
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-[#020205]/60 dark:bg-[#020205]/60 backdrop-blur-xl border-b border-[#353437] shadow-none">
+<div class="flex justify-between items-center px-4 md:px-margin py-4 w-full max-w-container-max mx-auto">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[#8B5CF6]" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+<span class="font-headline-md text-headline-md font-bold text-[#8B5CF6] tracking-tight">PostGenius AI</span>
+</div>
+<!-- Desktop Nav (Hidden on mobile) -->
+<nav class="hidden md:flex gap-6 items-center">
+<a class="text-on-surface-variant hover:text-[#8B5CF6] transition-all font-label-sm text-label-sm uppercase" href="#">Studio</a>
+<a class="text-on-surface-variant hover:text-[#8B5CF6] transition-all font-label-sm text-label-sm uppercase" href="#">Trending</a>
+<a class="text-on-surface-variant hover:text-[#8B5CF6] transition-all font-label-sm text-label-sm uppercase" href="#">History</a>
+<a class="text-on-surface-variant hover:text-[#8B5CF6] transition-all font-label-sm text-label-sm uppercase" href="#">Wallet</a>
+<a class="text-[#8B5CF6] font-bold border-b-2 border-[#8B5CF6] pb-1 font-label-sm text-label-sm uppercase" href="#">Profile</a>
+</nav>
+<div class="flex items-center gap-4">
+<span class="text-on-surface-variant font-label-sm text-label-sm uppercase hidden md:inline-block">120 Credits</span>
+<button class="md:hidden text-on-surface hover:text-[#8B5CF6] transition-colors">
+<span class="material-symbols-outlined">menu</span>
+</button>
+</div>
+</div>
+</header>
+<!-- Main Content -->
+<main class="pt-24 pb-32 md:pb-24 px-4 md:px-margin max-w-container-max mx-auto">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
+<!-- Sidebar / Settings Nav (Desktop) -->
+<aside class="hidden lg:block lg:col-span-3">
+<div class="sticky top-28 bg-[#020205]/60 backdrop-blur-xl rounded-xl border border-[#353437] overflow-hidden relative premium-card">
+<nav class="flex flex-col py-4 relative z-10">
+<a class="px-6 py-3 border-l-2 border-[#8B5CF6] bg-[#8B5CF6]/10 text-[#8B5CF6] font-body-base flex items-center gap-3" href="#">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">person</span>
+                            General Settings
+                        </a>
+<a class="px-6 py-3 border-l-2 border-transparent text-on-surface-variant hover:bg-[#353437] hover:text-on-surface transition-colors font-body-base flex items-center gap-3" href="#">
+<span class="material-symbols-outlined text-[20px]">notifications</span>
+                            Notifications
+                        </a>
+<a class="px-6 py-3 border-l-2 border-transparent text-on-surface-variant hover:bg-[#353437] hover:text-on-surface transition-colors font-body-base flex items-center gap-3" href="#">
+<span class="material-symbols-outlined text-[20px]">shield_lock</span>
+                            Security
+                        </a>
+<a class="px-6 py-3 border-l-2 border-transparent text-on-surface-variant hover:bg-[#353437] hover:text-on-surface transition-colors font-body-base flex items-center gap-3" href="#">
+<span class="material-symbols-outlined text-[20px]">credit_card</span>
+                            Billing
+                        </a>
+</nav>
+</div>
+</aside>
+<!-- Settings Content -->
+<div class="lg:col-span-9 space-y-gutter">
+<h1 class="font-display-lg text-display-lg md:text-display-lg font-bold text-on-surface-variant tracking-tight mb-8">Settings</h1>
+<!-- Profile Section -->
+<section class="bg-[#020205]/60 backdrop-blur-xl border border-[#353437] rounded-xl p-6 md:p-8 premium-card relative">
+<h2 class="font-headline-md text-headline-md font-medium text-on-surface-variant mb-6">Profile</h2>
+<div class="flex flex-col md:flex-row items-start md:items-center gap-6 mb-8">
+<div class="relative group cursor-pointer">
+<img class="w-24 h-24 rounded-full object-cover border-2 border-[#353437] group-hover:border-[#8B5CF6] transition-colors" data-alt="A highly detailed, professional headshot avatar of a sophisticated user for a dark-mode luxury AI application. The image features a modern, cinematic lighting setup with soft, cool tones and a subtle violet rim light on a pure black background. The subject is well-dressed in minimalist dark attire, conveying a sense of authoritative calm and precision." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCrdBB6gFG0uIJRvtoRvExluWJE9P4ZQBLuHHS9IZAsB0xNotl_L66gr3AZjZyQYIzjLwEGICnNtfyOU46my-YG63CHKDH_esVUfud2v7LqMjxNRD2edDB0tlCrXxSx2v9nU9kS5T68pZdmMfYFWHH-wvWrspf-hS_VvRK1Qs8STN3PQlEN-4AChNN1HEnTqSxorZYwRVM5amqmBOqqQZum2jQ3svIsx481EH5GSsczRKOJHjhgluoj1g"/>
+<div class="absolute inset-0 bg-[#020205]/80 rounded-full opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
+<span class="material-symbols-outlined text-[#8B5CF6]">photo_camera</span>
+</div>
+</div>
+<div class="flex-1 space-y-4 w-full">
+<div>
+<label class="block font-label-sm text-label-sm text-on-surface-variant uppercase mb-2">Email Address</label>
+<input class="w-full bg-[#020205]/80 border border-[#353437] rounded-lg px-4 py-3 text-on-surface-variant focus:outline-none focus:border-[#8B5CF6] focus:ring-1 focus:ring-[#8B5CF6] transition-all font-body-base" readonly="" type="email" value="alex.vance@example.com"/>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<div>
+<label class="block font-label-sm text-label-sm text-on-surface-variant uppercase mb-2">First Name</label>
+<input class="w-full bg-[#020205]/80 border border-[#353437] rounded-lg px-4 py-3 text-on-surface-variant focus:outline-none focus:border-[#8B5CF6] focus:ring-1 focus:ring-[#8B5CF6] transition-all font-body-base" type="text" value="Alex"/>
+</div>
+<div>
+<label class="block font-label-sm text-label-sm text-on-surface-variant uppercase mb-2">Last Name</label>
+<input class="w-full bg-[#020205]/80 border border-[#353437] rounded-lg px-4 py-3 text-on-surface-variant focus:outline-none focus:border-[#8B5CF6] focus:ring-1 focus:ring-[#8B5CF6] transition-all font-body-base" type="text" value="Vance"/>
+</div>
+</div>
+</div>
+</div>
+<div class="flex justify-end">
+<button class="bg-[#8B5CF6] hover:bg-[#7c3aed] text-[#020205] px-6 py-2 rounded-lg font-label-sm text-label-sm uppercase tracking-wider transition-colors active:scale-95 duration-200">
+                            Save Changes
+                        </button>
+</div>
+</section>
+<!-- Utilisation & Facturation -->
+<section class="bg-[#020205]/60 backdrop-blur-xl border border-[#353437] rounded-xl p-6 md:p-8 premium-card relative">
+<h2 class="font-headline-md text-headline-md font-medium text-on-surface-variant mb-6">Utilisation &amp; Facturation</h2>
+<div class="flex flex-col md:flex-row items-center gap-8">
+<!-- Circular Chart -->
+<div class="relative w-32 h-32 flex-shrink-0">
+<svg class="w-full h-full transform -rotate-90" viewbox="0 0 36 36">
+<!-- Background Circle -->
+<path class="text-[#353437] stroke-current" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke-width="3"></path>
+<!-- Progress Circle -->
+<path class="text-[#8B5CF6] stroke-current transition-all duration-1000 ease-out" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke-dasharray="75, 100" stroke-linecap="round" stroke-width="3"></path>
+</svg>
+<div class="absolute inset-0 flex flex-col items-center justify-center">
+<span class="font-headline-md text-headline-md font-bold text-on-surface-variant">75%</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase text-[10px]">Used</span>
+</div>
+</div>
+<div class="flex-1 space-y-4 text-center md:text-left">
+<div>
+<h3 class="font-body-base text-lg text-on-surface-variant mb-1">Professional Plan</h3>
+<p class="text-on-surface-variant font-body-base text-sm">You have used 7,500 of your 10,000 monthly AI credits.</p>
+</div>
+<div class="flex flex-wrap justify-center md:justify-start gap-4 pt-2">
+<button class="bg-transparent border border-[#494454] hover:border-[#958ea0] text-on-surface-variant px-6 py-2 rounded-lg font-label-sm text-label-sm uppercase tracking-wider transition-colors active:scale-95 duration-200">
+                                    Manage Plan
+                                </button>
+<button class="bg-transparent hover:bg-[#353437] text-[#8B5CF6] px-6 py-2 rounded-lg font-label-sm text-label-sm uppercase tracking-wider transition-colors active:scale-95 duration-200">
+                                    Buy Credits
+                                </button>
+</div>
+</div>
+</div>
+</section>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-gutter">
+<!-- Préférences -->
+<section class="bg-[#020205]/60 backdrop-blur-xl border border-[#353437] rounded-xl p-6 premium-card relative">
+<h2 class="font-headline-md text-headline-md font-medium text-on-surface-variant mb-6">Préférences</h2>
+<div class="space-y-6">
+<div>
+<label class="block font-label-sm text-label-sm text-on-surface-variant uppercase mb-2">Language</label>
+<div class="relative">
+<select class="w-full bg-[#020205]/80 border border-[#353437] rounded-lg px-4 py-3 text-on-surface-variant appearance-none focus:outline-none focus:border-[#8B5CF6] focus:ring-1 focus:ring-[#8B5CF6] transition-all font-body-base cursor-pointer">
+<option value="en">English</option>
+<option selected="" value="fr">Français</option>
+<option value="es">Español</option>
+</select>
+<div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-on-surface-variant">
+<span class="material-symbols-outlined">expand_more</span>
+</div>
+</div>
+</div>
+<div class="pt-4 border-t border-[#353437]">
+<div class="flex items-center justify-between mb-4">
+<div>
+<h4 class="text-on-surface-variant font-body-base">Email Notifications</h4>
+<p class="text-on-surface-variant text-sm">Weekly usage reports &amp; alerts</p>
+</div>
+<!-- Toggle -->
+<label class="flex items-center cursor-pointer">
+<div class="relative">
+<input checked="" class="sr-only" type="checkbox"/>
+<div class="block bg-[#020205]/80 border border-[#494454] w-10 h-6 rounded-full transition-colors duration-300"></div>
+<div class="dot absolute left-1 top-1 bg-[#8B5CF6] w-4 h-4 rounded-full transition transform translate-x-4 duration-300"></div>
+</div>
+</label>
+</div>
+<div class="flex items-center justify-between">
+<div>
+<h4 class="text-on-surface-variant font-body-base">Marketing Updates</h4>
+<p class="text-on-surface-variant text-sm">New features and promotions</p>
+</div>
+<label class="flex items-center cursor-pointer">
+<div class="relative">
+<input class="sr-only" type="checkbox"/>
+<div class="block bg-[#020205]/80 border border-[#494454] w-10 h-6 rounded-full transition-colors duration-300"></div>
+<div class="dot absolute left-1 top-1 bg-[#494454] w-4 h-4 rounded-full transition duration-300"></div>
+</div>
+</label>
+</div>
+</div>
+</div>
+</section>
+<!-- Sécurité -->
+<section class="bg-[#020205]/60 backdrop-blur-xl border border-[#353437] rounded-xl p-6 premium-card relative">
+<h2 class="font-headline-md text-headline-md font-medium text-on-surface-variant mb-6">Sécurité</h2>
+<div class="space-y-6">
+<div class="bg-[#020205]/80 border border-[#353437] rounded-lg p-4 flex items-center justify-between">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-[#8B5CF6]/10 flex items-center justify-center text-[#8B5CF6]">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">password</span>
+</div>
+<div>
+<h4 class="text-on-surface-variant font-body-base">Password</h4>
+<p class="text-on-surface-variant text-sm">Last changed 3 months ago</p>
+</div>
+</div>
+<button class="text-[#8B5CF6] hover:text-[#7c3aed] transition-colors text-sm font-label-sm uppercase">Update</button>
+</div>
+<div class="bg-[#020205]/80 border border-[#353437] rounded-lg p-4 flex items-center justify-between">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-[#353437] flex items-center justify-center text-on-surface-variant">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">phonelink_lock</span>
+</div>
+<div>
+<h4 class="text-on-surface-variant font-body-base">Two-Factor (2FA)</h4>
+<p class="text-on-surface-variant text-sm">Currently disabled</p>
+</div>
+</div>
+<button class="bg-transparent border border-[#494454] hover:border-[#958ea0] text-on-surface-variant px-3 py-1 rounded-lg font-label-sm text-label-sm uppercase transition-colors">Enable</button>
+</div>
+</div>
+</section>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 w-full z-50 rounded-t-xl bg-[#020205]/80 backdrop-blur-xl shadow-2xl flex justify-around items-center py-3 px-4 border-t border-[#353437]">
+<a class="flex flex-col items-center justify-center text-on-surface-variant/70 hover:text-[#8B5CF6] transition-all active:scale-90 duration-150 gap-1 w-16" href="#">
+<span class="material-symbols-outlined">movie_filter</span>
+<span class="font-label-sm text-label-sm text-[10px]">Studio</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant/70 hover:text-[#8B5CF6] transition-all active:scale-90 duration-150 gap-1 w-16" href="#">
+<span class="material-symbols-outlined">trending_up</span>
+<span class="font-label-sm text-label-sm text-[10px]">Trending</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant/70 hover:text-[#8B5CF6] transition-all active:scale-90 duration-150 gap-1 w-16" href="#">
+<span class="material-symbols-outlined">history</span>
+<span class="font-label-sm text-label-sm text-[10px]">History</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant/70 hover:text-[#8B5CF6] transition-all active:scale-90 duration-150 gap-1 w-16" href="#">
+<span class="material-symbols-outlined">account_balance_wallet</span>
+<span class="font-label-sm text-label-sm text-[10px]">Wallet</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#8B5CF6] font-bold bg-[#8B5CF6]/10 rounded-full py-1 px-3 w-16 active:scale-90 duration-150 gap-1" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">person</span>
+<span class="font-label-sm text-label-sm text-[10px]">Profile</span>
+</a>
+</nav>
+<script>
+        // Simple toggle logic for custom styling if needed, handled primarily via CSS classes in this simplified version
+        document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                const dot = this.parentElement.querySelector('.dot');
+                if(this.checked) {
+                    dot.classList.add('translate-x-4', 'bg-[#8B5CF6]');
+                    dot.classList.remove('bg-[#494454]');
+                } else {
+                    dot.classList.remove('translate-x-4', 'bg-[#8B5CF6]');
+                    dot.classList.add('bg-[#494454]');
+                }
+            });
+        });
+    </script>
+</body></html>

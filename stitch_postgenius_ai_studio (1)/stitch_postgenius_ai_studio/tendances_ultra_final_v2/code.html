@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>PostGenius AI - Trending</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "error": "#ffb4ab",
+                        "primary-fixed": "#e9ddff",
+                        "surface-bright": "#1a1a1f",
+                        "tertiary": "#06b6d4",
+                        "surface": "#020205",
+                        "primary-container": "#4c1d95",
+                        "outline": "#4b4b54",
+                        "background": "#020205",
+                        "secondary-fixed": "#e4e2e5",
+                        "surface-variant": "#111116",
+                        "surface-tint": "#8b5cf6",
+                        "inverse-on-surface": "#313032",
+                        "surface-container-lowest": "#010103",
+                        "on-primary-fixed-variant": "#5516be",
+                        "surface-container": "#08080a",
+                        "outline-variant": "#2a2a35",
+                        "inverse-primary": "#6d3bd7",
+                        "secondary": "#c8c6c9",
+                        "on-tertiary-fixed-variant": "#0e7490",
+                        "primary": "#8b5cf6",
+                        "surface-container-low": "#050508",
+                        "on-secondary-container": "#b6b4b8",
+                        "on-surface-variant": "#a3a3b0",
+                        "on-tertiary": "#083344",
+                        "on-background": "#a3a3b0",
+                        "surface-container-highest": "#1c1c24",
+                        "on-tertiary-container": "#164e63",
+                        "secondary-container": "#272730",
+                        "inverse-surface": "#e5e1e4",
+                        "error-container": "#93000a",
+                        "surface-container-high": "#14141a",
+                        "on-primary-fixed": "#23005c",
+                        "tertiary-fixed": "#cffafe",
+                        "on-surface": "#c8c6c9",
+                        "on-tertiary-fixed": "#083344",
+                        "on-secondary-fixed": "#1b1b1e",
+                        "on-primary": "#c8c6c9",
+                        "secondary-fixed-dim": "#c8c6c9",
+                        "surface-dim": "#020205",
+                        "on-primary-container": "#e9ddff",
+                        "on-error": "#690005",
+                        "on-secondary-fixed-variant": "#47464a",
+                        "primary-fixed-dim": "#a78bfa",
+                        "on-secondary": "#303033",
+                        "tertiary-fixed-dim": "#22d3ee",
+                        "tertiary-container": "#0891b2",
+                        "on-error-container": "#ffdad6",
+                        "cyan": "#06b6d4",
+                        "cyan-dim": "#22d3ee"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem",
+                        "2xl": "1rem"
+                    },
+                    "spacing": {
+                        "margin": "40px",
+                        "unit": "4px",
+                        "gutter": "24px",
+                        "container-max": "1200px"
+                    },
+                    "fontFamily": {
+                        "headline-lg-mobile": ["Hanken Grotesk"],
+                        "label-sm": ["JetBrains Mono"],
+                        "body-base": ["Hanken Grotesk"],
+                        "headline-md": ["Hanken Grotesk"],
+                        "display-lg": ["Hanken Grotesk"]
+                    },
+                    "fontSize": {
+                        "headline-lg-mobile": ["32px", { "lineHeight": "1.2", "fontWeight": "600" }],
+                        "label-sm": ["12px", { "lineHeight": "1.0", "letterSpacing": "0.05em", "fontWeight": "500" }],
+                        "body-base": ["16px", { "lineHeight": "1.6", "letterSpacing": "-0.01em", "fontWeight": "400" }],
+                        "headline-md": ["24px", { "lineHeight": "1.3", "letterSpacing": "-0.02em", "fontWeight": "500" }],
+                        "display-lg": ["48px", { "lineHeight": "1.1", "letterSpacing": "-0.04em", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            background-color: #020205;
+            color: #c8c6c9;
+        }
+        .glass-panel {
+            background: rgba(8, 8, 10, 0.4);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(139, 92, 246, 0.15);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+        }
+        .glass-card {
+            background: rgba(17, 17, 22, 0.6);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(139, 92, 246, 0.05);
+            transition: all 0.3s ease;
+        }
+        .glass-card:hover {
+            border-color: rgba(139, 92, 246, 0.4);
+            background: rgba(20, 20, 26, 0.8);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(139, 92, 246, 0.1);
+        }
+        .premium-edge {
+            position: relative;
+        }
+        .premium-edge::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(139, 92, 246, 0.3), transparent);
+            z-index: 1;
+        }
+        /* Hide scrollbar for clean look */
+        ::-webkit-scrollbar {
+            display: none;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="font-body-base text-body-base bg-background min-h-screen relative overflow-x-hidden">
+<!-- Interactive WebGL Background -->
+<div class="fixed inset-0 z-0 pointer-events-none opacity-60 mix-blend-screen">
+    {{DATA:ANIMATION:ANIMATION_31}}
+</div>
+<!-- TopAppBar (Web) -->
+<header class="hidden md:flex fixed top-0 w-full z-50 bg-surface/40 backdrop-blur-2xl border-b border-primary/20 justify-between items-center px-margin py-4 transition-colors">
+<div class="flex items-center gap-2 font-headline-md text-headline-md font-bold text-primary tracking-tight cursor-pointer">
+<span class="material-symbols-outlined text-[28px]" data-icon="auto_awesome" data-weight="fill" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+            PostGenius AI
+        </div>
+<!-- Navigation Shell Web -->
+<nav class="flex gap-8 px-6 py-2 rounded-full glass-panel">
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors flex items-center gap-2" href="#">
+<span class="material-symbols-outlined" data-icon="movie_filter">movie_filter</span> Studio
+            </a>
+<a class="font-label-sm text-label-sm text-primary font-bold bg-primary/20 border border-primary/30 rounded-full py-1 px-4 flex items-center gap-2 shadow-[0_0_15px_rgba(139,92,246,0.2)]" href="#">
+<span class="material-symbols-outlined" data-icon="trending_up">trending_up</span> Trending
+            </a>
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors flex items-center gap-2" href="#">
+<span class="material-symbols-outlined" data-icon="history">history</span> History
+            </a>
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors flex items-center gap-2" href="#">
+<span class="material-symbols-outlined" data-icon="account_balance_wallet">account_balance_wallet</span> Wallet
+            </a>
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors flex items-center gap-2" href="#">
+<span class="material-symbols-outlined" data-icon="person">person</span> Profile
+            </a>
+</nav>
+<button class="bg-primary/20 text-primary font-label-sm text-label-sm px-4 py-2 rounded-full hover:bg-primary/30 transition-colors border border-primary/40 shadow-[0_0_10px_rgba(139,92,246,0.15)] backdrop-blur-md">
+            120 Credits
+        </button>
+</header>
+<!-- TopAppBar (Mobile) -->
+<header class="md:hidden fixed top-0 w-full z-50 bg-surface/40 backdrop-blur-2xl border-b border-primary/20 flex justify-between items-center px-4 py-4 transition-colors">
+<div class="flex items-center gap-2 font-headline-lg-mobile text-headline-lg-mobile font-bold text-primary tracking-tight">
+<span class="material-symbols-outlined text-[24px]" data-icon="auto_awesome" data-weight="fill" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+            PostGenius AI
+        </div>
+<button class="bg-primary/20 text-primary font-label-sm text-label-sm px-3 py-1.5 rounded-full border border-primary/40 backdrop-blur-md shadow-[0_0_10px_rgba(139,92,246,0.15)]">
+            120 Credits
+        </button>
+</header>
+<!-- Main Content Canvas -->
+<main class="relative z-10 pt-[80px] pb-[100px] md:pt-[100px] md:pb-margin px-4 md:px-margin max-w-container-max mx-auto w-full">
+<div class="mb-12 text-center md:text-left mt-8 md:mt-12">
+<h1 class="font-display-lg text-display-lg text-primary mb-2 tracking-tight">Trend Intelligence</h1>
+<p class="text-on-surface-variant text-body-base max-w-2xl">Real-time analysis of viral mechanics and niche momentum across major platforms.</p>
+</div>
+<!-- Bento Grid Layout -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
+<!-- Top Niches Module -->
+<section class="lg:col-span-8 glass-panel rounded-2xl p-6 premium-edge">
+<div class="flex justify-between items-center mb-6 border-b border-outline-variant pb-4">
+<h2 class="font-headline-md text-headline-md text-primary flex items-center gap-2">
+<span class="material-symbols-outlined text-primary drop-shadow-[0_0_8px_rgba(139,92,246,0.5)]" data-icon="radar">radar</span>
+                        Top Trending Niches
+                    </h2>
+<span class="font-label-sm text-label-sm text-primary-fixed-dim bg-primary/10 px-3 py-1 rounded-full border border-primary/20">Updated Live</span>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+<!-- Niche Card 1 -->
+<div class="glass-card rounded-xl p-4 cursor-pointer group">
+<div class="flex justify-between items-start mb-3">
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary transition-colors" data-icon="memory">memory</span>
+<span class="font-label-sm text-label-sm text-primary bg-primary/10 px-2 py-0.5 rounded text-xs border border-primary/20">98</span>
+</div>
+<h3 class="font-body-base text-body-base text-on-surface font-semibold mb-2">Tech &amp; AI</h3>
+<div class="w-full bg-surface-container h-1.5 rounded-full overflow-hidden border border-outline-variant/50">
+<div class="bg-gradient-to-r from-primary to-cyan h-full w-[98%] shadow-[0_0_10px_rgba(139,92,246,0.8)]"></div>
+</div>
+</div>
+<!-- Niche Card 2 -->
+<div class="glass-card rounded-xl p-4 cursor-pointer group">
+<div class="flex justify-between items-start mb-3">
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-cyan transition-colors" data-icon="sports_esports">sports_esports</span>
+<span class="font-label-sm text-label-sm text-cyan bg-cyan/10 px-2 py-0.5 rounded text-xs border border-cyan/20">94</span>
+</div>
+<h3 class="font-body-base text-body-base text-on-surface font-semibold mb-2">Gaming</h3>
+<div class="w-full bg-surface-container h-1.5 rounded-full overflow-hidden border border-outline-variant/50">
+<div class="bg-gradient-to-r from-cyan to-primary h-full w-[94%] shadow-[0_0_10px_rgba(6,182,212,0.8)]"></div>
+</div>
+</div>
+<!-- Niche Card 3 -->
+<div class="glass-card rounded-xl p-4 cursor-pointer group">
+<div class="flex justify-between items-start mb-3">
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary-fixed-dim transition-colors" data-icon="account_balance">account_balance</span>
+<span class="font-label-sm text-label-sm text-primary-fixed-dim bg-primary-fixed-dim/10 px-2 py-0.5 rounded text-xs border border-primary-fixed-dim/20">89</span>
+</div>
+<h3 class="font-body-base text-body-base text-on-surface font-semibold mb-2">Finance</h3>
+<div class="w-full bg-surface-container h-1.5 rounded-full overflow-hidden border border-outline-variant/50">
+<div class="bg-gradient-to-r from-primary-fixed-dim to-cyan-dim h-full w-[89%] shadow-[0_0_10px_rgba(167,139,250,0.8)]"></div>
+</div>
+</div>
+<!-- Niche Card 4 -->
+<div class="glass-card rounded-xl p-4 cursor-pointer group">
+<div class="flex justify-between items-start mb-3">
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-inverse-primary transition-colors" data-icon="fitness_center">fitness_center</span>
+<span class="font-label-sm text-label-sm text-inverse-primary bg-inverse-primary/10 px-2 py-0.5 rounded text-xs border border-inverse-primary/20">85</span>
+</div>
+<h3 class="font-body-base text-body-base text-on-surface font-semibold mb-2">Fitness</h3>
+<div class="w-full bg-surface-container h-1.5 rounded-full overflow-hidden border border-outline-variant/50">
+<div class="bg-gradient-to-r from-inverse-primary to-cyan h-full w-[85%] shadow-[0_0_10px_rgba(109,59,215,0.8)]"></div>
+</div>
+</div>
+<!-- Niche Card 5 -->
+<div class="glass-card rounded-xl p-4 cursor-pointer group">
+<div class="flex justify-between items-start mb-3">
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary transition-colors" data-icon="brush">brush</span>
+<span class="font-label-sm text-label-sm text-primary bg-primary/10 px-2 py-0.5 rounded text-xs border border-primary/20">82</span>
+</div>
+<h3 class="font-body-base text-body-base text-on-surface font-semibold mb-2">Art &amp; Design</h3>
+<div class="w-full bg-surface-container h-1.5 rounded-full overflow-hidden border border-outline-variant/50">
+<div class="bg-gradient-to-r from-primary to-primary-fixed-dim h-full w-[82%] opacity-90 shadow-[0_0_8px_rgba(139,92,246,0.6)]"></div>
+</div>
+</div>
+<!-- Niche Card 6 -->
+<div class="glass-card rounded-xl p-4 cursor-pointer group">
+<div class="flex justify-between items-start mb-3">
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-cyan transition-colors" data-icon="restaurant">restaurant</span>
+<span class="font-label-sm text-label-sm text-cyan bg-cyan/10 px-2 py-0.5 rounded text-xs border border-cyan/20">78</span>
+</div>
+<h3 class="font-body-base text-body-base text-on-surface font-semibold mb-2">Culinary</h3>
+<div class="w-full bg-surface-container h-1.5 rounded-full overflow-hidden border border-outline-variant/50">
+<div class="bg-gradient-to-r from-cyan to-cyan-dim h-full w-[78%] opacity-90 shadow-[0_0_8px_rgba(6,182,212,0.6)]"></div>
+</div>
+</div>
+<!-- Niche Card 7 -->
+<div class="glass-card rounded-xl p-4 cursor-pointer group">
+<div class="flex justify-between items-start mb-3">
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary-fixed-dim transition-colors" data-icon="flight_takeoff">flight_takeoff</span>
+<span class="font-label-sm text-label-sm text-primary-fixed-dim bg-primary-fixed-dim/10 px-2 py-0.5 rounded text-xs border border-primary-fixed-dim/20">75</span>
+</div>
+<h3 class="font-body-base text-body-base text-on-surface font-semibold mb-2">Travel</h3>
+<div class="w-full bg-surface-container h-1.5 rounded-full overflow-hidden border border-outline-variant/50">
+<div class="bg-gradient-to-r from-primary-fixed-dim to-primary h-full w-[75%] opacity-90 shadow-[0_0_8px_rgba(167,139,250,0.6)]"></div>
+</div>
+</div>
+<!-- Niche Card 8 -->
+<div class="glass-card rounded-xl p-4 cursor-pointer group">
+<div class="flex justify-between items-start mb-3">
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-inverse-primary transition-colors" data-icon="psychology">psychology</span>
+<span class="font-label-sm text-label-sm text-inverse-primary bg-inverse-primary/10 px-2 py-0.5 rounded text-xs border border-inverse-primary/20">71</span>
+</div>
+<h3 class="font-body-base text-body-base text-on-surface font-semibold mb-2">Mindset</h3>
+<div class="w-full bg-surface-container h-1.5 rounded-full overflow-hidden border border-outline-variant/50">
+<div class="bg-gradient-to-r from-inverse-primary to-cyan h-full w-[71%] opacity-90 shadow-[0_0_8px_rgba(109,59,215,0.6)]"></div>
+</div>
+</div>
+</div>
+</section>
+<!-- Meilleurs Horaires (Best Times) Module -->
+<section class="lg:col-span-4 glass-panel rounded-2xl p-6 premium-edge flex flex-col">
+<h2 class="font-headline-md text-headline-md text-primary mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined text-cyan drop-shadow-[0_0_8px_rgba(6,182,212,0.5)]" data-icon="schedule">schedule</span>
+                    Meilleurs Horaires
+                </h2>
+<div class="flex gap-2 mb-6 border-b border-outline-variant pb-2">
+<button class="font-label-sm text-label-sm text-primary border-b-2 border-primary pb-2 px-2 drop-shadow-[0_0_5px_rgba(139,92,246,0.5)]">TikTok</button>
+<button class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary pb-2 px-2 transition-colors">Reels</button>
+<button class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary pb-2 px-2 transition-colors">Shorts</button>
+</div>
+<div class="space-y-4 flex-grow">
+<div class="flex items-center justify-between p-3 rounded-xl bg-surface-variant/40 border border-outline-variant/50 backdrop-blur-sm">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary" data-icon="light_mode">light_mode</span>
+<span class="font-body-base text-body-base text-on-surface">Matin</span>
+</div>
+<span class="font-label-sm text-label-sm text-primary font-bold">07:30 - 09:00</span>
+</div>
+<div class="flex items-center justify-between p-3 rounded-xl bg-surface-variant/40 border border-outline-variant/50 backdrop-blur-sm">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-cyan" data-icon="wb_sunny">wb_sunny</span>
+<span class="font-body-base text-body-base text-on-surface">Midi</span>
+</div>
+<span class="font-label-sm text-label-sm text-cyan font-bold">12:15 - 13:45</span>
+</div>
+<div class="flex items-center justify-between p-3 rounded-xl bg-primary/10 border border-primary/30 backdrop-blur-sm shadow-[0_0_15px_rgba(139,92,246,0.1)]">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary-fixed" data-icon="nights_stay">nights_stay</span>
+<span class="font-body-base text-body-base text-primary-fixed font-semibold drop-shadow-[0_0_5px_rgba(233,221,255,0.5)]">Soir (Peak)</span>
+</div>
+<span class="font-label-sm text-label-sm text-primary-fixed font-bold drop-shadow-[0_0_5px_rgba(233,221,255,0.5)]">19:00 - 21:30</span>
+</div>
+</div>
+</section>
+<!-- 10 Formats Viraux -->
+<section class="lg:col-span-12 glass-panel rounded-2xl p-6 premium-edge mt-4">
+<div class="flex justify-between items-center mb-6 border-b border-outline-variant pb-4">
+<h2 class="font-headline-md text-headline-md text-primary flex items-center gap-2">
+<span class="material-symbols-outlined text-primary-fixed-dim drop-shadow-[0_0_8px_rgba(167,139,250,0.5)]" data-icon="view_carousel">view_carousel</span>
+                        10 Formats Viraux Actuels
+                    </h2>
+<button class="text-label-sm font-label-sm text-primary hover:text-primary-fixed transition-colors flex items-center gap-1 drop-shadow-[0_0_5px_rgba(139,92,246,0.3)]">
+                        View All <span class="material-symbols-outlined text-[16px]" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+<!-- Format 1 -->
+<div class="glass-card rounded-xl p-4 cursor-pointer relative overflow-hidden group">
+<div class="absolute inset-0 bg-gradient-to-br from-primary/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+<div class="w-8 h-8 rounded-full bg-primary/20 border border-primary/30 flex items-center justify-center text-primary font-label-sm text-label-sm mb-3 shadow-[0_0_10px_rgba(139,92,246,0.2)]">#1</div>
+<h4 class="font-body-base text-body-base text-on-surface font-semibold mb-2 relative z-10">POV Contrarien</h4>
+<p class="text-[13px] text-on-surface-variant leading-tight relative z-10">Start with an unpopular opinion in your niche, explain why everyone is wrong.</p>
+</div>
+<!-- Format 2 -->
+<div class="glass-card rounded-xl p-4 cursor-pointer relative overflow-hidden group">
+<div class="absolute inset-0 bg-gradient-to-br from-cyan/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+<div class="w-8 h-8 rounded-full bg-surface-container-high border border-outline-variant/50 flex items-center justify-center text-on-surface font-label-sm text-label-sm mb-3">#2</div>
+<h4 class="font-body-base text-body-base text-on-surface font-semibold mb-2 relative z-10">L'Erreur à 10k</h4>
+<p class="text-[13px] text-on-surface-variant leading-tight relative z-10">Share a costly mistake you made and the exact 3 steps to avoid it.</p>
+</div>
+<!-- Format 3 -->
+<div class="glass-card rounded-xl p-4 cursor-pointer relative overflow-hidden group">
+<div class="absolute inset-0 bg-gradient-to-br from-primary-fixed-dim/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+<div class="w-8 h-8 rounded-full bg-surface-container-high border border-outline-variant/50 flex items-center justify-center text-on-surface font-label-sm text-label-sm mb-3">#3</div>
+<h4 class="font-body-base text-body-base text-on-surface font-semibold mb-2 relative z-10">L'Outil Secret</h4>
+<p class="text-[13px] text-on-surface-variant leading-tight relative z-10">Reveal a lesser-known tool or website that automates a hard task.</p>
+</div>
+<!-- Format 4 -->
+<div class="glass-card rounded-xl p-4 cursor-pointer relative overflow-hidden group">
+<div class="absolute inset-0 bg-gradient-to-br from-inverse-primary/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+<div class="w-8 h-8 rounded-full bg-surface-container-high border border-outline-variant/50 flex items-center justify-center text-on-surface font-label-sm text-label-sm mb-3">#4</div>
+<h4 class="font-body-base text-body-base text-on-surface font-semibold mb-2 relative z-10">Avant / Après Brut</h4>
+<p class="text-[13px] text-on-surface-variant leading-tight relative z-10">Show the unpolished reality vs the final result with fast transitions.</p>
+</div>
+<!-- Format 5 -->
+<div class="glass-card rounded-xl p-4 cursor-pointer relative overflow-hidden group">
+<div class="absolute inset-0 bg-gradient-to-br from-cyan-dim/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+<div class="w-8 h-8 rounded-full bg-surface-container-high border border-outline-variant/50 flex items-center justify-center text-on-surface font-label-sm text-label-sm mb-3">#5</div>
+<h4 class="font-body-base text-body-base text-on-surface font-semibold mb-2 relative z-10">Le Hack en 3s</h4>
+<p class="text-[13px] text-on-surface-variant leading-tight relative z-10">Immediate value delivery in first 3 seconds, followed by explanation.</p>
+</div>
+</div>
+</section>
+<!-- Resources / Guides -->
+<section class="lg:col-span-12 glass-panel rounded-2xl p-6 premium-edge mt-4">
+<h2 class="font-headline-md text-headline-md text-primary mb-6 flex items-center gap-2 border-b border-outline-variant pb-4">
+<span class="material-symbols-outlined text-inverse-primary drop-shadow-[0_0_8px_rgba(109,59,215,0.5)]" data-icon="library_books">library_books</span>
+                    Resources &amp; Guides
+                </h2>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<!-- YouTube Library -->
+<div class="relative overflow-hidden rounded-xl border border-outline-variant/50 group cursor-pointer h-48 hover:border-cyan/40 transition-colors">
+<div class="absolute inset-0 bg-cover bg-center opacity-40 group-hover:opacity-60 transition-all duration-500 group-hover:scale-105" data-alt="A dark, cinematic composition featuring a sleek, modern smartphone floating in a void, displaying a glowing YouTube logo and analytics charts. The scene is lit with subtle, deep purple and neon blue edge lighting, reflecting off the dark, brushed metal surface below. High contrast, minimalist aesthetic." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAhdmZQQd0BqDKwR6SIDLN4RXhz7BtwexPmnLERW1mBxT8-JLGjqwV5xr-TrhU4ey7tJvRnHca41sT2-iVeJ9RcQtaekMJMtmF1sTxnUpxo4jbYmkmMX5c1gDBjY8t9dJ4736XoCEs9TF15E4rfuVpCSgiP_pIa5HAoq_mIJGnpFKISUssFicOrm1_jobD5jemryHXKtAoVFudzBKdE0TW2ddg9Id9r3nCup24jdybP9vzyAVLU6ZyOvQ')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-[#020205] via-[#020205]/80 to-transparent"></div>
+<div class="absolute bottom-0 left-0 p-6 w-full">
+<span class="font-label-sm text-label-sm text-cyan bg-cyan/10 px-2 py-1 rounded mb-2 inline-block border border-cyan/30 backdrop-blur-sm">Video Library</span>
+<h3 class="font-headline-md text-headline-md text-on-surface font-bold group-hover:text-cyan transition-colors">YouTube Masterclass</h3>
+<p class="text-on-surface-variant text-sm mt-1">Deconstruct the retention tactics of top creators.</p>
+</div>
+</div>
+<!-- Algorithm Guide -->
+<div class="relative overflow-hidden rounded-xl border border-outline-variant/50 group cursor-pointer h-48 hover:border-primary/40 transition-colors">
+<div class="absolute inset-0 bg-cover bg-center opacity-40 group-hover:opacity-60 transition-all duration-500 group-hover:scale-105" data-alt="A macro shot of a complex, futuristic digital network interface on a dark glass screen. Glowing nodes and thin, laser-like violet connections pulse with data. The background is a deep, impenetrable black. The mood is high-tech, analytical, and sophisticated, emphasizing algorithm structures." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCQgeY5sb5aqeL-uiSk-4qzeQ8Opr_GJTUV6XtOm_2fki-pK6pMEqrrAPar412R1HyM04jjToRbiEgSX2JmWTUaH_QNMBs3ANECUpr0xgmH8ZzXdEb2fU-5JRaACyyabU6HAULROZkU0UFCodwLbNiKCpsW5b2SXQ8lIcTze8aWDWC0Luvd1lYAMgvcRiYYM8v1Sdzo1isN1hLt-G60usxQ58kb8xdoGQLzZ29o_5K3jjNw9HM8Vm7HPg')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-[#020205] via-[#020205]/80 to-transparent"></div>
+<div class="absolute bottom-0 left-0 p-6 w-full">
+<span class="font-label-sm text-label-sm text-primary-fixed bg-primary-fixed/10 px-2 py-1 rounded mb-2 inline-block border border-primary-fixed/30 backdrop-blur-sm">PDF Guide</span>
+<h3 class="font-headline-md text-headline-md text-on-surface font-bold group-hover:text-primary transition-colors">Algorithm Blueprint 2024</h3>
+<p class="text-on-surface-variant text-sm mt-1">Understanding the shift from social graph to interest graph.</p>
+</div>
+</div>
+</div>
+</section>
+</div>
+</main>
+<!-- BottomNavBar (Mobile) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full flex justify-around items-center py-3 px-4 bg-surface/60 backdrop-blur-2xl z-50 rounded-t-2xl border-t border-primary/20 shadow-[0_-5px_25px_rgba(0,0,0,0.5)]">
+<a class="flex flex-col items-center justify-center text-on-surface-variant/70 hover:text-primary transition-all active:scale-90 duration-150" href="#">
+<span class="material-symbols-outlined text-[24px]" data-icon="movie_filter">movie_filter</span>
+<span class="font-label-sm text-label-sm mt-1 text-[10px]">Studio</span>
+</a>
+<a class="flex flex-col items-center justify-center text-primary font-bold bg-primary/20 border border-primary/30 rounded-full py-2 px-4 active:scale-90 duration-150 shadow-[0_0_15px_rgba(139,92,246,0.2)]" href="#">
+<span class="material-symbols-outlined text-[24px]" data-icon="trending_up" data-weight="fill" style="font-variation-settings: 'FILL' 1;">trending_up</span>
+<span class="font-label-sm text-label-sm mt-1 text-[10px]">Trending</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant/70 hover:text-primary transition-all active:scale-90 duration-150" href="#">
+<span class="material-symbols-outlined text-[24px]" data-icon="history">history</span>
+<span class="font-label-sm text-label-sm mt-1 text-[10px]">History</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant/70 hover:text-primary transition-all active:scale-90 duration-150" href="#">
+<span class="material-symbols-outlined text-[24px]" data-icon="account_balance_wallet">account_balance_wallet</span>
+<span class="font-label-sm text-label-sm mt-1 text-[10px]">Wallet</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant/70 hover:text-primary transition-all active:scale-90 duration-150" href="#">
+<span class="material-symbols-outlined text-[24px]" data-icon="person">person</span>
+<span class="font-label-sm text-label-sm mt-1 text-[10px]">Profile</span>
+</a>
+</nav>
+</body></html>

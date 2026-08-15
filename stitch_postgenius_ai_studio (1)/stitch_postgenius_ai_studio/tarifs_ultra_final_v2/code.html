@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="fr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>PostGenius AI - Pricing</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "error": "#ffb4ab",
+                      "primary-fixed": "#e9ddff",
+                      "surface-bright": "#39393b",
+                      "tertiary": "#ffb869",
+                      "surface": "#020205",
+                      "primary-container": "#a078ff",
+                      "outline": "#958ea0",
+                      "background": "#020205",
+                      "secondary-fixed": "#e4e2e5",
+                      "surface-variant": "#1c1c1f",
+                      "surface-tint": "#d0bcff",
+                      "inverse-on-surface": "#313032",
+                      "surface-container-lowest": "#010103",
+                      "on-primary-fixed-variant": "#5516be",
+                      "surface-container": "#08080a",
+                      "outline-variant": "#2a2a30",
+                      "inverse-primary": "#6d3bd7",
+                      "secondary": "#c8c6c9",
+                      "on-tertiary-fixed-variant": "#673d00",
+                      "primary": "#d0bcff",
+                      "surface-container-low": "#050508",
+                      "on-secondary-container": "#b6b4b8",
+                      "on-surface-variant": "#cbc3d7",
+                      "on-tertiary": "#482900",
+                      "on-background": "#cbc3d7",
+                      "surface-container-highest": "#1c1c1f",
+                      "on-tertiary-container": "#3f2300",
+                      "secondary-container": "#47464a",
+                      "inverse-surface": "#e5e1e4",
+                      "error-container": "#93000a",
+                      "surface-container-high": "#121215",
+                      "on-primary-fixed": "#23005c",
+                      "tertiary-fixed": "#ffdcbb",
+                      "on-surface": "#cbc3d7",
+                      "on-tertiary-fixed": "#2c1700",
+                      "on-secondary-fixed": "#1b1b1e",
+                      "on-primary": "#3c0091",
+                      "secondary-fixed-dim": "#c8c6c9",
+                      "surface-dim": "#020205",
+                      "on-primary-container": "#340080",
+                      "on-error": "#690005",
+                      "on-secondary-fixed-variant": "#47464a",
+                      "primary-fixed-dim": "#d0bcff",
+                      "on-secondary": "#303033",
+                      "tertiary-fixed-dim": "#ffb869",
+                      "tertiary-container": "#ca801e",
+                      "on-error-container": "#ffdad6"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "margin": "40px",
+                      "unit": "4px",
+                      "gutter": "24px",
+                      "container-max": "1200px"
+              },
+              "fontFamily": {
+                      "headline-lg-mobile": [
+                              "Hanken Grotesk"
+                      ],
+                      "label-sm": [
+                              "JetBrains Mono"
+                      ],
+                      "body-base": [
+                              "Hanken Grotesk"
+                      ],
+                      "headline-md": [
+                              "Hanken Grotesk"
+                      ],
+                      "display-lg": [
+                              "Hanken Grotesk"
+                      ]
+              },
+              "fontSize": {
+                      "headline-lg-mobile": [
+                              "32px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "label-sm": [
+                              "12px",
+                              {
+                                      "lineHeight": "1.0",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "body-base": [
+                              "16px",
+                              {
+                                      "lineHeight": "1.6",
+                                      "letterSpacing": "-0.01em",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-md": [
+                              "24px",
+                              {
+                                      "lineHeight": "1.3",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "display-lg": [
+                              "48px",
+                              {
+                                      "lineHeight": "1.1",
+                                      "letterSpacing": "-0.04em",
+                                      "fontWeight": "600"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+      </script>
+<style>
+        body {
+            background-color: #020205; /* Obsidian Luxe Level 0 Canvas */
+            color: #cbc3d7;
+        }
+        
+        .glass-card {
+            background-color: rgba(10, 10, 15, 0.4); /* Deep glass surface */
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(139, 92, 246, 0.1);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+        }
+        
+        .premium-edge {
+            position: relative;
+        }
+        .premium-edge::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(139, 92, 246, 0.5), transparent);
+            z-index: 10;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #6d28d9, #4c1d95);
+            color: #e5e1e4;
+            border-top: 1px solid rgba(139, 92, 246, 0.3);
+            transition: all 0.2s ease;
+        }
+        
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #5b21b6, #3b0764);
+            box-shadow: 0 0 20px rgba(139, 92, 246, 0.2);
+        }
+
+        .btn-secondary {
+            background-color: rgba(139, 92, 246, 0.05);
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            color: #cbc3d7;
+            transition: all 0.2s ease;
+        }
+        
+        .btn-secondary:hover {
+            background-color: rgba(139, 92, 246, 0.1);
+        }
+
+        /* Nav Noise Texture */
+        .nav-texture {
+            position: relative;
+        }
+        .nav-texture::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.02'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: -1;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="min-h-screen font-body-base antialiased text-on-surface relative overflow-x-hidden selection:bg-primary-container selection:text-on-primary-container">
+<!-- Background Shader -->
+<div class="fixed inset-0 z-[-1] pointer-events-none">
+    {{DATA:ANIMATION:ANIMATION_31}}
+</div>
+<!-- Top Navigation (Generated from Shared Components) -->
+<nav class="fixed top-0 w-full z-50 bg-surface/40 dark:bg-surface/40 backdrop-blur-xl border-b border-[#8B5CF6]/20 shadow-none flex justify-between items-center px-margin py-4 w-full">
+<div class="flex items-center gap-2 cursor-pointer active:scale-95 duration-200 group">
+<span class="material-symbols-outlined text-[#8B5CF6] group-hover:text-primary-fixed transition-colors" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+<span class="font-headline-md text-headline-md font-bold text-[#8B5CF6] tracking-tight">PostGenius AI</span>
+</div>
+<!-- Desktop Nav Links (Hidden on Mobile, Required by rules) -->
+<div class="hidden md:flex items-center gap-6">
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-[#8B5CF6] transition-colors uppercase tracking-widest" href="#">Studio</a>
+<a class="font-label-sm text-label-sm text-[#8B5CF6] font-bold hover:text-primary transition-colors uppercase tracking-widest relative" href="#">
+                Premium
+                <span class="absolute -bottom-1 left-0 w-full h-[2px] bg-[#8B5CF6] rounded-full"></span>
+</a>
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-[#8B5CF6] transition-colors uppercase tracking-widest" href="#">Profile</a>
+</div>
+<div class="flex items-center gap-4">
+<button class="font-label-sm text-label-sm text-on-surface-variant hover:bg-surface-variant/50 transition-colors px-3 py-1.5 rounded flex items-center gap-1 active:scale-95 duration-200">
+<span class="material-symbols-outlined text-[16px]">account_balance_wallet</span>
+                120 Credits
+            </button>
+</div>
+</nav>
+<!-- Main Content Canvas -->
+<main class="pt-[100px] pb-32 px-4 md:px-margin max-w-[1200px] mx-auto flex flex-col items-center">
+<!-- Header Section -->
+<div class="text-center mb-16 mt-8 max-w-2xl">
+<h1 class="font-display-lg text-display-lg md:text-[56px] text-on-surface font-semibold tracking-tight mb-4 leading-tight drop-shadow-lg">
+                Unlock <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#8B5CF6] to-primary-container drop-shadow-[0_0_15px_rgba(139,92,246,0.3)]">Infinite</span> Creation
+            </h1>
+<p class="font-body-base text-body-base text-on-surface-variant mb-8 opacity-90 max-w-lg mx-auto">
+                Select a plan tailored to your workflow. Upgrade your content game with advanced AI models and priority generation.
+            </p>
+<!-- Currency Selector -->
+<div class="inline-flex items-center p-1 rounded-full bg-surface-container/60 border border-[#8B5CF6]/30 backdrop-blur-xl">
+<button class="px-6 py-2 rounded-full font-label-sm text-label-sm text-on-surface-variant hover:text-[#8B5CF6] transition-colors" onclick="setCurrency('FCFA')">FCFA</button>
+<button class="px-6 py-2 rounded-full font-label-sm text-label-sm bg-surface-variant/80 text-on-surface shadow-[0_0_10px_rgba(139,92,246,0.2)] transition-colors border border-[#8B5CF6]/40" onclick="setCurrency('EUR')">EUR</button>
+<button class="px-6 py-2 rounded-full font-label-sm text-label-sm text-on-surface-variant hover:text-[#8B5CF6] transition-colors" onclick="setCurrency('USD')">USD</button>
+</div>
+</div>
+<!-- Pricing Cards Grid -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 w-full max-w-[1100px] relative z-10">
+<!-- Starter Plan -->
+<div class="glass-card rounded-xl p-8 flex flex-col relative overflow-hidden group hover:-translate-y-1 transition-transform duration-300">
+<div class="mb-6">
+<span class="font-label-sm text-label-sm text-on-surface-variant tracking-widest uppercase mb-2 block">Starter</span>
+<div class="flex items-baseline gap-1">
+<span class="font-headline-md text-headline-md md:text-[32px] font-semibold text-on-surface drop-shadow-md" data-price-eur="Free" data-price-fcfa="Gratuit" data-price-usd="Free">Free</span>
+</div>
+<p class="font-body-base text-sm text-on-surface-variant mt-2 opacity-80">Perfect for exploring the basics.</p>
+</div>
+<div class="space-y-4 mb-8 flex-grow">
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-outline/70 text-[18px] mt-0.5">check</span>
+<span class="font-body-base text-sm text-on-surface-variant">50 AI Generations / month</span>
+</div>
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-outline/70 text-[18px] mt-0.5">check</span>
+<span class="font-body-base text-sm text-on-surface-variant">Standard Models</span>
+</div>
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-outline/70 text-[18px] mt-0.5">check</span>
+<span class="font-body-base text-sm text-on-surface-variant">Basic Templates</span>
+</div>
+</div>
+<button class="w-full py-3 rounded-lg btn-secondary font-label-sm text-label-sm uppercase tracking-wider backdrop-blur-md">Current Plan</button>
+</div>
+<!-- Pro Plan (Recommended) -->
+<div class="glass-card premium-edge rounded-xl p-8 flex flex-col relative overflow-hidden transform md:scale-105 z-10 border-[#8B5CF6]/40 shadow-[0_0_40px_rgba(139,92,246,0.15)] bg-surface-container/40">
+<!-- Subtle background glow for recommended -->
+<div class="absolute inset-0 bg-gradient-to-b from-[#8B5CF6]/10 to-transparent pointer-events-none"></div>
+<div class="absolute top-0 right-0 bg-gradient-to-r from-[#6d28d9] to-[#8B5CF6] text-on-surface font-label-sm text-[10px] uppercase tracking-widest px-3 py-1 rounded-bl-lg font-bold shadow-[0_0_10px_rgba(139,92,246,0.3)]">
+                    Recommended
+                </div>
+<div class="mb-6 relative z-10">
+<span class="font-label-sm text-label-sm text-[#8B5CF6] tracking-widest uppercase mb-2 block drop-shadow-sm">Pro</span>
+<div class="flex items-baseline gap-1">
+<span class="font-headline-md text-headline-md md:text-[40px] font-semibold text-on-surface drop-shadow-md" data-price-eur="€19" data-price-fcfa="12,500 FCFA" data-price-usd="$20">€19</span>
+<span class="text-on-surface-variant text-sm">/mo</span>
+</div>
+<p class="font-body-base text-sm text-on-surface-variant mt-2 opacity-80">For professionals creating daily.</p>
+</div>
+<div class="space-y-4 mb-8 flex-grow relative z-10">
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-[#8B5CF6] text-[18px] mt-0.5 drop-shadow-[0_0_5px_rgba(139,92,246,0.2)]">check_circle</span>
+<span class="font-body-base text-sm text-on-surface">Unlimited AI Generations</span>
+</div>
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-[#8B5CF6] text-[18px] mt-0.5 drop-shadow-[0_0_5px_rgba(139,92,246,0.2)]">check_circle</span>
+<span class="font-body-base text-sm text-on-surface">Premium Models (GPT-4o, Claude 3.5)</span>
+</div>
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-[#8B5CF6] text-[18px] mt-0.5 drop-shadow-[0_0_5px_rgba(139,92,246,0.2)]">check_circle</span>
+<span class="font-body-base text-sm text-on-surface">Priority Queue Processing</span>
+</div>
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-[#8B5CF6] text-[18px] mt-0.5 drop-shadow-[0_0_5px_rgba(139,92,246,0.2)]">check_circle</span>
+<span class="font-body-base text-sm text-on-surface">Remove Watermarks</span>
+</div>
+</div>
+<button class="w-full py-3.5 rounded-lg btn-primary font-label-sm text-label-sm uppercase tracking-wider relative z-10 shadow-lg shadow-[#8B5CF6]/10">
+                    S'abonner au Pro
+                </button>
+</div>
+<!-- Studio Plan -->
+<div class="glass-card rounded-xl p-8 flex flex-col relative overflow-hidden group hover:-translate-y-1 transition-transform duration-300">
+<div class="mb-6">
+<span class="font-label-sm text-label-sm text-on-surface-variant tracking-widest uppercase mb-2 block">Studio</span>
+<div class="flex items-baseline gap-1">
+<span class="font-headline-md text-headline-md md:text-[32px] font-semibold text-on-surface drop-shadow-md" data-price-eur="€49" data-price-fcfa="32,000 FCFA" data-price-usd="$55">€49</span>
+<span class="text-on-surface-variant text-sm">/mo</span>
+</div>
+<p class="font-body-base text-sm text-on-surface-variant mt-2 opacity-80">For teams and agencies.</p>
+</div>
+<div class="space-y-4 mb-8 flex-grow">
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-outline/70 text-[18px] mt-0.5">check</span>
+<span class="font-body-base text-sm text-on-surface-variant">Everything in Pro</span>
+</div>
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-outline/70 text-[18px] mt-0.5">check</span>
+<span class="font-body-base text-sm text-on-surface-variant">Up to 5 Team Members</span>
+</div>
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-outline/70 text-[18px] mt-0.5">check</span>
+<span class="font-body-base text-sm text-on-surface-variant">Custom Brand Voice API</span>
+</div>
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-outline/70 text-[18px] mt-0.5">check</span>
+<span class="font-body-base text-sm text-on-surface-variant">Dedicated Support</span>
+</div>
+</div>
+<button class="w-full py-3 rounded-lg btn-secondary font-label-sm text-label-sm uppercase tracking-wider backdrop-blur-md">Contact Sales</button>
+</div>
+</div>
+<!-- Local Payment Methods -->
+<div class="mt-16 text-center">
+<p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest mb-4 opacity-60">Accepted Local Payment Methods</p>
+<div class="flex flex-wrap items-center justify-center gap-4 opacity-80">
+<div class="flex items-center gap-2 px-4 py-2 rounded-lg bg-surface-container/40 border border-[#8B5CF6]/20 backdrop-blur-md">
+<span class="material-symbols-outlined text-[20px] text-[#8B5CF6]">account_balance_wallet</span>
+<span class="font-body-base text-sm font-medium text-on-surface-variant">Orange Money</span>
+</div>
+<div class="flex items-center gap-2 px-4 py-2 rounded-lg bg-surface-container/40 border border-[#8B5CF6]/20 backdrop-blur-md">
+<span class="material-symbols-outlined text-[20px] text-[#8B5CF6]">waves</span>
+<span class="font-body-base text-sm font-medium text-on-surface-variant">Wave</span>
+</div>
+<div class="flex items-center gap-2 px-4 py-2 rounded-lg bg-surface-container/40 border border-[#8B5CF6]/20 backdrop-blur-md">
+<span class="material-symbols-outlined text-[20px] text-on-surface-variant">credit_card</span>
+<span class="font-body-base text-sm font-medium text-on-surface-variant">Cartes Bancaires</span>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Navigation (Generated from Shared Components - Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 w-full z-50 rounded-t-2xl bg-surface/60 dark:bg-surface/60 backdrop-blur-xl shadow-[0_-10px_30px_rgba(0,0,0,0.5)] flex justify-around items-center py-3 px-4 pb-safe border-t border-[#8B5CF6]/20 nav-texture">
+<a class="flex flex-col items-center justify-center text-on-surface-variant/70 hover:text-[#8B5CF6] transition-all active:scale-90 duration-150 gap-1" href="#">
+<span class="material-symbols-outlined text-[24px]">movie_filter</span>
+<span class="font-label-sm text-[10px]">Studio</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant/70 hover:text-[#8B5CF6] transition-all active:scale-90 duration-150 gap-1" href="#">
+<span class="material-symbols-outlined text-[24px]">trending_up</span>
+<span class="font-label-sm text-[10px]">Trending</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant/70 hover:text-[#8B5CF6] transition-all active:scale-90 duration-150 gap-1" href="#">
+<span class="material-symbols-outlined text-[24px]">history</span>
+<span class="font-label-sm text-[10px]">History</span>
+</a>
+<!-- Active State (Wallet - closest to Pricing/Purchase intent) -->
+<a class="flex flex-col items-center justify-center text-[#8B5CF6] font-bold bg-[#8B5CF6]/10 rounded-full py-1.5 px-4 active:scale-90 duration-150 gap-1" href="#">
+<span class="material-symbols-outlined text-[24px]" style="font-variation-settings: 'FILL' 1;">account_balance_wallet</span>
+<span class="font-label-sm text-[10px]">Wallet</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant/70 hover:text-[#8B5CF6] transition-all active:scale-90 duration-150 gap-1" href="#">
+<span class="material-symbols-outlined text-[24px]">person</span>
+<span class="font-label-sm text-[10px]">Profile</span>
+</a>
+</nav>
+<script>
+        // Simple currency toggle logic
+        function setCurrency(currency) {
+            const buttons = document.querySelectorAll('.inline-flex button');
+            buttons.forEach(btn => {
+                if(btn.innerText === currency) {
+                    btn.classList.add('bg-surface-variant/80', 'text-on-surface', 'shadow-[0_0_10px_rgba(139,92,246,0.2)]', 'border', 'border-[#8B5CF6]/40');
+                    btn.classList.remove('text-on-surface-variant', 'hover:text-[#8B5CF6]', 'border-[#8B5CF6]/30');
+                } else {
+                    btn.classList.remove('bg-surface-variant/80', 'text-on-surface', 'shadow-[0_0_10px_rgba(139,92,246,0.2)]', 'border', 'border-[#8B5CF6]/40');
+                    btn.classList.add('text-on-surface-variant', 'hover:text-[#8B5CF6]', 'border-transparent');
+                }
+            });
+
+            const priceElements = document.querySelectorAll('[data-price-eur]');
+            priceElements.forEach(el => {
+                el.innerText = el.getAttribute(`data-price-${currency.toLowerCase()}`);
+            });
+        }
+    </script>
+</body></html>

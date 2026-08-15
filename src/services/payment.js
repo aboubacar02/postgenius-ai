@@ -1,0 +1,35 @@
+// Service de paiement côté client.
+// Les clés réelles (Paystack / CinetPay) vivent UNIQUEMENT côté serveur :
+// l'app POSTe sur /api/payments/init et le serveur retourne soit une session
+// réelle (avec URL de paiement), soit une simulation sandbox (aucune charge).
+
+export const PAYMENT_PROVIDERS = [
+  { id: 'paystack', name: 'Paystack', desc: 'Carte bancaire & Mobile Money (Afrique)' },
+  { id: 'cinetpay', name: 'CinetPay', desc: 'Mobile Money & cartes (Afrique francophone)' }
+]
+
+function makeReference() {
+  return `PG-${Date.now().toString(36).toUpperCase()}-${Math.random().toString(36).slice(2, 8).toUpperCase()}`
+}
+
+function fakeWait(ms) {
+  return new Promise((resolve) => setTimeout(resolve, 900))
+}
+
+// Point d'entrée unique — provider : 'simulation' | 'paystack' | 'cinetpay' | 'auto'
+export async function createPaymentSession({ provider = 'auto', method, plan, currency, amount, email }) {
+  try {
+    const res = await fetch('/api/payments/init', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ provider, method, plan, currency, amount: Number(amount) || 0, email })
+    })
+    if (res.ok) return res.json()
+  } catch {
+    /* serveur indisponible : repli simulation locale ci-dessous */
+  }
+
+  // Repli : simulation locale (aucune clé côté client, aucun débit réel).
+  await fakeWait()
+  return { provider: 'simulation', reference: makeReference(), status: 'success', sandbox: true, method, plan }
+}

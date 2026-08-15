@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="fr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>PostGenius AI - Résultats</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&amp;family=Hanken+Grotesk:ital,wght@0,100..900;1,100..900&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        "colors": {
+                "primary-container": "#a078ff",
+                "surface-container": "rgba(20, 20, 22, 0.4)",
+                "inverse-primary": "#6d3bd7",
+                "inverse-on-surface": "#313032",
+                "tertiary": "#ffb869",
+                "primary-fixed-dim": "#d0bcff",
+                "on-secondary-fixed-variant": "#47464a",
+                "on-error": "#690005",
+                "tertiary-fixed-dim": "#ffb869",
+                "on-tertiary-container": "#3f2300",
+                "secondary-fixed": "#e4e2e5",
+                "error": "#ffb4ab",
+                "on-secondary-fixed": "#1b1b1e",
+                "on-primary-fixed-variant": "#5516be",
+                "surface-bright": "#39393b",
+                "surface-dim": "#131315",
+                "secondary": "#c8c6c9",
+                "outline": "rgba(255, 255, 255, 0.1)",
+                "on-error-container": "#ffdad6",
+                "surface-tint": "#d0bcff",
+                "primary-fixed": "#e9ddff",
+                "on-primary": "#3c0091",
+                "surface-variant": "rgba(20, 20, 22, 0.6)",
+                "outline-variant": "rgba(255, 255, 255, 0.05)",
+                "primary": "#8b5cf6",
+                "on-background": "#e5e1e4",
+                "on-tertiary": "#482900",
+                "on-surface-variant": "#cbc3d7",
+                "surface-container-high": "rgba(20, 20, 22, 0.5)",
+                "on-surface": "#e5e1e4",
+                "secondary-fixed-dim": "#c8c6c9",
+                "on-secondary": "#303033",
+                "on-primary-container": "#340080",
+                "surface-container-highest": "rgba(20, 20, 22, 0.6)",
+                "surface-container-lowest": "rgba(20, 20, 22, 0.2)",
+                "background": "#020205",
+                "on-primary-fixed": "#23005c",
+                "tertiary-fixed": "#ffdcbb",
+                "inverse-surface": "#e5e1e4",
+                "on-secondary-container": "#b6b4b8",
+                "tertiary-container": "#ca801e",
+                "surface": "#020205",
+                "on-tertiary-fixed": "#2c1700",
+                "surface-container-low": "rgba(20, 20, 22, 0.3)",
+                "error-container": "#93000a",
+                "secondary-container": "#47464a",
+                "on-tertiary-fixed-variant": "#673d00"
+        },
+        "borderRadius": {
+                "DEFAULT": "0.125rem",
+                "lg": "0.25rem",
+                "xl": "0.5rem",
+                "full": "0.75rem"
+        },
+        "spacing": {
+                "gutter": "24px",
+                "margin": "40px",
+                "unit": "4px",
+                "container-max": "1200px"
+        },
+        "fontFamily": {
+                "body-base": [
+                        "Hanken Grotesk"
+                ],
+                "headline-md": [
+                        "Hanken Grotesk"
+                ],
+                "headline-lg-mobile": [
+                        "Hanken Grotesk"
+                ],
+                "label-sm": [
+                        "JetBrains Mono"
+                ],
+                "display-lg": [
+                        "Hanken Grotesk"
+                ]
+        },
+        "fontSize": {
+                "body-base": [
+                        "16px",
+                        {
+                                "lineHeight": "1.6",
+                                "letterSpacing": "-0.01em",
+                                "fontWeight": "400"
+                        }
+                ],
+                "headline-md": [
+                        "24px",
+                        {
+                                "lineHeight": "1.3",
+                                "letterSpacing": "-0.02em",
+                                "fontWeight": "500"
+                        }
+                ],
+                "headline-lg-mobile": [
+                        "32px",
+                        {
+                                "lineHeight": "1.2",
+                                "fontWeight": "600"
+                        }
+                ],
+                "label-sm": [
+                        "12px",
+                        {
+                                "lineHeight": "1.0",
+                                "letterSpacing": "0.05em",
+                                "fontWeight": "500"
+                        }
+                ],
+                "display-lg": [
+                        "48px",
+                        {
+                                "lineHeight": "1.1",
+                                "letterSpacing": "-0.04em",
+                                "fontWeight": "600"
+                        }
+                ]
+        }
+},
+    },
+  }
+</script>
+<style>
+        body {
+            background-color: transparent;
+            color: theme('colors.on-background');
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        #webgl-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* Glass card utility */
+        .glass-card {
+            background: theme('colors.surface-container');
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid theme('colors.outline-variant');
+            border-radius: theme('borderRadius.xl');
+        }
+        
+        .glass-card:hover {
+            border-color: theme('colors.outline');
+            transition: all 400ms cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+
+        /* Teleprompter Scroll Animation */
+        @keyframes scroll-up {
+            0% { transform: translateY(100%); }
+            100% { transform: translateY(-100%); }
+        }
+        
+        .teleprompter-text {
+            animation: scroll-up 20s linear infinite;
+        }
+        
+        .teleprompter-container:hover .teleprompter-text {
+            animation-play-state: paused;
+        }
+
+        /* Scrollbar hiding for clean UI */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        
+        .progress-bar {
+            transition: width 1s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+    </style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+</head>
+<body class="font-body-base text-body-base antialiased selection:bg-primary-container selection:text-on-primary-container bg-[#020205]">
+<!-- Background WebGL Shader -->
+<canvas id="webgl-canvas"></canvas>
+<script>
+    const canvas = document.getElementById('webgl-canvas');
+    const renderer = new THREE.WebGLRenderer({canvas, alpha: true});
+    const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
+    const scene = new THREE.Scene();
+
+    const geometry = new THREE.PlaneGeometry(2, 2);
+    const material = new THREE.ShaderMaterial({
+        uniforms: {
+            u_time: { value: 0 },
+            u_resolution: { value: new THREE.Vector2() },
+            u_mouse: { value: new THREE.Vector2() }
+        },
+        vertexShader: `
+            varying vec2 v_texCoord;
+            void main() {
+                v_texCoord = uv;
+                gl_Position = vec4(position, 1.0);
+            }
+        `,
+        fragmentShader: `
+precision highp float;
+uniform float u_time;
+uniform vec2 u_resolution;
+uniform vec2 u_mouse;
+varying vec2 v_texCoord;
+
+// Simplex 2D noise
+vec3 permute(vec3 x) { return mod(((x*34.0)+1.0)*x, 289.0); }
+
+float snoise(vec2 v){
+  const vec4 C = vec4(0.211324865405187, 0.366025403784439,
+           -0.577350269189626, 0.024390243902439);
+  vec2 i  = floor(v + dot(v, C.yy) );
+  vec2 x0 = v -   i + dot(i, C.xx);
+  vec2 i1;
+  i1 = (x0.x > x0.y) ? vec2(1.0, 0.0) : vec2(0.0, 1.0);
+  vec4 x12 = x0.xyxy + C.xxzz;
+  x12.xy -= i1;
+  i = mod(i, 289.0);
+  vec3 p = permute( permute( i.y + vec3(0.0, i1.y, 1.0 ))
+  + i.x + vec3(0.0, i1.x, 1.0 ));
+  vec3 m = max(0.5 - vec3(dot(x0,x0), dot(x12.xy,x12.xy),
+    dot(x12.zw,x12.zw)), 0.0);
+  m = m*m ;
+  m = m*m ;
+  vec3 x = 2.0 * fract(p * C.www) - 1.0;
+  vec3 h = abs(x) - 0.5;
+  vec3 ox = floor(x + 0.5);
+  vec3 a0 = x - ox;
+  m *= 1.79284291400159 - 0.85373472095314 * ( a0*a0 + h*h );
+  vec3 g;
+  g.x  = a0.x  * x0.x  + h.x  * x0.y;
+  g.yz = a0.yz * x12.xz + h.yz * x12.yw;
+  return 130.0 * dot(m, g);
+}
+
+void main() {
+    vec2 uv = v_texCoord;
+    vec2 mouse = u_mouse / u_resolution;
+    
+    // Create base dark obsidian color
+    vec3 color = vec3(0.01, 0.01, 0.02); 
+    
+    // Dynamic aurora/fluid movement
+    float n1 = snoise(uv * 2.0 + u_time * 0.1 + mouse * 0.5);
+    float n2 = snoise(uv * 3.0 - u_time * 0.15 + mouse.yx * 0.3);
+    
+    // Accents: Electric Violet (#8B5CF6) and Hyper-Cyan (#22D3EE)
+    vec3 violet = vec3(0.545, 0.361, 0.965);
+    vec3 cyan = vec3(0.133, 0.827, 0.933);
+    
+    // Interaction: Mouse glow
+    float d = distance(uv, mouse);
+    float glow = smoothstep(0.4, 0.0, d) * 0.25;
+    
+    // Mix colors based on noise
+    color = mix(color, violet, n1 * 0.08);
+    color = mix(color, cyan, n2 * 0.06);
+    color += violet * glow * n1;
+    
+    // Add subtle grain/noise
+    float grain = fract(sin(dot(uv, vec2(12.9898, 78.233))) * 43758.5453);
+    color += (grain - 0.5) * 0.02;
+    
+    gl_FragColor = vec4(color, 1.0);
+}
+`
+    });
+
+    const mesh = new THREE.Mesh(geometry, material);
+    scene.add(mesh);
+
+    function resize() {
+        const width = window.innerWidth;
+        const height = window.innerHeight;
+        renderer.setSize(width, height);
+        material.uniforms.u_resolution.value.set(width, height);
+    }
+
+    window.addEventListener('resize', resize);
+    resize();
+
+    window.addEventListener('mousemove', (e) => {
+        material.uniforms.u_mouse.value.set(e.clientX, window.innerHeight - e.clientY);
+    });
+
+    function animate(time) {
+        material.uniforms.u_time.value = time * 0.001;
+        renderer.render(scene, camera);
+        requestAnimationFrame(animate);
+    }
+    requestAnimationFrame(animate);
+</script>
+<!-- TopAppBar -->
+<header class="w-full sticky top-0 z-50 backdrop-blur-xl border-b border-white/10 bg-transparent flex justify-between items-center px-gutter py-unit h-16">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary font-bold text-[32px]">auto_awesome</span>
+<h1 class="font-display-lg text-headline-sm-mobile font-extrabold text-primary tracking-tighter">PostGenius AI</h1>
+</div>
+<div class="flex items-center gap-4">
+<button class="px-4 py-2 flex items-center gap-2 hover:opacity-80 transition-opacity active:scale-95 duration-400">
+<span class="text-primary font-bold font-label-sm text-label-sm">⚡ 450 Credits</span>
+</button>
+<div class="w-10 h-10 rounded-full bg-surface-variant flex items-center justify-center border border-outline-variant relative cursor-pointer hover:border-primary/50 transition-colors">
+<img class="w-full h-full object-cover rounded-full" data-alt="A highly detailed close-up portrait of a digital creator. Cyberpunk, neon lighting, highly realistic. Dark background. Violet and cyan highlights." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAY05kP8xVgE4HeLzJTRkN5yJQoFeNtAg2bRHv_6TSwcYyLt52Lrkh0-jIDPnM10TJMNHC-NL_Jfgk71luTgqPQJHs8gyzn0m8giCfArJ4u5CpYgvrIKUrhVp5wnQiQ2JwGXRnlPATDfrwbP-zgqPGkln7ocwofGoWwS02g6LipZMVVwgYH46P7MzSQrxjphQu7opPY0oF7lCxm-2oLaXsLLpfaCFu0BIB7MDiN5Jp7NhAR06jfZLq50g"/>
+<div class="absolute bottom-0 right-0 w-3 h-3 bg-tertiary rounded-full border-2 border-[#020205]"></div>
+</div>
+</div>
+</header>
+<!-- Main Content -->
+<main class="max-w-[1440px] mx-auto px-gutter md:px-margin py-8 md:py-12 mb-24 md:mb-0">
+<!-- Header Actions -->
+<div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+<div>
+<h2 class="font-headline-lg-mobile md:font-display-lg text-headline-lg-mobile md:text-display-lg text-on-surface mb-2">Résultats Générés</h2>
+<p class="text-on-surface-variant">Script optimisé pour la viralité TikTok/Reels</p>
+</div>
+<div class="flex flex-wrap gap-3">
+<button class="glass-card px-5 py-2.5 flex items-center gap-2 text-on-surface hover:text-primary transition-colors active:scale-95">
+<span class="material-symbols-outlined text-[20px]">content_copy</span>
+<span>Copier</span>
+</button>
+<button class="glass-card px-5 py-2.5 flex items-center gap-2 text-on-surface hover:text-primary transition-colors active:scale-95">
+<span class="material-symbols-outlined text-[20px]">download</span>
+<span>Télécharger audio</span>
+</button>
+<button class="bg-gradient-to-r from-primary to-cyan-500 text-on-background px-5 py-2.5 rounded-lg flex items-center gap-2 hover:-translate-y-[2px] transition-all active:scale-95 font-medium shadow-[0_0_20px_rgba(139,92,246,0.3)]">
+<span class="material-symbols-outlined text-[20px]">refresh</span>
+<span>Régénérer</span>
+</button>
+</div>
+</div>
+<!-- Bento Grid Layout -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+<!-- Left Column: Settings & Analysis (4 cols) -->
+<div class="md:col-span-4 flex flex-col gap-6">
+<!-- Angle Selector -->
+<div class="glass-card p-6">
+<div class="flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined text-secondary">alt_route</span>
+<h3 class="font-headline-md text-headline-md text-on-surface">Angles d'attaque</h3>
+</div>
+<div class="flex flex-col gap-unit">
+<button class="w-full text-left p-4 rounded-lg bg-gradient-to-r from-primary/20 to-cyan-500/20 border border-primary/30 relative overflow-hidden group">
+<div class="flex justify-between items-center relative z-10">
+<div>
+<span class="font-label-sm text-label-sm text-cyan-400 mb-1 block">ANGLE 1 • ACTIF</span>
+<span class="font-medium text-on-surface">Le Mythe Détruit</span>
+</div>
+<span class="material-symbols-outlined text-cyan-400">check_circle</span>
+</div>
+</button>
+<button class="w-full text-left p-4 rounded-lg bg-[#020205] border border-outline-variant hover:border-outline transition-colors">
+<div class="flex justify-between items-center">
+<div>
+<span class="font-label-sm text-label-sm text-on-surface-variant mb-1 block">ANGLE 2</span>
+<span class="text-on-surface-variant">Tutoriel Express</span>
+</div>
+</div>
+</button>
+<button class="w-full text-left p-4 rounded-lg bg-[#020205] border border-outline-variant hover:border-outline transition-colors">
+<div class="flex justify-between items-center">
+<div>
+<span class="font-label-sm text-label-sm text-on-surface-variant mb-1 block">ANGLE 3</span>
+<span class="text-on-surface-variant">Storytelling Émotionnel</span>
+</div>
+</div>
+</button>
+</div>
+</div>
+<!-- Viral Score & Prediction -->
+<div class="glass-card p-6 relative overflow-hidden">
+<div class="flex items-center justify-between mb-6 relative z-10">
+<h3 class="font-headline-md text-headline-md text-on-surface">Score de Viralité</h3>
+<div class="bg-gradient-to-r from-primary/20 to-cyan-500/20 text-cyan-400 font-bold font-label-sm text-label-sm px-3 py-1 rounded-full border border-primary/30">
+                            94/100
+                        </div>
+</div>
+<div class="flex flex-col gap-4 relative z-10 font-label-sm text-label-sm">
+<!-- Metric: Hook -->
+<div>
+<div class="flex justify-between mb-1">
+<span class="text-on-surface-variant uppercase">Hook (3 premières sec)</span>
+<span class="text-on-surface font-bold">98%</span>
+</div>
+<div class="h-1.5 bg-[#020205] rounded-full overflow-hidden">
+<div class="h-full bg-gradient-to-r from-primary to-cyan-400 w-[98%] progress-bar rounded-full"></div>
+</div>
+</div>
+<!-- Metric: Emotional Peak -->
+<div>
+<div class="flex justify-between mb-1">
+<span class="text-on-surface-variant uppercase">Pic Émotionnel</span>
+<span class="text-on-surface font-bold">85%</span>
+</div>
+<div class="h-1.5 bg-[#020205] rounded-full overflow-hidden">
+<div class="h-full bg-gradient-to-r from-primary to-cyan-400 w-[85%] progress-bar rounded-full"></div>
+</div>
+</div>
+<!-- Metric: Pacing -->
+<div>
+<div class="flex justify-between mb-1">
+<span class="text-on-surface-variant uppercase">Rythme &amp; Rétention</span>
+<span class="text-on-surface font-bold">92%</span>
+</div>
+<div class="h-1.5 bg-[#020205] rounded-full overflow-hidden">
+<div class="h-full bg-gradient-to-r from-primary to-cyan-400 w-[92%] progress-bar rounded-full"></div>
+</div>
+</div>
+<!-- Metric: SEO -->
+<div>
+<div class="flex justify-between mb-1">
+<span class="text-on-surface-variant uppercase">Mots-clés / SEO</span>
+<span class="text-on-surface font-bold">88%</span>
+</div>
+<div class="h-1.5 bg-[#020205] rounded-full overflow-hidden">
+<div class="h-full bg-gradient-to-r from-primary to-cyan-400 w-[88%] progress-bar rounded-full"></div>
+</div>
+</div>
+<!-- Metric: CTA -->
+<div>
+<div class="flex justify-between mb-1">
+<span class="text-on-surface-variant uppercase">Appel à l'action</span>
+<span class="text-on-surface font-bold">90%</span>
+</div>
+<div class="h-1.5 bg-[#020205] rounded-full overflow-hidden">
+<div class="h-full bg-gradient-to-r from-primary to-cyan-400 w-[90%] progress-bar rounded-full"></div>
+</div>
+</div>
+</div>
+<div class="mt-6 pt-4 border-t border-outline-variant">
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-cyan-400 mt-0.5">insights</span>
+<div>
+<h4 class="text-on-surface font-medium text-sm">Prédiction d'engagement</h4>
+<p class="text-on-surface-variant text-xs mt-1">Forte probabilité de watch-time &gt; 70%. L'accroche visuelle recommandée est cruciale.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Voice Selector -->
+<div class="glass-card p-6">
+<div class="flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined text-secondary">record_voice_over</span>
+<h3 class="font-headline-md text-headline-md text-on-surface">Voix Off (Gemini)</h3>
+</div>
+<div class="relative">
+<select class="w-full bg-[#020205] border border-outline-variant rounded-lg p-3 text-on-surface appearance-none focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400 transition-colors cursor-pointer">
+<option value="nova">Nova (Dynamique, Féminin)</option>
+<option value="echo">Echo (Posé, Masculin)</option>
+<option value="alloy">Alloy (Neutre, Narratif)</option>
+<option value="fable">Fable (Expressif, Storytelling)</option>
+<option value="onyx">Onyx (Grave, Autoritaire)</option>
+<option value="shimmer">Shimmer (Doux, ASMR)</option>
+<option value="jouvence">Jouvence (Jeune, Énergique) - FR</option>
+</select>
+<span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant pointer-events-none">expand_more</span>
+</div>
+<div class="mt-4 flex items-center justify-between bg-[#020205] p-3 rounded-lg border border-outline-variant">
+<button class="w-8 h-8 rounded-full bg-gradient-to-r from-primary to-cyan-500 flex items-center justify-center text-on-background hover:opacity-80 transition-opacity shadow-[0_0_10px_rgba(139,92,246,0.5)]">
+<span class="material-symbols-outlined text-[18px]">play_arrow</span>
+</button>
+<div class="flex-1 px-4">
+<!-- Fake waveform -->
+<div class="flex items-center gap-1 h-4">
+<div class="w-1 h-2 bg-cyan-400/40 rounded-full"></div>
+<div class="w-1 h-3 bg-cyan-400/60 rounded-full"></div>
+<div class="w-1 h-4 bg-cyan-400 rounded-full"></div>
+<div class="w-1 h-2 bg-cyan-400/40 rounded-full"></div>
+<div class="w-1 h-1 bg-cyan-400/20 rounded-full"></div>
+<div class="w-1 h-3 bg-cyan-400/60 rounded-full"></div>
+<div class="w-1 h-2 bg-cyan-400/40 rounded-full"></div>
+</div>
+</div>
+<span class="text-xs font-label-sm text-label-sm text-on-surface-variant">0:00 / 0:15</span>
+</div>
+</div>
+</div>
+<!-- Right Column: Script & Teleprompter (8 cols) -->
+<div class="md:col-span-8 flex flex-col gap-6">
+<div class="glass-card flex-1 flex flex-col overflow-hidden min-h-[600px] relative">
+<!-- Editor Header -->
+<div class="p-4 border-b border-outline-variant flex justify-between items-center bg-[#020205]">
+<div class="flex gap-2">
+<span class="bg-surface-container text-on-surface px-3 py-1 rounded-md font-label-sm text-label-sm border border-outline-variant">00:45 SECS</span>
+<span class="bg-surface-container text-on-surface px-3 py-1 rounded-md font-label-sm text-label-sm border border-outline-variant">140 MOTS</span>
+</div>
+<div class="flex gap-2">
+<button class="text-on-surface-variant hover:text-on-surface p-1 transition-colors" title="Mode Édition">
+<span class="material-symbols-outlined text-[20px]">edit</span>
+</button>
+<button class="text-on-surface-variant hover:text-on-surface p-1 transition-colors" title="Plein écran">
+<span class="material-symbols-outlined text-[20px]">fullscreen</span>
+</button>
+</div>
+</div>
+<!-- Teleprompter View -->
+<div class="flex-1 bg-[#020205] relative overflow-hidden flex flex-col items-center justify-center p-8 teleprompter-container cursor-ns-resize group">
+<!-- Teleprompter UI Overlays -->
+<div class="absolute left-4 top-1/2 -translate-y-1/2 flex flex-col gap-2 opacity-30 group-hover:opacity-100 transition-opacity">
+<button class="w-8 h-8 bg-surface-container rounded flex items-center justify-center hover:bg-surface-bright border border-outline-variant text-on-surface"><span class="material-symbols-outlined">add</span></button>
+<span class="text-center text-xs font-label-sm text-on-surface-variant">VITESSE</span>
+<button class="w-8 h-8 bg-surface-container rounded flex items-center justify-center hover:bg-surface-bright border border-outline-variant text-on-surface"><span class="material-symbols-outlined">remove</span></button>
+</div>
+<!-- Center Focus Line -->
+<div class="absolute w-full h-[2px] bg-gradient-to-r from-transparent via-cyan-400/30 to-transparent top-1/2 -translate-y-1/2 z-0 shadow-[0_0_10px_rgba(34,211,238,0.5)]"></div>
+<div class="absolute left-0 w-8 h-full bg-gradient-to-r from-[#020205] to-transparent z-10"></div>
+<div class="absolute right-0 w-8 h-full bg-gradient-to-l from-[#020205] to-transparent z-10"></div>
+<!-- Scrolling Text -->
+<div class="w-full max-w-2xl relative z-10 h-full overflow-hidden mask-image-vertical">
+<div class="teleprompter-text text-center text-2xl md:text-4xl font-headline-lg-mobile md:font-headline-md leading-relaxed text-on-background font-bold tracking-tight py-[50%] drop-shadow-md">
+<p class="text-primary mb-8 transition-colors duration-300 font-label-sm uppercase tracking-widest">[HOOK VISUEL: ZOOM RAPIDE SUR LE VISAGE]</p>
+<p class="mb-6 opacity-40 hover:opacity-100 transition-opacity text-on-surface-variant">Arrêtez de boire du café le matin si vous voulez être productif.</p>
+<p class="mb-6 opacity-40 hover:opacity-100 transition-opacity text-on-surface-variant">Je sais, ça sonne fou. Mais écoutez ça.</p>
+<p class="mb-8 text-cyan-400 opacity-40 hover:opacity-100 transition-opacity font-label-sm uppercase tracking-widest">[B-ROLL: PERSONNE FATIGUÉE À SON BUREAU]</p>
+<p class="mb-6 opacity-40 hover:opacity-100 transition-opacity text-on-surface-variant">Quand vous vous réveillez, votre taux de cortisol est déjà à son maximum naturel.</p>
+<p class="mb-6 opacity-40 hover:opacity-100 transition-opacity text-on-surface-variant">Boire du café à ce moment-là, c'est comme jeter de l'eau sur un feu déjà allumé.</p>
+<p class="mb-6 opacity-40 hover:opacity-100 transition-opacity text-on-surface-variant">Ça ne sert à rien, et ça provoque le fameux crash de 14h.</p>
+<p class="mb-8 text-primary opacity-40 hover:opacity-100 transition-opacity font-label-sm uppercase tracking-widest">[ZOOM AVANT, CHANGEMENT D'ANGLE]</p>
+<p class="mb-6 opacity-40 hover:opacity-100 transition-opacity text-on-surface-variant">La science dit d'attendre 90 minutes après le réveil.</p>
+<p class="mb-6 opacity-40 hover:opacity-100 transition-opacity text-on-surface-variant">Essayez ça demain. Vous n'aurez plus jamais de coup de barre l'après-midi.</p>
+<p class="mb-6 text-on-surface opacity-100 scale-105 transition-all drop-shadow-[0_0_8px_rgba(255,255,255,0.2)]">Enregistre cette vidéo pour t'en souvenir demain matin !</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Viral Checklist -->
+<div class="glass-card p-6">
+<h3 class="font-headline-md text-headline-md text-on-surface mb-4">Checklist de Tournage</h3>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<label class="flex items-start gap-3 p-3 rounded bg-[#020205] border border-outline-variant cursor-pointer hover:border-outline transition-colors">
+<input checked="" class="mt-1 rounded border-outline-variant bg-surface-container text-cyan-400 focus:ring-cyan-400/50 focus:ring-offset-0" type="checkbox"/>
+<span class="text-sm text-on-surface">Utiliser un micro cravate pour la clarté (Audio)</span>
+</label>
+<label class="flex items-start gap-3 p-3 rounded bg-[#020205] border border-outline-variant cursor-pointer hover:border-outline transition-colors">
+<input class="mt-1 rounded border-outline-variant bg-surface-container text-cyan-400 focus:ring-cyan-400/50 focus:ring-offset-0" type="checkbox"/>
+<span class="text-sm text-on-surface">Éclairage dramatique (lumière latérale forte)</span>
+</label>
+<label class="flex items-start gap-3 p-3 rounded bg-[#020205] border border-outline-variant cursor-pointer hover:border-outline transition-colors">
+<input class="mt-1 rounded border-outline-variant bg-surface-container text-cyan-400 focus:ring-cyan-400/50 focus:ring-offset-0" type="checkbox"/>
+<span class="text-sm text-on-surface">Préparer tasse de café vide (Accessoire B-Roll)</span>
+</label>
+<label class="flex items-start gap-3 p-3 rounded bg-[#020205] border border-outline-variant cursor-pointer hover:border-outline transition-colors">
+<input checked="" class="mt-1 rounded border-outline-variant bg-surface-container text-cyan-400 focus:ring-cyan-400/50 focus:ring-offset-0" type="checkbox"/>
+<span class="text-sm text-on-surface">Garder un rythme de parole rapide (1.2x)</span>
+</label>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="md:hidden fixed bottom-0 w-full z-50 backdrop-blur-xl border-t border-white/10 bg-[#020205]/80 flex justify-around items-center h-20 pb-safe px-2 shadow-[0_-10px_40px_rgba(221,183,255,0.05)]">
+<button class="flex flex-col items-center justify-center text-cyan-400 font-bold bg-cyan-400/10 rounded-xl px-3 py-1 active:scale-90 transition-all duration-400 cubic-bezier(0.2,0.8,0.2,1) hover:text-cyan-400/80">
+<span class="material-symbols-outlined font-label-sm text-label-sm">auto_awesome</span>
+<span class="font-data-mono text-[10px] uppercase mt-1">Studio</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant/70 active:scale-90 transition-all duration-400 cubic-bezier(0.2,0.8,0.2,1) hover:text-cyan-400/80">
+<span class="material-symbols-outlined font-label-sm text-label-sm">trending_up</span>
+<span class="font-data-mono text-[10px] uppercase mt-1">Trending</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant/70 active:scale-90 transition-all duration-400 cubic-bezier(0.2,0.8,0.2,1) hover:text-cyan-400/80">
+<span class="material-symbols-outlined font-label-sm text-label-sm">history</span>
+<span class="font-data-mono text-[10px] uppercase mt-1">History</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant/70 active:scale-90 transition-all duration-400 cubic-bezier(0.2,0.8,0.2,1) hover:text-cyan-400/80">
+<span class="material-symbols-outlined font-label-sm text-label-sm">account_balance_wallet</span>
+<span class="font-data-mono text-[10px] uppercase mt-1">Wallet</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant/70 active:scale-90 transition-all duration-400 cubic-bezier(0.2,0.8,0.2,1) hover:text-cyan-400/80">
+<span class="material-symbols-outlined font-label-sm text-label-sm">person</span>
+<span class="font-data-mono text-[10px] uppercase mt-1">Profile</span>
+</button>
+</nav>
+<style>
+        .mask-image-vertical {
+            mask-image: linear-gradient(to bottom, transparent 0%, black 20%, black 80%, transparent 100%);
+            -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 20%, black 80%, transparent 100%);
+        }
+    </style>
+</body></html>

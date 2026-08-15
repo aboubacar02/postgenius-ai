@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="fr" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script>
+      try {
+        var t = localStorage.getItem('pg-theme')
+        if (t === 'light') document.documentElement.classList.remove('dark')
+      } catch (e) {}
+    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="PostGenius AI - Générez des scripts viraux pour TikTok, Reels et Shorts avec l'IA." />
+    <meta name="keywords" content="script viral, TikTok, Reels, Shorts, IA, générateur de script, PostGenius" />
+    <meta name="author" content="PostGenius AI" />
+    <meta property="og:title" content="PostGenius AI - Scripts viraux générés par IA" />
+    <meta property="og:description" content="Générez des scripts viraux pour TikTok, Reels et Shorts en quelques secondes." />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="PostGenius AI" />
+    <meta name="twitter:description" content="Générez des scripts viraux pour TikTok, Reels et Shorts en quelques secondes." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Hanken+Grotesk:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <title>PostGenius AI</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>

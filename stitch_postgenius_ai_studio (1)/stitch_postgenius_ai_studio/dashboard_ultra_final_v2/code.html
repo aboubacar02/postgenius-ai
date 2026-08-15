@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>PostGenius AI - Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@100..900&amp;family=JetBrains+Mono:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "error": "#ffb4ab",
+                        "primary-fixed": "#e9ddff",
+                        "surface-bright": "#39393b",
+                        "tertiary": "#ffb869",
+                        "surface": "#020205",
+                        "primary-container": "#a078ff",
+                        "outline": "#958ea0",
+                        "background": "#020205",
+                        "secondary-fixed": "#e4e2e5",
+                        "surface-variant": "#353437",
+                        "surface-tint": "#8B5CF6",
+                        "inverse-on-surface": "#313032",
+                        "surface-container-lowest": "#020205",
+                        "on-primary-fixed-variant": "#5516be",
+                        "surface-container": "#020205",
+                        "outline-variant": "#494454",
+                        "inverse-primary": "#6d3bd7",
+                        "secondary": "#c8c6c9",
+                        "on-tertiary-fixed-variant": "#673d00",
+                        "primary": "#8B5CF6",
+                        "surface-container-low": "#020205",
+                        "on-secondary-container": "#b6b4b8",
+                        "on-surface-variant": "#cbc3d7",
+                        "on-tertiary": "#482900",
+                        "on-background": "#cbc3d7",
+                        "surface-container-highest": "#353437",
+                        "on-tertiary-container": "#3f2300",
+                        "secondary-container": "#47464a",
+                        "inverse-surface": "#e5e1e4",
+                        "error-container": "#93000a",
+                        "surface-container-high": "#2a2a2c",
+                        "on-primary-fixed": "#23005c",
+                        "tertiary-fixed": "#ffdcbb",
+                        "on-surface": "#cbc3d7",
+                        "on-tertiary-fixed": "#2c1700",
+                        "on-secondary-fixed": "#1b1b1e",
+                        "on-primary": "#3c0091",
+                        "secondary-fixed-dim": "#c8c6c9",
+                        "surface-dim": "#020205",
+                        "on-primary-container": "#340080",
+                        "on-error": "#690005",
+                        "on-secondary-fixed-variant": "#47464a",
+                        "primary-fixed-dim": "#8B5CF6",
+                        "on-secondary": "#303033",
+                        "tertiary-fixed-dim": "#ffb869",
+                        "tertiary-container": "#ca801e",
+                        "on-error-container": "#ffdad6"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "margin": "40px",
+                        "unit": "4px",
+                        "gutter": "24px",
+                        "container-max": "1200px"
+                    },
+                    "fontFamily": {
+                        "headline-lg-mobile": ["Hanken Grotesk"],
+                        "label-sm": ["JetBrains Mono"],
+                        "body-base": ["Hanken Grotesk"],
+                        "headline-md": ["Hanken Grotesk"],
+                        "display-lg": ["Hanken Grotesk"]
+                    },
+                    "fontSize": {
+                        "headline-lg-mobile": ["32px", { "lineHeight": "1.2", "fontWeight": "600" }],
+                        "label-sm": ["12px", { "lineHeight": "1.0", "letterSpacing": "0.05em", "fontWeight": "500" }],
+                        "body-base": ["16px", { "lineHeight": "1.6", "letterSpacing": "-0.01em", "fontWeight": "400" }],
+                        "headline-md": ["24px", { "lineHeight": "1.3", "letterSpacing": "-0.02em", "fontWeight": "500" }],
+                        "display-lg": ["48px", { "lineHeight": "1.1", "letterSpacing": "-0.04em", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            background-color: #020205;
+            color: #cbc3d7;
+        }
+        .card-premium {
+            border: 1px solid rgba(203, 195, 215, 0.05);
+            background: rgba(2, 2, 5, 0.6);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+        }
+    </style>
+</head>
+<body class="antialiased min-h-screen flex flex-col relative overflow-x-hidden font-body-base text-body-base bg-[#020205]">
+<!-- WebGL Background -->
+<div class="fixed inset-0 w-full h-full z-0 pointer-events-none">
+{{DATA:ANIMATION:ANIMATION_31}}
+</div>
+<div class="fixed inset-0 w-full h-full z-0 bg-[#020205]/60 pointer-events-none"></div>
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-[#020205]/50 dark:bg-[#020205]/50 backdrop-blur-xl border-b border-white/5 shadow-none flex justify-between items-center px-4 md:px-margin py-4">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+<span class="font-headline-md text-headline-md font-bold text-primary tracking-tight">PostGenius AI</span>
+</div>
+<!-- Desktop Nav -->
+<nav class="hidden md:flex gap-8 items-center">
+<a class="text-primary font-bold hover:bg-surface-variant/50 transition-colors active:scale-95 duration-200 py-2 px-4 rounded-full bg-primary/10" href="#">Studio</a>
+<a class="text-on-surface-variant hover:text-primary transition-all active:scale-95 duration-200 py-2 px-4 rounded-full" href="#">Trending</a>
+<a class="text-on-surface-variant hover:text-primary transition-all active:scale-95 duration-200 py-2 px-4 rounded-full" href="#">History</a>
+<a class="text-on-surface-variant hover:text-primary transition-all active:scale-95 duration-200 py-2 px-4 rounded-full" href="#">Wallet</a>
+<a class="text-on-surface-variant hover:text-primary transition-all active:scale-95 duration-200 py-2 px-4 rounded-full" href="#">Profile</a>
+</nav>
+<div class="flex items-center gap-4">
+<div class="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-full card-premium">
+<span class="material-symbols-outlined text-tertiary" style="font-size: 16px;">stars</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">120 Credits</span>
+</div>
+</div>
+</header>
+<!-- Main Canvas -->
+<main class="flex-1 w-full max-w-container-max mx-auto px-4 md:px-margin pt-28 pb-32 md:pb-24 z-10 relative flex flex-col gap-12">
+<!-- Hero Section -->
+<section class="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 pt-8">
+<div class="flex flex-col gap-4 max-w-2xl">
+<h1 class="font-display-lg text-headline-lg-mobile md:text-display-lg text-on-surface-variant">Prêt à devenir viral ?</h1>
+<p class="text-on-surface-variant text-lg">Générez des vidéos courtes percutantes en quelques secondes avec notre IA de dernière génération.</p>
+</div>
+<button class="bg-primary hover:bg-[#7c4dff] text-[#e9ddff] px-6 py-3 rounded-lg font-bold transition-colors shadow-[0_0_20px_rgba(139,92,246,0.3)] active:scale-95 flex items-center gap-2">
+<span class="material-symbols-outlined">add</span>
+                Nouveau Projet
+            </button>
+</section>
+<!-- Stats Grid -->
+<section class="grid grid-cols-2 md:grid-cols-4 gap-4">
+<div class="card-premium rounded-xl p-5 flex flex-col gap-2">
+<div class="flex items-center gap-2 text-on-surface-variant mb-2">
+<span class="material-symbols-outlined text-primary text-sm">visibility</span>
+<span class="font-label-sm text-label-sm">Vues totales</span>
+</div>
+<div class="font-headline-md text-headline-md text-primary">2.4M</div>
+<div class="text-xs text-primary flex items-center gap-1">
+<span class="material-symbols-outlined" style="font-size: 12px;">trending_up</span> +12% ce mois
+                </div>
+</div>
+<div class="card-premium rounded-xl p-5 flex flex-col gap-2">
+<div class="flex items-center gap-2 text-on-surface-variant mb-2">
+<span class="material-symbols-outlined text-tertiary text-sm">favorite</span>
+<span class="font-label-sm text-label-sm">Engagement</span>
+</div>
+<div class="font-headline-md text-headline-md text-primary">8.2%</div>
+<div class="text-xs text-tertiary flex items-center gap-1">
+<span class="material-symbols-outlined" style="font-size: 12px;">trending_up</span> +1.5% ce mois
+                </div>
+</div>
+<div class="card-premium rounded-xl p-5 flex flex-col gap-2">
+<div class="flex items-center gap-2 text-on-surface-variant mb-2">
+<span class="material-symbols-outlined text-secondary text-sm">movie_filter</span>
+<span class="font-label-sm text-label-sm">Vidéos générées</span>
+</div>
+<div class="font-headline-md text-headline-md text-primary">148</div>
+<div class="text-xs text-on-surface-variant flex items-center gap-1">
+                    Total
+                </div>
+</div>
+<div class="card-premium rounded-xl p-5 flex flex-col gap-2">
+<div class="flex items-center gap-2 text-on-surface-variant mb-2">
+<span class="material-symbols-outlined text-primary text-sm">schedule</span>
+<span class="font-label-sm text-label-sm">Temps sauvé</span>
+</div>
+<div class="font-headline-md text-headline-md text-primary">42h</div>
+<div class="text-xs text-primary flex items-center gap-1">
+                    Estimé ce mois
+                </div>
+</div>
+</section>
+<!-- Recent Creations -->
+<section class="flex flex-col gap-6">
+<div class="flex justify-between items-center">
+<h2 class="font-headline-md text-headline-md text-on-surface-variant">Créations Récentes</h2>
+<button class="text-primary font-label-sm text-label-sm hover:text-[#7c4dff] transition-colors flex items-center gap-1">
+                    Voir tout <span class="material-symbols-outlined" style="font-size: 16px;">arrow_forward</span>
+</button>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+<!-- Video Card 1 -->
+<div class="group relative aspect-[9/16] rounded-xl overflow-hidden card-premium cursor-pointer transition-transform hover:-translate-y-1 duration-300 p-0">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-105" style="background-image: url('https://lh3.googleusercontent.com/aida/AP1WRLvT6IxFvHqsgnps0Gv2d_lPACCDuM60dqKsetVyMT90-t7oqt7aQZzWlQJBmk4q9ngkNpAI-5dSnhbQA2mdTge8KNy4mWdYj01zEgJHV0yV7bY0P4lsrEZqOXeQQ89Er5l6JCk_pWU7Cl8CdsaC9OIAR_dolSw-lpTTjQ6m0Jt-jM244tfa7Vg4Vnjgff3H4_PnzObOLO6myHPUnahExhSx_WTifM4S2gfh9gYp1bJJ6OcdnddF4gNN4z7i'); background-position: left center; background-size: 400%;"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-[#020205]/90 via-transparent to-transparent"></div>
+<div class="absolute bottom-0 left-0 p-4 w-full">
+<div class="flex items-center justify-between mb-2">
+<span class="bg-[#020205]/60 backdrop-blur-md px-2 py-1 rounded text-[10px] font-label-sm text-on-surface-variant border border-on-surface-variant/10">0:15</span>
+<span class="material-symbols-outlined text-primary opacity-0 group-hover:opacity-100 transition-opacity">play_circle</span>
+</div>
+<h3 class="text-sm font-medium text-on-surface-variant truncate">Tech Trends 2024</h3>
+<p class="text-xs text-on-surface-variant mt-1">Il y a 2h</p>
+</div>
+</div>
+<!-- Video Card 2 -->
+<div class="group relative aspect-[9/16] rounded-xl overflow-hidden card-premium cursor-pointer transition-transform hover:-translate-y-1 duration-300 p-0">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-105" style="background-image: url('https://lh3.googleusercontent.com/aida/AP1WRLvT6IxFvHqsgnps0Gv2d_lPACCDuM60dqKsetVyMT90-t7oqt7aQZzWlQJBmk4q9ngkNpAI-5dSnhbQA2mdTge8KNy4mWdYj01zEgJHV0yV7bY0P4lsrEZqOXeQQ89Er5l6JCk_pWU7Cl8CdsaC9OIAR_dolSw-lpTTjQ6m0Jt-jM244tfa7Vg4Vnjgff3H4_PnzObOLO6myHPUnahExhSx_WTifM4S2gfh9gYp1bJJ6OcdnddF4gNN4z7i'); background-position: center center; background-size: 400%;"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-[#020205]/90 via-transparent to-transparent"></div>
+<div class="absolute bottom-0 left-0 p-4 w-full">
+<div class="flex items-center justify-between mb-2">
+<span class="bg-[#020205]/60 backdrop-blur-md px-2 py-1 rounded text-[10px] font-label-sm text-on-surface-variant border border-on-surface-variant/10">0:30</span>
+<span class="material-symbols-outlined text-primary opacity-0 group-hover:opacity-100 transition-opacity">play_circle</span>
+</div>
+<h3 class="text-sm font-medium text-on-surface-variant truncate">Design Tips</h3>
+<p class="text-xs text-on-surface-variant mt-1">Hier</p>
+</div>
+</div>
+<!-- Video Card 3 -->
+<div class="group relative aspect-[9/16] rounded-xl overflow-hidden card-premium cursor-pointer transition-transform hover:-translate-y-1 duration-300 p-0">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-105" style="background-image: url('https://lh3.googleusercontent.com/aida/AP1WRLvT6IxFvHqsgnps0Gv2d_lPACCDuM60dqKsetVyMT90-t7oqt7aQZzWlQJBmk4q9ngkNpAI-5dSnhbQA2mdTge8KNy4mWdYj01zEgJHV0yV7bY0P4lsrEZqOXeQQ89Er5l6JCk_pWU7Cl8CdsaC9OIAR_dolSw-lpTTjQ6m0Jt-jM244tfa7Vg4Vnjgff3H4_PnzObOLO6myHPUnahExhSx_WTifM4S2gfh9gYp1bJJ6OcdnddF4gNN4z7i'); background-position: right center; background-size: 400%;"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-[#020205]/90 via-transparent to-transparent"></div>
+<div class="absolute bottom-0 left-0 p-4 w-full">
+<div class="flex items-center justify-between mb-2">
+<span class="bg-[#020205]/60 backdrop-blur-md px-2 py-1 rounded text-[10px] font-label-sm text-on-surface-variant border border-on-surface-variant/10">0:45</span>
+<span class="material-symbols-outlined text-primary opacity-0 group-hover:opacity-100 transition-opacity">play_circle</span>
+</div>
+<h3 class="text-sm font-medium text-on-surface-variant truncate">Product Launch</h3>
+<p class="text-xs text-on-surface-variant mt-1">Il y a 3 jours</p>
+</div>
+</div>
+<!-- Video Card 4 (Hidden on small mobile) -->
+<div class="group relative aspect-[9/16] rounded-xl overflow-hidden card-premium cursor-pointer transition-transform hover:-translate-y-1 duration-300 hidden md:block p-0">
+<div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-105" style="background-image: url('https://lh3.googleusercontent.com/aida/AP1WRLvT6IxFvHqsgnps0Gv2d_lPACCDuM60dqKsetVyMT90-t7oqt7aQZzWlQJBmk4q9ngkNpAI-5dSnhbQA2mdTge8KNy4mWdYj01zEgJHV0yV7bY0P4lsrEZqOXeQQ89Er5l6JCk_pWU7Cl8CdsaC9OIAR_dolSw-lpTTjQ6m0Jt-jM244tfa7Vg4Vnjgff3H4_PnzObOLO6myHPUnahExhSx_WTifM4S2gfh9gYp1bJJ6OcdnddF4gNN4z7i'); background-position: 80% center; background-size: 400%;"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-[#020205]/90 via-transparent to-transparent"></div>
+<div class="absolute bottom-0 left-0 p-4 w-full">
+<div class="flex items-center justify-between mb-2">
+<span class="bg-[#020205]/60 backdrop-blur-md px-2 py-1 rounded text-[10px] font-label-sm text-on-surface-variant border border-on-surface-variant/10">0:20</span>
+<span class="material-symbols-outlined text-primary opacity-0 group-hover:opacity-100 transition-opacity">play_circle</span>
+</div>
+<h3 class="text-sm font-medium text-on-surface-variant truncate">AI Tutorial</h3>
+<p class="text-xs text-on-surface-variant mt-1">Il y a 1 sem.</p>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full flex justify-around items-center py-3 px-4 z-50 rounded-t-2xl border-t border-white/10 shadow-2xl bg-[#020205]/70 backdrop-blur-xl pb-safe">
+<a class="flex flex-col items-center justify-center text-primary font-bold bg-primary/10 rounded-full py-1 px-3 active:scale-90 duration-150" href="#">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 1;">movie_filter</span>
+<span class="font-label-sm text-[10px]">Studio</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-all active:scale-90 duration-150 py-1 px-3" href="#">
+<span class="material-symbols-outlined mb-1">trending_up</span>
+<span class="font-label-sm text-[10px]">Trending</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-all active:scale-90 duration-150 py-1 px-3" href="#">
+<span class="material-symbols-outlined mb-1">history</span>
+<span class="font-label-sm text-[10px]">History</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-all active:scale-90 duration-150 py-1 px-3" href="#">
+<span class="material-symbols-outlined mb-1">account_balance_wallet</span>
+<span class="font-label-sm text-[10px]">Wallet</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-primary transition-all active:scale-90 duration-150 py-1 px-3" href="#">
+<span class="material-symbols-outlined mb-1">person</span>
+<span class="font-label-sm text-[10px]">Profile</span>
+</a>
+</nav>
+<style>
+        @supports (padding-bottom: env(safe-area-inset-bottom)) {
+            .pb-safe {
+                padding-bottom: calc(0.75rem + env(safe-area-inset-bottom));
+            }
+        }
+    </style>
+</body></html>

@@ -1,0 +1,23 @@
+import { cn } from '../../lib/utils'
+
+const badgeVariants = {
+  default: 'bg-primary text-primary-foreground shadow-[0_0_12px_rgba(139,92,246,0.2)]',
+  secondary: 'bg-secondary text-secondary-foreground',
+  destructive: 'bg-destructive-10 text-destructive',
+  outline: 'border border-border text-foreground'
+}
+
+export function Badge({ className, variant = 'default', ...props }) {
+  return (
+    <span
+      data-slot="badge"
+      className={cn(
+        'group/badge inline-flex h-5 w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-full border border-transparent px-2 py-0.5 text-xs font-medium whitespace-nowrap transition-all',
+        '[&>svg]:pointer-events-none [&>svg]:size-3',
+        badgeVariants[variant],
+        className
+      )}
+      {...props}
+    />
+  )
+}

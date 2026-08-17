@@ -1,20 +1,23 @@
 import { NavLink } from 'react-router-dom'
-import { Flame, Gauge, History, LayoutDashboard, Sparkles, Wallet } from 'lucide-react'
+import { Clapperboard, Flame, Gauge, History, LayoutDashboard, Sparkles, Wallet } from 'lucide-react'
 import { cn } from '../../lib/utils'
-
-const NAV_ITEMS = [
-  { href: '/', label: 'Studio', icon: LayoutDashboard, end: true },
-  { href: '/generateur', label: 'Créer', icon: Sparkles },
-  { href: '/score-viral', label: 'Score', icon: Gauge },
-  { href: '/historique', label: 'History', icon: History },
-  { href: '/tendances', label: 'Trending', icon: Flame },
-  { href: '/tarifs', label: 'Wallet', icon: Wallet }
-]
+import { useI18n } from '../../lib/i18n'
 
 export function BottomNav() {
+  const { t } = useI18n()
+  const NAV_ITEMS = [
+    { href: '/', label: t('nav.studio'), icon: LayoutDashboard, end: true },
+    { href: '/generateur', label: t('nav.create'), icon: Sparkles },
+    { href: '/faceless', label: t('nav.faceless'), icon: Clapperboard },
+    { href: '/score-viral', label: t('nav.score'), icon: Gauge },
+    { href: '/historique', label: t('nav.history'), icon: History },
+    { href: '/tendances', label: t('nav.trending'), icon: Flame },
+    { href: '/tarifs', label: t('nav.wallet'), icon: Wallet }
+  ]
+
   return (
-    <nav className="fixed inset-x-0 bottom-0 z-40 border-t border-primary/15 bg-background/80 backdrop-blur-xl md:hidden">
-      <div className="mx-auto flex h-16 max-w-[600px] items-center justify-around px-2">
+    <nav className="fixed inset-x-0 bottom-0 z-40 border-t border-white/[0.07] bg-pg-surface/95 backdrop-blur-xl md:hidden">
+      <div className="mx-auto flex h-14 max-w-[600px] items-center justify-around px-2">
         {NAV_ITEMS.map((item) => {
           const Icon = item.icon
           return (
@@ -24,17 +27,30 @@ export function BottomNav() {
               end={item.end}
               className={({ isActive }) =>
                 cn(
-                  'flex flex-col items-center justify-center gap-1 rounded-xl px-3 py-1 transition-all',
+                  'relative flex flex-col items-center justify-center gap-0.5 rounded-lg px-2 py-1 transition-all duration-150',
                   isActive
-                    ? 'bg-primary/10 text-primary shadow-[0_0_15px_rgba(139,92,246,0.2)]'
-                    : 'text-muted-foreground hover:text-primary'
+                    ? 'text-primary'
+                    : 'text-pg-muted hover:text-pg-text'
                 )
               }
             >
               {({ isActive }) => (
                 <>
-                  <Icon className={cn('size-5', isActive && 'fill-current')} />
-                  <span className="font-mono text-[10px] uppercase tracking-wider">{item.label}</span>
+                  {isActive && (
+                    <span className="absolute -top-0 left-1/2 h-0.5 w-5 -translate-x-1/2 rounded-full bg-primary shadow-[0_0_8px_rgba(99,102,241,0.4)]" />
+                  )}
+                  <Icon
+                    className="size-5 transition-colors"
+                    strokeWidth={isActive ? 2.2 : 1.6}
+                  />
+                  <span
+                    className={cn(
+                      'text-[9px] uppercase tracking-wider transition-all',
+                      isActive ? 'font-semibold text-primary' : 'font-medium'
+                    )}
+                  >
+                    {item.label}
+                  </span>
                 </>
               )}
             </NavLink>

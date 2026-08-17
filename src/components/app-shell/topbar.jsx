@@ -1,126 +1,86 @@
 import { useState } from 'react'
-import { Link, NavLink, useNavigate } from 'react-router-dom'
-import { toast } from '../ui/sonner'
-import { Globe, LogIn, LogOut, Settings, Sparkles, User, Zap } from 'lucide-react'
+import { Link, useNavigate } from 'react-router-dom'
+import { ChevronDown, LogIn, LogOut, Menu, Plus, Search, Sparkles, Zap } from 'lucide-react'
 import { Button } from '../ui/button'
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator } from '../ui/dropdown-menu'
-import { ThemeToggle } from '../theme-toggle'
 import { GradientAvatar } from '../media/gradient-avatar'
-import { useApp } from '../../lib/app-context'
-import { cn } from '../../lib/utils'
+import { AppDrawer } from './app-drawer'
+import { useApp, isUnlimitedPlan } from '../../lib/app-context'
+import { useI18n, LANGUAGES } from '../../lib/i18n'
 
-const NAV_ITEMS = [
-  { href: '/', label: 'Studio', end: true },
-  { href: '/tendances', label: 'Trending' },
-  { href: '/historique', label: 'History' },
-  { href: '/tarifs', label: 'Wallet' },
-  { href: '/parametres', label: 'Profile' }
-]
-
-export function Topbar() {
+export function Topbar({ onOpenCommandPalette }) {
   const navigate = useNavigate()
-  const { user, creditsLeft, creditsTotal, logout } = useApp()
-  const [lang, setLang] = useState('FR')
+  const { user, creditsLeft, creditsTotal, plan, logout } = useApp()
+  const { t, lang, setLang } = useI18n()
+  const [drawerOpen, setDrawerOpen] = useState(false)
   const display = user || { name: 'Camille Aubert', email: 'camille.aubert@postgenius.ai', initials: 'CA', plan: 'Starter' }
+  const currentLang = LANGUAGES.find((l) => l.id === lang) || LANGUAGES[0]
 
   return (
-    <header className="fixed top-0 z-40 w-full border-b border-white/5 bg-background/50 backdrop-blur-xl">
-      <div className="mx-auto flex h-16 w-full max-w-[1200px] items-center justify-between gap-4 px-4 md:px-8">
-        <Link to="/" className="flex items-center gap-2">
-          <span className="flex size-8 items-center justify-center rounded-lg bg-primary-15 text-primary">
-            <Sparkles className="size-4" />
-          </span>
-          <span className="font-heading text-[18px] font-extrabold tracking-tight text-primary">
-            PostGenius AI
-          </span>
-        </Link>
-
-        {/* Desktop Nav — pills Stitch */}
-        <nav className="hidden items-center gap-1 lg:flex">
-          {NAV_ITEMS.map((item) => (
-            <NavLink
-              key={item.href}
-              to={item.href}
-              end={item.end}
-              className={({ isActive }) =>
-                cn(
-                  'rounded-full px-4 py-2 text-sm font-medium transition-all active:scale-95',
-                  isActive
-                    ? 'bg-primary/10 font-bold text-primary'
-                    : 'text-muted-foreground hover:bg-surface-variant/50 hover:text-primary'
-                )
-              }
-            >
-              {item.label}
-            </NavLink>
-          ))}
-        </nav>
-
-        <div className="flex items-center gap-2.5">
-          <Button
-            variant="ghost"
-            size="sm"
-            className="hidden sm:inline-flex"
-            onClick={() => setLang((l) => (l === 'FR' ? 'EN' : 'FR'))}
-            aria-label="Changer de langue"
-          >
-            <Globe data-icon="inline-start" />
-            {lang}
-          </Button>
-
-          <div className="flex items-center gap-2 rounded-full border border-primary/15 bg-card/60 px-3 py-1.5 backdrop-blur-md md:flex">
-            <Zap className="size-3.5 text-warning" />
-            <span className="font-mono text-[12px] font-medium tracking-wider text-muted-foreground">
-              {Math.min(creditsLeft, creditsTotal)} / {creditsTotal} crédits
-            </span>
+    <>
+      <AppDrawer open={drawerOpen} onOpenChange={setDrawerOpen} />
+      <header className="fixed inset-x-0 top-0 z-40 h-16 border-b border-white/[0.07] bg-pg-bg/95 backdrop-blur-xl">
+        <div className="mx-auto flex h-14 w-full max-w-[1200px] items-center justify-between gap-3 px-4 md:px-8">
+          {/* Mobile logo */}
+          <div className="lg:hidden">
+            <Link to="/" className="pg-brand flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-primary to-purple-500 text-white">
+              <Sparkles className="size-4" />
+            </Link>
           </div>
 
-          <ThemeToggle />
+          {/* Mobile menu button */}
+          <div className="lg:hidden">
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setDrawerOpen(true)}
+              aria-label={t('topbar.menu')}
+            >
+              <Menu />
+            </Button>
+          </div>
 
-          <DropdownMenu>
-            <DropdownMenuTrigger>
-              <Button variant="ghost" size="icon-sm" aria-label="Menu du compte">
-                <GradientAvatar initials={display.initials} className="size-6 text-[10px]" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-56">
-              <DropdownMenuLabel>
-                <p className="truncate text-sm font-medium text-foreground">{display.name}</p>
-                <p className="truncate text-xs text-muted-foreground">{display.email}</p>
-              </DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              {user ? (
-                <>
-                  <DropdownMenuItem onClick={() => navigate('/parametres')}>
-                    <User />
-                    Mon profil
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => navigate('/parametres')}>
-                    <Settings />
-                    Paramètres
-                  </DropdownMenuItem>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem
-                    className="text-muted-foreground hover:bg-destructive-10 hover:text-destructive"
-                    onClick={() => {
-                      logout()
-                      toast.success('Déconnexion réussie')
-                    }}
-                  >
-                    <LogOut />
-                    Déconnexion
-                  </DropdownMenuItem>
-                </>
-              ) : (
-                <DropdownMenuItem onClick={() => navigate('/parametres')}>
-                  <LogIn />
-                  Se connecter / Créer un compte
-                </DropdownMenuItem>
-              )}
-            </DropdownMenuContent>
-          </DropdownMenu>
+          <div className="hidden flex-1 md:block" />
+
+          <div className="flex items-center gap-2">
+            {/* SEARCH */}
+            <button
+              type="button"
+              onClick={() => onOpenCommandPalette?.(true)}
+              className="hidden h-9 w-[230px] items-center gap-2 rounded-pg border border-white/[0.08] bg-white/[0.025] px-3 text-left text-xs text-pg-muted transition hover:border-white/[0.14] hover:bg-white/[0.04] md:flex"
+            >
+              <Search size={14} />
+              <span className="flex-1">{t('topbar.search') || 'Rechercher...'}</span>
+              <span className="flex items-center gap-0.5 rounded border border-white/[0.08] px-1.5 py-0.5 text-[9px] text-pg-subtle">
+                ⌘K
+              </span>
+            </button>
+
+            {/* CREDITS */}
+            <div className="hidden h-9 items-center gap-2 rounded-pg border border-white/[0.08] bg-white/[0.025] px-3 text-xs sm:flex">
+              <span className="text-pg-amber">⚡</span>
+              <span className="font-medium text-pg-text">
+                {isUnlimitedPlan(plan) ? '∞' : `${Math.min(creditsLeft, creditsTotal)} / ${creditsTotal}`}
+              </span>
+              <span className="text-pg-subtle">crédits</span>
+            </div>
+
+            {/* CTA */}
+            <button
+              onClick={() => navigate('/generateur')}
+              className="pg-button-primary hidden sm:inline-flex items-center gap-1.5 rounded-pg bg-gradient-to-r from-primary to-purple-500 px-3.5 py-2 text-xs font-semibold text-white shadow-[0_0_20px_rgba(99,102,241,0.3)] transition-all hover:shadow-[0_0_30px_rgba(99,102,241,0.5)] hover:scale-[1.02] active:scale-[0.98]"
+            >
+              <Plus size={14} />
+              Nouvelle vidéo
+            </button>
+
+            {/* AVATAR */}
+            <div className="ml-1 flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-cyan-400 to-indigo-500 text-xs font-bold text-white">
+              {display.initials}
+            </div>
+          </div>
         </div>
-      </div>
-    </header>
+      </header>
+    </>
   )
 }

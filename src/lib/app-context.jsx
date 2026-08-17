@@ -9,6 +9,7 @@ import {
   deleteGeneratedScript
 } from '../services/supabase'
 import { generateScript as callGemini, analyzeHook as callAnalyze } from '../services/gemini'
+import { captureReferrer } from '../services/referral'
 import {
   generateScript as localGenerate,
   toV0Script,
@@ -20,8 +21,12 @@ import {
 
 export const DAILY_TOTAL = CREDITS_PER_DAY
 
-const PLAN_LIMITS = { Starter: DAILY_TOTAL, Pro: 25, Studio: 200 }
+const PLAN_LIMITS = { Starter: CREDITS_PER_DAY, Pro: 20, Studio: 500 }
 const PLAN_NAMES = ['Starter', 'Pro', 'Studio']
+
+export function isUnlimitedPlan(plan) {
+  return plan === 'Studio'
+}
 
 const AppContext = createContext(null)
 
@@ -78,6 +83,10 @@ export function AppProvider({ children }) {
   }, [theme])
 
   const setTheme = useCallback((next) => setThemeState(next), [])
+
+  useEffect(() => {
+    captureReferrer()
+  }, [])
 
   useEffect(() => {
     getCurrentSession().then(setSession).catch(() => {})
@@ -219,6 +228,8 @@ export function AppProvider({ children }) {
         aiMetrics: real?.metrics,
         aiScore: real?.score,
         analysis: real?.analysis,
+        reason: real?.reason,
+        actionPlan: real?.actionPlan,
         hook
       })
       const tips =

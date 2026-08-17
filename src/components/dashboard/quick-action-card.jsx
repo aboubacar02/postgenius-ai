@@ -5,7 +5,7 @@ export function QuickActionCard({ href, title, description, icon: Icon }) {
   return (
     <Link
       to={href}
-      className="lift glass premium-edge group relative flex flex-col gap-3 rounded-lg p-5 transition-colors hover:border-primary-40 hover:bg-card-80 hover:-translate-y-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring-50"
+      className="lift glass premium-edge group relative flex flex-col gap-3 rounded-lg p-5 transition-colors hover:border-primary-40 hover:bg-card-60 hover:-translate-y-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring-50"
     >
       <div className="flex items-center justify-between">
         <div className="flex size-9 items-center justify-center rounded-lg bg-primary-10 text-primary">

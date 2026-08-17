@@ -39,6 +39,7 @@ function isQuotaError(err) {
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 
 function parseKeys(raw) {
+  if (Array.isArray(raw)) return raw.map(String).map((s) => s.trim()).filter(Boolean)
   return String(raw || '')
     .split(',')
     .map((k) => k.trim())
@@ -92,6 +93,38 @@ export function createGeminiServer(rawKeys) {
         // toutes les clés, on remonte l'erreur directement.
         throw lastError
       }
+    }
+
+    throw new QuotaExhaustedError(lastError)
+  }
+
+  async function generateText(prompt) {
+    if (!available) throw new Error('Clé Gemini serveur manquante')
+
+    let lastError = null
+
+    for (let k = 0; k < keys.length; k++) {
+      const key = currentKey()
+      const genAI = new GoogleGenerativeAI(key)
+      let quotaHit = false
+
+      for (let attempt = 0; attempt < MAX_ATTEMPTS && !quotaHit; attempt++) {
+        const model = genAI.getGenerativeModel({ model: MODELS[attempt % MODELS.length] })
+        try {
+          const result = await model.generateContent(prompt)
+          return result.response.text()
+        } catch (err) {
+          lastError = err
+          if (isQuotaError(err)) {
+            quotaHit = true
+            rotate()
+            break
+          }
+          if (attempt < MAX_ATTEMPTS - 1) await sleep(400)
+        }
+      }
+
+      if (!quotaHit && lastError) throw lastError
     }
 
     throw new QuotaExhaustedError(lastError)
@@ -156,6 +189,7 @@ export function createGeminiServer(rawKeys) {
   return {
     keyCount: keys.length,
     generateContent: (prompt) => callModel(prompt),
+    generateText,
     synthesizeVoice
   }
 }

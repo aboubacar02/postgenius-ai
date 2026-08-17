@@ -301,7 +301,7 @@ export function scoreHook(hook, { cta = '', keyword = '' } = {}) {
 
 // Algorithme de score viral 10x : fusionne la note de l'IA (70 %) avec
 // l'analyse locale (30 %) pilier par pilier, pour un score stable et transparent.
-export function computeViralScore({ aiMetrics, aiScore, analysis, hook, cta = '', scriptText = '', keyword = '' }) {
+export function computeViralScore({ aiMetrics, aiScore, analysis, reason, actionPlan, hook, cta = '', scriptText = '', keyword = '' }) {
   const local = scoreHook(hook, { cta, keyword })
   const byId = {}
   VIRAL_PILLARS.forEach(({ id }) => {
@@ -345,6 +345,8 @@ export function computeViralScore({ aiMetrics, aiScore, analysis, hook, cta = ''
     aiScore: finalAiScore,
     localScore: Math.round(metrics.reduce((s, m) => s + m.localScore, 0) / metrics.length),
     analysis: analysis || null,
+    reason: reason || null,
+    actionPlan: Array.isArray(actionPlan) && actionPlan.length ? actionPlan : null,
     metrics,
     factors: metrics,
     suggestions: local.suggestions,

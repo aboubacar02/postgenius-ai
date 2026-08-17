@@ -17,6 +17,15 @@ export async function signIn(email, password) {
   return data.session
 }
 
+export async function signInWithGoogle() {
+  const { data, error } = await supabase.auth.signInWithOAuth({
+    provider: 'google',
+    options: { redirectTo: window.location.origin }
+  })
+  if (error) throw error
+  return data
+}
+
 export async function signUp(email, password) {
   const { data, error } = await supabase.auth.signUp({ email, password })
   if (error) throw error

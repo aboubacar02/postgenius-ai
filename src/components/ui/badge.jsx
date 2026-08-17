@@ -1,7 +1,7 @@
 import { cn } from '../../lib/utils'
 
 const badgeVariants = {
-  default: 'bg-primary text-primary-foreground shadow-[0_0_12px_rgba(139,92,246,0.2)]',
+  default: 'bg-primary text-primary-foreground',
   secondary: 'bg-secondary text-secondary-foreground',
   destructive: 'bg-destructive-10 text-destructive',
   outline: 'border border-border text-foreground'

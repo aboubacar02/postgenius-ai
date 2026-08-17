@@ -66,3 +66,11 @@ export function defaultCurrency() {
   }
   return CURRENCIES[1]
 }
+
+export function setStoredCurrency(id) {
+  try {
+    localStorage.setItem('pg-currency', id)
+  } catch {
+    /* stockage indisponible */
+  }
+}

@@ -6,8 +6,10 @@ import { Badge } from '../ui/badge'
 import { cn } from '../../lib/utils'
 import { formatPrice } from '../../lib/currencies'
 import { createPaymentSession } from '../../services/payment'
+import { useI18n } from '../../lib/i18n'
 
 export function PaymentModal({ open, plan, currency, methods, onClose, onSuccess }) {
+  const { t } = useI18n()
   const [method, setMethod] = useState(null)
   const [step, setStep] = useState('choose')
   const [reference, setReference] = useState('')
@@ -37,16 +39,16 @@ export function PaymentModal({ open, plan, currency, methods, onClose, onSuccess
         amount: plan.price
       })
 
-      if (session.status === 'pending' && (session.authorization_url || session.payment_url)) {
-        const url = session.authorization_url || session.payment_url
-        toast.info('Redirection vers la page de paiement sécurisée…')
+      if (session.status === 'pending' && (session.authorization_url || session.payment_url || session.approval_url)) {
+        const url = session.authorization_url || session.payment_url || session.approval_url
+        toast.info(t('pricing.paymentRedirect'))
         window.open(url, '_blank', 'noopener,noreferrer')
       }
 
       setReference(session.reference)
       setStep('success')
     } catch {
-      toast.error('Paiement impossible pour le moment — réessaie.')
+      toast.error(t('pricing.paymentFail'))
       setStep('choose')
     }
   }
@@ -63,14 +65,14 @@ export function PaymentModal({ open, plan, currency, methods, onClose, onSuccess
             <div className="flex items-center gap-2">
               <Badge className="gap-1 rounded-full bg-amber-400 text-amber-950">
                 <ShieldCheck className="size-3" />
-                Mode Test
+                {t('pricing.paymentTest')}
               </Badge>
               <span className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
                 {plan.name}
               </span>
             </div>
             <h2 className="font-heading text-lg font-semibold text-balance">
-              Abonnement {plan.name}
+              {t('pricing.subscribeTo', { plan: plan.name })}
             </h2>
             <p className="text-sm text-muted-foreground">
               <span className="font-mono text-xl font-semibold text-foreground">
@@ -82,7 +84,7 @@ export function PaymentModal({ open, plan, currency, methods, onClose, onSuccess
           {step === 'choose' && (
             <button
               type="button"
-              aria-label="Fermer"
+              aria-label={t('pricing.close')}
               onClick={onClose}
               className="inline-flex size-7 items-center justify-center rounded-md text-muted-foreground hover:bg-muted hover:text-foreground"
             >
@@ -124,13 +126,12 @@ export function PaymentModal({ open, plan, currency, methods, onClose, onSuccess
             </div>
 
             <div className="flex flex-col gap-1.5 rounded-lg border border-dashed border-border bg-background-40 p-3 text-xs leading-relaxed text-muted-foreground">
-              <span className="font-medium text-foreground">💡 Simulation de test</span>
-              Aucun paiement réel n&apos;est effectué : confirmer validera simplement le passage
-              en <span className="font-medium text-foreground">{plan.name}</span>.
+              <span className="font-medium text-foreground">{t('pricing.simulation')}</span>
+              <span dangerouslySetInnerHTML={{ __html: t('pricing.simulationDesc', { plan: `<span class="font-medium text-foreground">${plan.name}</span>` }) }} />
             </div>
 
             <Button size="lg" className="w-full" onClick={pay}>
-              Valider le paiement de test
+              {t('pricing.validateTest')}
             </Button>
           </>
         )}
@@ -138,8 +139,8 @@ export function PaymentModal({ open, plan, currency, methods, onClose, onSuccess
         {step === 'processing' && (
           <div className="flex flex-col items-center gap-4 py-8">
             <Loader2 className="size-9 animate-spin text-primary" />
-            <p className="text-sm font-medium text-foreground">Paiement en cours…</p>
-            <p className="text-xs text-muted-foreground">Simulation d&apos;un paiement {method}.</p>
+            <p className="text-sm font-medium text-foreground">{t('pricing.processing')}</p>
+            <p className="text-xs text-muted-foreground">{t('pricing.processingDesc', { method })}</p>
           </div>
         )}
 
@@ -150,14 +151,14 @@ export function PaymentModal({ open, plan, currency, methods, onClose, onSuccess
             </span>
             <div className="flex flex-col gap-1">
               <p className="text-base font-semibold text-foreground">
-                Paiement de test réussi !
+                {t('pricing.success')}
               </p>
               <p className="text-xs text-muted-foreground">
-                Référence : <span className="font-mono text-primary">{reference}</span>
+                {t('pricing.reference')} : <span className="font-mono text-primary">{reference}</span>
               </p>
               <p className="flex items-center justify-center gap-1.5 text-xs text-muted-foreground">
                 <BadgeCheck className="size-3.5 text-primary" />
-                Ton compte passe en {plan.name} et tes crédits sont débloqués.
+                {t('pricing.accountUpgraded', { plan: plan.name })}
               </p>
             </div>
             <Button
@@ -168,7 +169,7 @@ export function PaymentModal({ open, plan, currency, methods, onClose, onSuccess
                 onClose()
               }}
             >
-              Activer {plan.name}
+              {t('pricing.activate', { plan: plan.name })}
             </Button>
           </div>
         )}

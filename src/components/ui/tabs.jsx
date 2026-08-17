@@ -17,7 +17,7 @@ function TabsList({ className, ...props }) {
     <div
       role="tablist"
       data-slot="tabs-list"
-      className={cn('inline-flex w-fit items-center justify-center rounded-lg border border-border/60 bg-card/60 p-[3px] text-muted-foreground backdrop-blur-xl', className)}
+      className={cn('inline-flex w-fit items-center justify-center rounded-lg border border-white/[0.08] bg-pg-surface p-[3px] text-pg-muted', className)}
       {...props}
     />
   )
@@ -36,9 +36,9 @@ function TabsTrigger({ className, value, children, ...props }) {
       onClick={() => ctx?.setValue(value)}
       className={cn(
         'relative inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-1.5 rounded-md border border-transparent px-3 py-0.5 text-sm font-medium whitespace-nowrap transition-all',
-        'text-foreground-60 hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring-50',
+        'text-pg-muted hover:text-pg-text focus-visible:ring-2 focus-visible:ring-primary/50',
         '[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*="size-"])]:size-4',
-        active && 'bg-background text-foreground shadow-sm',
+        active && 'bg-background text-pg-text shadow-sm',
         className
       )}
       {...props}

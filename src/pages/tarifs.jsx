@@ -1,96 +1,81 @@
-import { useState } from 'react'
-import { Wallet } from 'lucide-react'
+import { useEffect, useState } from 'react'
+import { MapPin, Wallet, Sparkles } from 'lucide-react'
 import { toast } from '../components/ui/sonner'
 import { PRICING_PLANS } from '../lib/mock-data'
 import { PricingCard } from '../components/pricing/pricing-card'
 import { PaymentModal } from '../components/pricing/payment-modal'
 import { Badge } from '../components/ui/badge'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '../components/ui/card'
-import { ToggleGroup, ToggleGroupItem } from '../components/ui/toggle-group'
-import { CURRENCIES, MOBILE_PAYMENTS, CARD_PAYMENTS, defaultCurrency } from '../lib/currencies'
+import { MOBILE_PAYMENTS, CARD_PAYMENTS, defaultCurrency } from '../lib/currencies'
+import { detectCurrency } from '../services/geo'
 import { cn } from '../lib/utils'
 import { useApp } from '../lib/app-context'
+import { useI18n } from '../lib/i18n'
+import { creditReferrerForPayment } from '../services/referral'
 
 export default function PricingPage() {
   const { upgradeToPlan } = useApp()
+  const { t } = useI18n()
   const [currency, setCurrency] = useState(defaultCurrency)
   const [payingPlan, setPayingPlan] = useState(null)
 
-  function changeCurrency(id) {
-    const found = CURRENCIES.find((c) => c.id === id)
-    if (!found) return
-    setCurrency(found)
-    try {
-      localStorage.setItem('pg-currency', id)
-    } catch {
-      /* stockage indisponible */
-    }
-  }
+  useEffect(() => {
+    detectCurrency().then(setCurrency).catch(() => {})
+  }, [])
 
   const mobile = currency.id === 'xof'
   const methods = mobile ? MOBILE_PAYMENTS : CARD_PAYMENTS
 
   return (
-    <div className="mx-auto flex w-full max-w-5xl flex-col gap-10 px-4 py-8 sm:px-8">
-      <div className="flex flex-col items-center gap-3 text-center">
-        <span className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
-          Abonnement
-        </span>
-        <h1 className="font-heading text-4xl font-bold tracking-tight text-balance md:text-[44px] md:leading-tight">
-          Débloquez la création{' '}
-          <span className="bg-gradient-to-r from-primary to-primary-container bg-clip-text text-transparent drop-shadow-[0_0_15px_rgba(139,92,246,0.3)]">
-            illimitée
+    <div className="mx-auto flex w-full max-w-[1240px] flex-col gap-10 px-4 pb-16 pt-4 sm:px-8">
+      {/* Header */}
+      <div className="reveal flex flex-col items-center gap-4 text-center">
+        <div className="flex items-center gap-2">
+          <span className="eyebrow text-primary flex items-center gap-1.5">
+            <Sparkles className="size-3.5" />
+            {t('pricing.badge')}
+          </span>
+        </div>
+        <h1 className="text-2xl font-bold tracking-tight text-balance md:text-3xl">
+          {t('pricing.title')}{' '}
+          <span className="text-primary">
+            {t('pricing.unlimited')}
           </span>
         </h1>
-        <p className="max-w-lg text-sm leading-relaxed text-muted-foreground">
-          Change ou annule à tout moment. Les crédits se réinitialisent chaque jour.
+        <p className="max-w-lg text-[15px] text-pg-muted">
+          {t('pricing.subtitle')}
         </p>
       </div>
 
-      <div className="flex flex-col items-center gap-2">
-        <span className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
-          Devise d&apos;affichage
+      {/* Currency indicator */}
+      <div className="reveal-1 flex flex-col items-center gap-2">
+        <span className="flex items-center gap-1.5 rounded-full border border-white/[0.06] bg-white/[0.04] px-3 py-1 text-xs font-semibold text-pg-muted">
+          <MapPin className="size-3 text-primary" />
+          {currency.flag} {t('pricing.currencyAuto')}
         </span>
-        <ToggleGroup
-          value={[currency.id]}
-          onValueChange={(next) => {
-            if (next[0]) changeCurrency(next[0])
-          }}
-          className="w-full gap-1 rounded-full border border-primary-30 bg-card-60 p-1 backdrop-blur-xl sm:w-auto"
-        >
-          {CURRENCIES.map((c) => (
-            <ToggleGroupItem
-              key={c.id}
-              value={c.id}
-              className="rounded-full px-4 py-1.5 data-[state=on]:shadow-[0_0_10px_rgba(139,92,246,0.2)]"
-            >
-              {c.flag} {c.label}
-            </ToggleGroupItem>
-          ))}
-        </ToggleGroup>
-        <p className="flex items-center gap-1 text-xs text-muted-foreground">
+        <p className="flex items-center gap-1 text-xs text-pg-muted">
           <Wallet className="size-3 text-primary" />
-          {mobile
-            ? 'Paiement mobile disponible (Wave, Orange Money, MTN MoMo…)'
-            : 'Paiement par carte bancaire ou PayPal'}
+          {mobile ? t('pricing.mobile') : t('pricing.card')}
         </p>
       </div>
 
-      <div className="grid gap-6 md:grid-cols-3">
+      {/* Plans grid */}
+      <div className="reveal-2 grid gap-6 md:grid-cols-3 md:items-start">
         {PRICING_PLANS.map((plan) => (
           <PricingCard key={plan.id} plan={plan} currency={currency} onSubscribe={setPayingPlan} />
         ))}
       </div>
 
-      <Card className="glass premium-edge">
-        <CardHeader>
+      {/* Payment methods */}
+      <Card className="reveal-3 border border-white/[0.06] bg-pg-surface rounded-xl p-6">
+        <CardHeader className="p-0 pb-4">
           <div className="flex flex-wrap items-center gap-2">
-            <CardTitle className="text-sm">Moyens de paiement</CardTitle>
+            <CardTitle className="text-sm font-bold">{t('pricing.methodsTitle')}</CardTitle>
             <Badge
               variant="outline"
               className={cn(
-                'rounded-full',
-                mobile ? 'border-success-20 text-success' : 'border-primary-30 text-primary'
+                'rounded-full border font-semibold',
+                mobile ? 'border-success/30 text-success' : 'border-primary/30 text-primary'
               )}
             >
               {currency.flag} {currency.label}
@@ -98,22 +83,22 @@ export default function PricingPage() {
           </div>
           <CardDescription className="text-xs">
             {mobile
-              ? 'Paiement 100% mobile en FCFA, sans carte bancaire, depuis ton téléphone.'
-              : 'Paiement international sécurisé, ta carte est débitée en fin de mois.'}
+              ? t('pricing.methodsMobileDesc', { currency: 'FCFA' })
+              : t('pricing.methodsCardDesc')}
           </CardDescription>
         </CardHeader>
-        <CardContent className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+        <CardContent className="grid grid-cols-1 gap-3 p-0 sm:grid-cols-2 lg:grid-cols-3">
           {methods.map((m) => (
             <div
               key={m.id}
-              className="flex items-center gap-3 rounded-lg border border-primary-20 bg-card-60 p-3.5 backdrop-blur-md"
+              className="flex items-center gap-3 rounded-2xl border border-white/[0.06] bg-white/[0.04] p-3.5 transition-colors hover:border-primary/20"
             >
-              <span className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-primary-10 text-primary text-base">
+              <span className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-base">
                 {m.emoji || '💳'}
               </span>
               <div className="flex flex-col gap-0.5">
-                <span className="text-sm font-medium text-foreground">{m.name}</span>
-                <span className="text-xs text-muted-foreground">{m.desc}</span>
+                <span className="text-sm font-semibold text-pg-text">{m.name}</span>
+                <span className="text-[11px] text-pg-muted">{m.desc}</span>
               </div>
             </div>
           ))}
@@ -128,8 +113,10 @@ export default function PricingPage() {
         onClose={() => setPayingPlan(null)}
         onSuccess={async () => {
           const next = await upgradeToPlan(payingPlan?.name)
-          if (next === 'Pro') toast.success('Abonnement Pro activé — 25 scripts/jour débloqués !')
-          else toast.success(`Abonnement ${next} activé !`)
+          const credited = creditReferrerForPayment()
+          if (next === 'Pro') toast.success(t('pricing.proActivated'))
+          else toast.success(t('pricing.planActivated', { plan: next }))
+          if (credited) toast.success(t('referral.creditToast'))
         }}
       />
     </div>

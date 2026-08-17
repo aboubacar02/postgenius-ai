@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { cn } from '../../lib/utils'
 
-function Select({ className, value, defaultValue, onValueChange, placeholder = 'Sélectionner…', children, ...props }) {
+function Select({ className, value, defaultValue, onValueChange, placeholder = 'Sélectionner…', disabled = false, children, ...props }) {
   const [open, setOpen] = useState(false)
   const [internal, setInternal] = useState(defaultValue)
   const ref = useRef(null)
@@ -32,13 +32,19 @@ function Select({ className, value, defaultValue, onValueChange, placeholder = '
     'Sélectionner…'
 
   return (
-    <div ref={ref} className={cn('relative', className)} data-slot="select" {...props}>
+    <div ref={ref} className={cn('relative', disabled && 'pointer-events-none', className)} data-slot="select" {...props}>
       <button
         type="button"
         aria-haspopup="listbox"
         aria-expanded={open}
-        onClick={() => setOpen((v) => !v)}
-        className="flex h-8 w-full min-w-0 items-center justify-between gap-2 rounded-lg border border-input bg-card px-2.5 py-1 text-sm transition-colors outline-none hover:border-input-60 hover:bg-card focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring-50"
+        aria-disabled={disabled || undefined}
+        disabled={disabled}
+        onClick={() => !disabled && setOpen((v) => !v)}
+        className={cn(
+          'flex h-8 w-full min-w-0 items-center justify-between gap-2 rounded-lg border border-input bg-card px-2.5 py-1 text-sm transition-colors outline-none',
+          'hover:border-input-60 hover:bg-card focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring-50',
+          disabled && 'opacity-40 cursor-not-allowed'
+        )}
       >
         <span className={cn('truncate', !current && 'text-muted-foreground')}>{selectedLabel}</span>
         <svg className="size-3.5 shrink-0 opacity-50" viewBox="0 0 16 16" fill="none" aria-hidden="true">

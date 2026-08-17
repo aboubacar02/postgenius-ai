@@ -36,12 +36,13 @@ import { copyText, downloadText } from '../../lib/copy'
 import { synthesizeVoice, GEMINI_VOICES } from '../../services/gemini'
 import { pcmToWav, makeAudioUrl } from '../../services/audio'
 import { cn } from '../../lib/utils'
+import { useI18n } from '../../lib/i18n'
 
-const GENERATION_STEPS = [
-  'Analyse du sujet et du réseau',
-  'Rédaction de 3 variantes (hooks + scripts)',
-  'Découpage de la timeline et du tournage',
-  'Calcul du score viral de chaque angle'
+const GENERATION_STEP_KEYS = [
+  'results.steps.subject',
+  'results.steps.variants',
+  'results.steps.timeline',
+  'results.steps.score'
 ]
 
 const THUMB_GRADS = [
@@ -52,14 +53,15 @@ const THUMB_GRADS = [
 
 const fmtNum = (n) => new Intl.NumberFormat('fr-FR', { notation: 'compact', maximumFractionDigits: 1 }).format(n)
 
-function copy(text, label) {
+function copy(text, label, t) {
   copyText(text).then((ok) => {
-    if (ok) toast.success(`${label} copié`)
-    else toast.error('Impossible de copier')
+    if (ok) toast.success(t('results.copied', { label }))
+    else toast.error(t('results.copyFail'))
   })
 }
 
 function VariantPicker({ variants, selected, onSelect }) {
+  const { t } = useI18n()
   return (
     <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-3">
       {variants.map((v, i) => {
@@ -70,10 +72,10 @@ function VariantPicker({ variants, selected, onSelect }) {
             type="button"
             onClick={() => onSelect(i)}
             className={cn(
-              'flex flex-col gap-1.5 rounded-xl border p-3 text-left transition-all',
+              'flex flex-col gap-1.5 rounded-2xl border p-3 text-left transition-all',
               active
-                ? 'border-primary-40 bg-primary-10 ring-1 ring-ring-50'
-                : 'border-border-60 bg-background-40 hover:border-foreground-20'
+                ? 'border-primary/40 bg-primary/15 ring-1 ring-primary/30 shadow-[0_0_15px_rgba(139,92,246,0.15)]'
+                : 'border-white/5 bg-card/40 hover:border-white/15'
             )}
           >
             <span className="flex items-center justify-between gap-2">
@@ -83,7 +85,7 @@ function VariantPicker({ variants, selected, onSelect }) {
                   active ? 'bg-primary text-white' : 'bg-muted text-muted-foreground'
                 )}
               >
-                Angle {i + 1}
+                {t('results.angle', { n: i + 1 })}
               </span>
               <span className="font-mono text-xs font-medium text-primary">{v.viralScore}</span>
             </span>
@@ -101,6 +103,7 @@ function VariantPicker({ variants, selected, onSelect }) {
 }
 
 function AudioPlayer({ text }) {
+  const { t } = useI18n()
   const [voice, setVoice] = useState(GEMINI_VOICES[1].id)
   const [busy, setBusy] = useState(false)
   const [audioUrl, setAudioUrl] = useState(null)
@@ -118,20 +121,20 @@ function AudioPlayer({ text }) {
         src = `data:${mimeType};base64,${base64}`
       }
       setAudioUrl(src)
-      toast.success('Audio généré avec la voix IA')
+      toast.success(t('results.audioSuccess'))
     } catch {
-      toast.error('Synthèse vocale indisponible — réessaie')
+      toast.error(t('results.audioFail'))
     } finally {
       setBusy(false)
     }
   }
 
   return (
-    <Card className="glass">
+    <Card className="glass glow-card rounded-3xl">
       <CardHeader>
         <CardTitle className="flex items-center gap-2 text-sm">
           <Volume2 className="size-4 text-primary" />
-          Voix off IA
+          {t('results.voiceOff')}
         </CardTitle>
       </CardHeader>
       <CardContent className="flex flex-col gap-3">
@@ -151,12 +154,12 @@ function AudioPlayer({ text }) {
             {busy ? (
               <span className="flex items-center gap-2">
                 <span className="size-3.5 animate-spin rounded-full border-2 border-current border-t-transparent" />
-                Génération…
+                {t('results.generatingAudio')}
               </span>
             ) : (
               <>
                 <Mic data-icon="inline-start" />
-                Générer l&apos;audio
+                {t('results.generateAudio')}
               </>
             )}
           </Button>
@@ -170,6 +173,7 @@ function AudioPlayer({ text }) {
 }
 
 function Teleprompter({ lines, open, onClose }) {
+  const { t } = useI18n()
   const [playing, setPlaying] = useState(false)
   const [speed, setSpeed] = useState(1)
   const ref = useRef(null)
@@ -197,15 +201,15 @@ function Teleprompter({ lines, open, onClose }) {
       <header className="flex items-center justify-between gap-3 border-b border-white/10 px-4 py-3">
         <div className="flex items-center gap-2">
           <MonitorPlay className="size-4 text-primary" />
-          <span className="text-sm font-semibold">Téléprompteur</span>
+          <span className="text-sm font-semibold">{t('results.teleprompter')}</span>
           <span className="hidden text-xs text-slate-400 sm:inline">
-            Lit ton script face caméra, le défilement est réglable.
+            {t('results.prompterDesc')}
           </span>
         </div>
         <div className="flex items-center gap-1.5">
           <button
             type="button"
-            aria-label="Réduire la vitesse"
+            aria-label={t('results.prompterSlow')}
             onClick={() => setSpeed((s) => Math.max(0.4, Number((s - 0.2).toFixed(1))))}
             className="inline-flex size-8 items-center justify-center rounded-md bg-white/10 hover:bg-white/20"
           >
@@ -214,7 +218,7 @@ function Teleprompter({ lines, open, onClose }) {
           <span className="w-14 text-center font-mono text-sm text-primary">{speed.toFixed(1)}x</span>
           <button
             type="button"
-            aria-label="Augmenter la vitesse"
+            aria-label={t('results.prompterFast')}
             onClick={() => setSpeed((s) => Math.min(3, Number((s + 0.2).toFixed(1))))}
             className="inline-flex size-8 items-center justify-center rounded-md bg-white/10 hover:bg-white/20"
           >
@@ -229,11 +233,11 @@ function Teleprompter({ lines, open, onClose }) {
             )}
           >
             {playing ? <Pause className="size-4" /> : <Play className="size-4" />}
-            {playing ? 'Pause' : 'Défiler'}
+            {playing ? t('results.prompterPause') : t('results.prompterPlay')}
           </button>
           <button
             type="button"
-            aria-label="Fermer le téléprompteur"
+            aria-label={t('results.prompterClose')}
             onClick={onClose}
             className="inline-flex size-8 items-center justify-center rounded-md bg-white/10 hover:bg-white/20"
           >
@@ -254,10 +258,10 @@ function Teleprompter({ lines, open, onClose }) {
   )
 }
 
-const CAPTION_STYLES = [
-  { id: 'bold', label: 'Gros mot' },
-  { id: 'karaoke', label: 'Mot à mot' },
-  { id: 'plain', label: 'Classique' }
+const CAPTION_STYLE_KEYS = [
+  { id: 'bold', key: 'results.captionBold' },
+  { id: 'karaoke', key: 'results.captionKaraoke' },
+  { id: 'plain', key: 'results.captionPlain' }
 ]
 
 function KaraokeCaption({ text, wordIdx }) {
@@ -286,10 +290,13 @@ function KaraokeCaption({ text, wordIdx }) {
 }
 
 function CaptionStylePreview({ subtitles }) {
+  const { t } = useI18n()
   const [style, setStyle] = useState('bold')
   const [idx, setIdx] = useState(0)
   const [word, setWord] = useState(0)
-  const captions = subtitles.length ? subtitles : ['Ta première capsule vidéo', 'Prête pour le montage', 'Poste et analyse']
+  const captions = subtitles.length
+    ? subtitles
+    : [t('results.captionFallback1'), t('results.captionFallback2'), t('results.captionFallback3')]
 
   useEffect(() => {
     const t = setInterval(() => {
@@ -310,14 +317,14 @@ function CaptionStylePreview({ subtitles }) {
   const longest = words.reduce((a, b) => (b.length > a.length ? b : a), words[0])
 
   return (
-    <Card className="glass">
+    <Card className="glass glow-card rounded-3xl">
       <CardHeader className="flex flex-row flex-wrap items-center justify-between gap-3">
         <CardTitle className="flex items-center gap-2 text-sm">
           <Sparkles className="size-4 text-primary" />
-          Aperçu des sous-titres animés
+          {t('results.captionsPreview')}
         </CardTitle>
         <div className="flex items-center gap-1 rounded-lg border border-border-60 bg-background-40 p-1">
-          {CAPTION_STYLES.map((s) => (
+          {CAPTION_STYLE_KEYS.map((s) => (
             <button
               key={s.id}
               type="button"
@@ -327,7 +334,7 @@ function CaptionStylePreview({ subtitles }) {
                 style === s.id ? 'bg-primary text-white' : 'text-muted-foreground hover:text-foreground'
               )}
             >
-              {s.label}
+              {t(s.key)}
             </button>
           ))}
         </div>
@@ -386,37 +393,38 @@ const PLATFORMS = [
     id: 'tiktok',
     label: 'TikTok',
     emoji: '🎵',
-    dur: '21 à 34 s',
-    format: 'Vertical 9:16 · captions pleine hauteur · son tendance',
+    durKey: 'results.platTikTokDur',
+    formatKey: 'results.platTikTokFormat',
     tags: ['#pourtoi', '#fyp', '#viral', '#tiktokfrance']
   },
   {
     id: 'reels',
     label: 'Reels',
     emoji: '📸',
-    dur: '15 à 30 s',
-    format: 'Vertical 9:16 · loop-friendly · vignette carrée 1:1',
+    durKey: 'results.platReelsDur',
+    formatKey: 'results.platReelsFormat',
     tags: ['#reels', '#instagram', '#explore', '#reelsfrance']
   },
   {
     id: 'shorts',
     label: 'YouTube Shorts',
     emoji: '▶️',
-    dur: 'jusqu’à 50 s',
-    format: 'Vertical 9:16 · titre SEO dans les 100 premiers caractères',
+    durKey: 'results.platShortsDur',
+    formatKey: 'results.platShortsFormat',
     tags: ['#shorts', '#youtubeshorts', '#fyp']
   }
 ]
 
 function PlatformAdapt({ cur }) {
+  const { t } = useI18n()
   const cta = cur.script?.[cur.script.length - 1] || ''
 
   return (
-    <Card className="glass">
+    <Card className="glass glow-card rounded-3xl">
       <CardHeader>
         <CardTitle className="flex items-center gap-2 text-sm">
           <Share2 className="size-4 text-primary" />
-          Déclinaisons multi-plateformes
+          {t('results.platformsTitle')}
         </CardTitle>
       </CardHeader>
       <CardContent className="grid grid-cols-1 gap-3 lg:grid-cols-3">
@@ -441,16 +449,16 @@ function PlatformAdapt({ cur }) {
                   {p.label}
                 </span>
                 <Badge variant="secondary" className="font-mono text-[10px]">
-                  {p.dur}
+                  {t(p.durKey)}
                 </Badge>
               </div>
-              <p className="text-[11px] leading-relaxed text-muted-foreground">{p.format}</p>
+              <p className="text-[11px] leading-relaxed text-muted-foreground">{t(p.formatKey)}</p>
               <p className="line-clamp-3 whitespace-pre-wrap rounded-md bg-card px-2.5 py-2 text-[11px] leading-relaxed text-foreground-80">
                 {caption}
               </p>
-              <Button variant="outline" size="sm" onClick={() => copy(caption, `Légende ${p.label}`)}>
+              <Button variant="outline" size="sm" onClick={() => copy(caption, p.label, t)}>
                 <Copy data-icon="inline-start" />
-                Copier la légende
+                {t('results.copyCaption')}
               </Button>
             </div>
           )
@@ -461,6 +469,7 @@ function PlatformAdapt({ cur }) {
 }
 
 function ViralScoreCard({ cur }) {
+  const { t } = useI18n()
   const scriptText = (cur.script || []).join(' ')
   const last = cur.script?.[cur.script.length - 1] || ''
 
@@ -471,22 +480,22 @@ function ViralScoreCard({ cur }) {
   const cta = /(abonne|follow|commente|dis-moi|partage|sauvegarde|bio|enregistre|réponds)/i.test(last)
 
   const metrics = [
-    { label: 'Hook (3 premières sec)', ok: hook },
-    { label: 'Pic Émotionnel', ok: emotion },
-    { label: 'Rythme & Rétention', ok: pacing },
-    { label: 'Mots-clés / SEO', ok: seo },
-    { label: 'Appel à l\'action', ok: cta }
+    { label: t('results.metricHook'), ok: hook },
+    { label: t('results.metricEmotion'), ok: emotion },
+    { label: t('results.metricPacing'), ok: pacing },
+    { label: t('results.metricSeo'), ok: seo },
+    { label: t('results.metricCta'), ok: cta }
   ]
   const pct = metrics.filter((m) => m.ok).length / metrics.length
 
   return (
-    <Card className="glass">
+    <Card className="glass glow-card rounded-3xl">
       <CardHeader className="flex flex-row items-center justify-between gap-2">
         <CardTitle className="flex items-center gap-2 text-sm">
           <Gauge className="size-4 text-primary" />
-          Score de Viralité
+          {t('results.viralScore')}
         </CardTitle>
-        <span className="rounded-full border border-primary-30 bg-gradient-to-r from-primary-15 to-primary-10 px-3 py-1 font-mono text-xs font-bold text-cyan-400">
+        <span className="flex items-center gap-1.5 rounded-full border border-primary/30 bg-gradient-to-r from-primary/20 to-fuchsia-500/20 px-3 py-1 font-mono text-xs font-bold text-cyan-400 shadow-[0_0_12px_rgba(34,211,238,0.25)]">
           {cur.viralScore}/100
         </span>
       </CardHeader>
@@ -506,11 +515,11 @@ function ViralScoreCard({ cur }) {
               <Lightbulb className="size-3.5" />
             </span>
             <div>
-              <h4 className="text-sm font-medium text-foreground">Prédiction d&apos;engagement</h4>
+              <h4 className="text-sm font-medium text-foreground">{t('results.engagementTitle')}</h4>
               <p className="mt-1 text-xs leading-relaxed text-muted-foreground">
                 {pct >= 0.8
-                  ? 'Forte probabilité de watch-time > 70%. L\'accroche visuelle recommandée est cruciale.'
-                  : 'Bon potentiel de rétention. Renforce le hook et le CTA pour dépasser les 70% de watch-time.'}
+                  ? t('results.engagementHigh')
+                  : t('results.engagementLow')}
               </p>
             </div>
           </div>
@@ -521,36 +530,37 @@ function ViralScoreCard({ cur }) {
 }
 
 function ViralChecklist({ cur, score }) {
+  const { t } = useI18n()
   const last = cur.script?.[cur.script.length - 1] || ''
   const scriptText = (cur.script || []).join(' ')
 
   const checks = [
     {
-      label: 'Accroche en moins de 3 secondes',
+      label: t('results.checkHook'),
       ok: !!cur.hook && cur.hook.length <= 90
     },
     {
-      label: 'Curiosity gap / promesse claire',
+      label: t('results.checkCuriosity'),
       ok: /(personne|jamais|secret|erreur|tu|vous|comment|pourquoi|arrête|révèle|découvre)/i.test(cur.hook || '')
     },
     {
-      label: 'Pic émotionnel présent',
+      label: t('results.checkEmotion'),
       ok: /(incroyable|impossible|horrible|fou|pire|meilleur|peur|gagné|perdu|détruire|choquant|honte)/i.test(scriptText)
     },
     {
-      label: 'Une question retient le spectateur',
+      label: t('results.checkQuestion'),
       ok: /\?/.test(scriptText)
     },
     {
-      label: 'CTA unique et clair',
+      label: t('results.checkCta'),
       ok: /(abonne|follow|commente|dis-moi|partage|sauvegarde|bio|enregistre|réponds)/i.test(last)
     },
     {
-      label: 'Sous-titres prêts pour le montage',
+      label: t('results.checkSubtitles'),
       ok: (cur.subtitles || []).length >= 3
     },
     {
-      label: 'Rythme : phrases courtes et orales',
+      label: t('results.checkPacing'),
       ok: (cur.script || []).every((l) => l.length <= 170)
     }
   ]
@@ -568,11 +578,11 @@ function ViralChecklist({ cur, score }) {
   }, [score])
 
   return (
-    <Card className="glass">
+    <Card className="glass glow-card rounded-3xl">
       <CardHeader className="flex flex-row items-center justify-between gap-3">
         <CardTitle className="flex items-center gap-2 text-sm">
           <ListChecks className="size-4 text-primary" />
-          Checklist avant publication
+          {t('results.checklist')}
         </CardTitle>
         <span className="font-mono text-xs font-medium text-primary">{done}/{checks.length}</span>
       </CardHeader>
@@ -596,31 +606,31 @@ function ViralChecklist({ cur, score }) {
             </div>
           ))}
         </div>
-        <div className="rounded-lg border border-primary-30 bg-primary-10 p-3.5">
-          <p className="mb-2.5 text-[11px] font-semibold uppercase tracking-wider text-primary">
-            Engagement estimé sur la première heure
+        <div className="rounded-2xl border border-primary/30 bg-primary/10 p-4">
+          <p className="mb-3 text-[11px] font-bold uppercase tracking-wider text-primary">
+            {t('results.engagementEstimated')}
           </p>
           <div className="flex items-center gap-6">
             <div className="flex flex-col">
-              <span className="font-mono text-lg font-semibold text-foreground">
+              <span className="font-mono text-xl font-black text-foreground">
                 {fmtNum(prediction.likes)}
               </span>
-              <span className="text-[10px] uppercase tracking-wider text-muted-foreground">Likes</span>
+              <span className="text-[10px] uppercase tracking-wider text-muted-foreground">{t('results.likes')}</span>
             </div>
             <div className="flex flex-col">
-              <span className="font-mono text-lg font-semibold text-foreground">
+              <span className="font-mono text-xl font-black text-foreground">
                 {fmtNum(prediction.comments)}
               </span>
-              <span className="text-[10px] uppercase tracking-wider text-muted-foreground">Commentaires</span>
+              <span className="text-[10px] uppercase tracking-wider text-muted-foreground">{t('results.comments')}</span>
             </div>
             <div className="flex flex-col">
-              <span className="font-mono text-lg font-semibold text-foreground">
+              <span className="font-mono text-xl font-black text-foreground">
                 {fmtNum(prediction.shares)}
               </span>
-              <span className="text-[10px] uppercase tracking-wider text-muted-foreground">Partages</span>
+              <span className="text-[10px] uppercase tracking-wider text-muted-foreground">{t('results.shares')}</span>
             </div>
             <p className="ml-auto max-w-[220px] text-[11px] leading-relaxed text-muted-foreground">
-              Simulation basée sur le score viral {score}/100 et les tendances 2026.
+              {t('results.simulation', { score })}
             </p>
           </div>
         </div>
@@ -630,6 +640,7 @@ function ViralChecklist({ cur, score }) {
 }
 
 export function ResultsPanel({ result, loading, onRegenerate }) {
+  const { t } = useI18n()
   const [step, setStep] = useState(0)
   const [vi, setVi] = useState(0)
   const [prompterOpen, setPrompterOpen] = useState(false)
@@ -638,7 +649,7 @@ export function ResultsPanel({ result, loading, onRegenerate }) {
     if (!loading) return
     setStep(0)
     const id = setInterval(
-      () => setStep((s) => Math.min(s + 1, GENERATION_STEPS.length - 1)),
+      () => setStep((s) => Math.min(s + 1, GENERATION_STEP_KEYS.length - 1)),
       1400
     )
     return () => clearInterval(id)
@@ -651,24 +662,25 @@ export function ResultsPanel({ result, loading, onRegenerate }) {
 
   if (loading) {
     return (
-      <Card className="glass">
-        <CardContent className="flex flex-col gap-6 px-6 py-12">
+      <Card className="glass glow-card rounded-3xl">
+        <CardContent className="flex flex-col gap-6 px-6 py-14">
           <div className="flex items-center justify-center">
-            <div className="relative flex size-14 items-center justify-center">
-              <div className="absolute inset-0 animate-spin rounded-full border-2 border-primary-30 border-t-primary" />
-              <Sparkles className="size-5 text-primary" />
+            <div className="relative flex size-16 items-center justify-center">
+              <div className="absolute inset-0 animate-spin rounded-full border-[3px] border-white/10 border-t-primary" />
+              <div className="absolute inset-1 animate-spin rounded-full border-2 border-white/5 border-t-primary/50 [animation-direction:reverse] [animation-duration:2s]" />
+              <Sparkles className="size-6 text-primary drop-shadow-[0_0_8px_rgba(139,92,246,0.5)]" />
             </div>
           </div>
-          <div className="flex flex-col gap-1 text-center">
-            <p className="text-sm font-semibold text-foreground">Génération en cours</p>
+          <div className="flex flex-col gap-1.5 text-center">
+            <p className="text-sm font-bold text-foreground">{t('results.generating')}</p>
             <p className="text-xs text-muted-foreground">
-              L&apos;IA rédige 3 angles différents puis les score.
+              {t('results.generatingDesc')}
             </p>
           </div>
           <div className="flex flex-col gap-2.5">
-            {GENERATION_STEPS.map((label, i) => (
+            {GENERATION_STEP_KEYS.map((key, i) => (
               <div
-                key={label}
+                key={key}
                 className={cn(
                   'flex items-center gap-2.5 text-sm transition-opacity',
                   i > step && 'opacity-40'
@@ -692,11 +704,11 @@ export function ResultsPanel({ result, loading, onRegenerate }) {
                     </span>
                   )}
                 </span>
-                <span className={cn(i === step && 'font-medium text-foreground')}>{label}</span>
+                <span className={cn(i === step && 'font-medium text-foreground')}>{t(key)}</span>
               </div>
             ))}
           </div>
-          <Progress value={((step + 1) / GENERATION_STEPS.length) * 100} className="h-1" />
+          <Progress value={((step + 1) / GENERATION_STEP_KEYS.length) * 100} className="h-1" />
         </CardContent>
       </Card>
     )
@@ -704,14 +716,13 @@ export function ResultsPanel({ result, loading, onRegenerate }) {
 
   if (!result) {
     return (
-      <Empty className="rounded-xl border border-dashed border-border bg-card-40">
-        <EmptyMedia>
-          <Sparkles />
+      <Empty className="glow-card glass rounded-3xl border-none py-16">
+        <EmptyMedia className="flex size-16 items-center justify-center rounded-2xl bg-primary/10 text-primary">
+          <Sparkles className="size-8" />
         </EmptyMedia>
-        <EmptyTitle>Aucun script pour l&apos;instant</EmptyTitle>
-        <EmptyDescription>
-          Remplissez le formulaire et cliquez sur &quot;Générer le scénario&quot; pour voir le
-          résultat ici.
+        <EmptyTitle className="mt-3 text-base font-bold">{t('results.emptyTitle')}</EmptyTitle>
+        <EmptyDescription className="max-w-xs text-xs">
+          {t('results.emptyDesc')}
         </EmptyDescription>
       </Empty>
     )
@@ -724,11 +735,12 @@ export function ResultsPanel({ result, loading, onRegenerate }) {
 
   return (
     <div className="flex flex-col gap-6">
-      <Card className="glass">
+      <Card className="glass glow-card rounded-3xl">
         <CardHeader className="flex flex-row items-start justify-between gap-3">
           <div className="flex min-w-0 flex-col gap-1">
             <span className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
-              Titre suggéré {variants.length > 1 && `· Angle ${vi + 1}`}
+              {t('results.suggestedTitle')}
+              {variants.length > 1 && ` · ${t('results.angle', { n: vi + 1 })}`}
             </span>
             <CardTitle className="text-balance font-heading text-lg leading-snug">
               {cur.title}
@@ -751,7 +763,7 @@ export function ResultsPanel({ result, loading, onRegenerate }) {
             </div>
             {cur.aiScore != null && (
               <span className="text-[10px] uppercase tracking-wider text-muted-foreground">
-                IA {cur.aiScore} · local {cur.localScore}
+                {t('results.iaLabel', { ai: cur.aiScore, local: cur.localScore })}
               </span>
             )}
           </div>
@@ -763,11 +775,11 @@ export function ResultsPanel({ result, loading, onRegenerate }) {
         {/* Left column (4): Angles + Score + Voix */}
         <div className="flex flex-col gap-6 md:col-span-4">
           {variants.length > 1 && (
-            <Card className="glass">
+            <Card className="glass glow-card rounded-3xl">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2 text-sm">
                   <Clapperboard className="size-4 text-primary" />
-                  Angles d&apos;attaque
+                  {t('results.anglesTitle')}
                 </CardTitle>
               </CardHeader>
               <CardContent>
@@ -783,17 +795,17 @@ export function ResultsPanel({ result, loading, onRegenerate }) {
 
         {/* Right column (8): Script + Checklist */}
         <div className="flex min-w-0 flex-col gap-6 md:col-span-8">
-          <Card className="glass flex-1">
+          <Card className="glass glow-card rounded-3xl flex-1">
             <CardHeader className="flex flex-row flex-wrap items-center justify-between gap-2 border-b border-border-60">
-              <CardTitle className="text-sm">Script complet</CardTitle>
+              <CardTitle className="text-sm">{t('results.scriptComplete')}</CardTitle>
               <div className="flex items-center gap-1.5">
                 <Button variant="outline" size="sm" onClick={() => setPrompterOpen(true)}>
                   <MonitorPlay data-icon="inline-start" />
-                  Téléprompteur
+                  {t('results.teleprompter')}
                 </Button>
-                <Button variant="ghost" size="sm" onClick={() => copy(fullScript, 'Script')}>
+                <Button variant="ghost" size="sm" onClick={() => copy(fullScript, 'Script', t)}>
                   <Copy data-icon="inline-start" />
-                  Copier
+                  {t('results.copy')}
                 </Button>
               </div>
             </CardHeader>
@@ -810,9 +822,9 @@ export function ResultsPanel({ result, loading, onRegenerate }) {
         </div>
       </div>
 
-      <Card className="glass">
+      <Card className="glass glow-card rounded-3xl">
         <CardHeader>
-          <CardTitle className="text-sm">Hooks alternatifs</CardTitle>
+          <CardTitle className="text-sm">{t('results.hooksAlt')}</CardTitle>
         </CardHeader>
         <CardContent className="flex flex-col gap-2">
           {hooks.map((hook, i) => (
@@ -828,7 +840,7 @@ export function ResultsPanel({ result, loading, onRegenerate }) {
                 variant="ghost"
                 size="icon-sm"
                 aria-label="Copier ce hook"
-                onClick={() => copy(hook, 'Hook')}
+                onClick={() => copy(hook, 'Hook', t)}
               >
                 <Copy />
               </Button>
@@ -839,11 +851,11 @@ export function ResultsPanel({ result, loading, onRegenerate }) {
 
       <CaptionStylePreview subtitles={cur.subtitles} />
 
-      <Card className="glass">
+      <Card className="glass glow-card rounded-3xl">
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-sm">
             <ListVideo className="size-4 text-primary" />
-            Timeline
+            {t('results.timeline')}
           </CardTitle>
         </CardHeader>
         <CardContent className="p-0">
@@ -851,12 +863,12 @@ export function ResultsPanel({ result, loading, onRegenerate }) {
             <TableHeader>
               <TableRow>
                 <TableHead className="w-24 font-mono text-[11px] uppercase text-muted-foreground">
-                  Temps
+                  {t('results.time')}
                 </TableHead>
                 <TableHead className="text-[11px] uppercase text-muted-foreground">
-                  Séquence
+                  {t('results.sequence')}
                 </TableHead>
-                <TableHead className="text-[11px] uppercase text-muted-foreground">Note</TableHead>
+                <TableHead className="text-[11px] uppercase text-muted-foreground">{t('results.note')}</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -875,17 +887,17 @@ export function ResultsPanel({ result, loading, onRegenerate }) {
       </Card>
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-        <Card className="glass">
+        <Card className="glass glow-card rounded-3xl">
           <CardHeader className="flex flex-row items-center justify-between">
             <CardTitle className="flex items-center gap-2 text-sm">
               <Hash className="size-4 text-primary" />
-              Hashtags
+              {t('results.hashtags')}
             </CardTitle>
             <Button
               variant="ghost"
               size="icon-sm"
               aria-label="Copier les hashtags"
-              onClick={() => copy(cur.hashtags.join(' '), 'Hashtags')}
+              onClick={() => copy(cur.hashtags.join(' '), 'Hashtags', t)}
             >
               <Copy />
             </Button>
@@ -899,14 +911,14 @@ export function ResultsPanel({ result, loading, onRegenerate }) {
           </CardContent>
         </Card>
 
-        <Card className="glass">
+        <Card className="glass glow-card rounded-3xl">
           <CardHeader className="flex flex-row items-center justify-between">
-            <CardTitle className="text-sm">Sous-titres</CardTitle>
+            <CardTitle className="text-sm">{t('results.subtitles')}</CardTitle>
             <Button
               variant="ghost"
               size="icon-sm"
               aria-label="Copier les sous-titres"
-              onClick={() => copy(cur.subtitles.join('\n'), 'Sous-titres')}
+              onClick={() => copy(cur.subtitles.join('\n'), 'Sous-titres', t)}
             >
               <Copy />
             </Button>
@@ -924,20 +936,18 @@ export function ResultsPanel({ result, loading, onRegenerate }) {
 
       <PlatformAdapt cur={cur} />
 
-      <ViralChecklist cur={cur} score={cur.viralScore} />
-
-      <Card className="glass">
+      <Card className="glass glow-card rounded-3xl">
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-sm">
             <Clapperboard className="size-4 text-primary" />
-            Fiche Technique de Tournage
+            {t('results.shootingSheet')}
           </CardTitle>
         </CardHeader>
         <CardContent className="grid grid-cols-1 gap-4 lg:grid-cols-3">
           <div className="flex flex-col gap-2 rounded-lg border border-border-60 bg-background-40 p-3.5">
             <span className="flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wider text-foreground">
               <Lightbulb className="size-3.5 text-amber-400" />
-              Plan d&apos;éclairage
+              {t('results.lighting')}
             </span>
             <ul className="flex flex-col gap-1.5">
               {result.lighting.map((tip) => (
@@ -950,7 +960,7 @@ export function ResultsPanel({ result, loading, onRegenerate }) {
           <div className="flex flex-col gap-2 rounded-lg border border-border-60 bg-background-40 p-3.5">
             <span className="flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wider text-foreground">
               <Camera className="size-3.5 text-cyan-400" />
-              Cadrage &amp; Angle
+              {t('results.framing')}
             </span>
             <ul className="flex flex-col gap-1.5">
               {result.camera.map((tip) => (
@@ -963,7 +973,7 @@ export function ResultsPanel({ result, loading, onRegenerate }) {
           <div className="flex flex-col gap-2 rounded-lg border border-border-60 bg-background-40 p-3.5">
             <span className="flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wider text-foreground">
               <Clapperboard className="size-3.5 text-fuchsia-400" />
-              B-Rolls &amp; Visuels
+              {t('results.brolls')}
             </span>
             <ul className="flex flex-col gap-1.5">
               {result.brolls.map((tip) => (
@@ -976,11 +986,11 @@ export function ResultsPanel({ result, loading, onRegenerate }) {
         </CardContent>
       </Card>
 
-      <Card className="glass">
+      <Card className="glass glow-card rounded-3xl">
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-sm">
             <ImageIcon className="size-4 text-primary" />
-            Vignettes d&apos;invite
+            {t('results.thumbnails')}
           </CardTitle>
         </CardHeader>
         <CardContent className="grid grid-cols-1 gap-3 sm:grid-cols-3">
@@ -1007,10 +1017,10 @@ export function ResultsPanel({ result, loading, onRegenerate }) {
                 variant="ghost"
                 size="sm"
                 className="self-start"
-                onClick={() => copy(prompt, 'Invite')}
+                onClick={() => copy(prompt, 'Invite', t)}
               >
                 <Copy data-icon="inline-start" />
-                Copier l&apos;invite
+                {t('results.copyPrompt')}
               </Button>
             </div>
           ))}
@@ -1019,21 +1029,29 @@ export function ResultsPanel({ result, loading, onRegenerate }) {
 
       <Separator />
 
-      <div className="flex flex-wrap items-center gap-2.5">
-        <Button onClick={() => copy(fullScript, 'Script')}>
+      <div className="flex flex-wrap items-center gap-3">
+        <Button
+          onClick={() => copy(fullScript, 'Script', t)}
+          className="rounded-2xl bg-gradient-to-r from-primary to-fuchsia-600 px-6 font-bold text-white shadow-[0_0_20px_rgba(139,92,246,0.3)] hover:shadow-[0_0_30px_rgba(139,92,246,0.5)]"
+        >
           <Copy data-icon="inline-start" />
-          Copier le script
+          {t('results.copyScript')}
         </Button>
         <Button
           variant="outline"
           onClick={() => downloadText(fullScript, 'script-postgenius.txt')}
+          className="rounded-2xl border-white/10 bg-white/5 font-semibold"
         >
           <Download data-icon="inline-start" />
-          Télécharger
+          {t('results.download')}
         </Button>
-        <Button variant="outline" onClick={onRegenerate}>
+        <Button
+          variant="outline"
+          onClick={onRegenerate}
+          className="rounded-2xl border-white/10 bg-white/5 font-semibold"
+        >
           <RefreshCw data-icon="inline-start" />
-          Régénérer
+          {t('results.regenerate')}
         </Button>
       </div>
 

@@ -1,25 +1,60 @@
+import { useCountUp } from '../../lib/use-count-up'
 import { scoreColorClass, scoreLevel } from '../../lib/format'
 import { cn } from '../../lib/utils'
 
-const LEVEL_LABEL = {
-  fort: 'Fort potentiel viral',
-  moyen: 'Potentiel moyen',
-  faible: 'Potentiel faible'
+const LEVEL_CONFIG = {
+  fort: {
+    label: 'Fort potentiel viral',
+    badge: '🟢 Excellent',
+    glow: 'rgba(74, 222, 128, 0.35)',
+    gradient: ['#4ade80', '#22d3ee']
+  },
+  moyen: {
+    label: 'Potentiel modéré',
+    badge: '🟡 À améliorer',
+    glow: 'rgba(251, 191, 36, 0.35)',
+    gradient: ['#fbbf24', '#f97316']
+  },
+  faible: {
+    label: 'Potentiel faible',
+    badge: '🔴 À corriger',
+    glow: 'rgba(248, 113, 113, 0.35)',
+    gradient: ['#f87171', '#ef4444']
+  }
 }
 
 export function ScoreGauge({ score }) {
+  const animated = useCountUp(score, { duration: 900 })
   const level = scoreLevel(score)
+  const cfg = LEVEL_CONFIG[level] || LEVEL_CONFIG.moyen
+
   const radius = 68
   const circumference = 2 * Math.PI * radius
   const offset = circumference - (score / 100) * circumference
-  const ringColor =
-    level === 'fort' ? 'stroke-success' : level === 'moyen' ? 'stroke-warning' : 'stroke-destructive'
 
   return (
-    <div className="flex flex-col items-center gap-3">
-      <div className="relative flex size-40 items-center justify-center">
-        <svg viewBox="0 0 160 160" className="size-40 -rotate-90">
-          <circle cx="80" cy="80" r={radius} fill="none" strokeWidth="10" className="stroke-border" />
+    <div className="flex flex-col items-center gap-3.5">
+      <div
+        className="relative flex size-44 items-center justify-center rounded-full p-2"
+        style={{
+          boxShadow: `0 0 45px -10px ${cfg.glow}`
+        }}
+      >
+        <svg viewBox="0 0 160 160" className="size-44 -rotate-90">
+          <defs>
+            <linearGradient id={`gauge-grad-${score}`} x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor={cfg.gradient[0]} />
+              <stop offset="100%" stopColor={cfg.gradient[1]} />
+            </linearGradient>
+          </defs>
+          <circle
+            cx="80"
+            cy="80"
+            r={radius}
+            fill="none"
+            strokeWidth="10"
+            className="stroke-white/10"
+          />
           <circle
             cx="80"
             cy="80"
@@ -29,17 +64,26 @@ export function ScoreGauge({ score }) {
             strokeLinecap="round"
             strokeDasharray={circumference}
             strokeDashoffset={offset}
-            className={cn(ringColor, 'transition-[stroke-dashoffset] duration-700 ease-out')}
+            stroke={`url(#gauge-grad-${score})`}
+            className="transition-[stroke-dashoffset] duration-1000 ease-out"
           />
         </svg>
         <div className="absolute flex flex-col items-center">
-          <span className={cn('font-mono text-4xl font-semibold tabular-nums', scoreColorClass(score))}>
-            {score}
+          <span className={cn('font-heading text-5xl font-black tabular-nums tracking-tight', scoreColorClass(score))}>
+            {animated}
           </span>
-          <span className="text-[11px] uppercase tracking-wider text-muted-foreground">/ 100</span>
+          <span className="font-mono text-xs font-semibold uppercase tracking-widest text-muted-foreground">
+            / 100
+          </span>
         </div>
       </div>
-      <p className={cn('text-sm font-medium', scoreColorClass(score))}>{LEVEL_LABEL[level]}</p>
+
+      <div className="flex flex-col items-center gap-1">
+        <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1 font-mono text-xs font-bold text-foreground">
+          {cfg.badge}
+        </span>
+        <p className="text-xs font-medium text-muted-foreground">{cfg.label}</p>
+      </div>
     </div>
   )
 }

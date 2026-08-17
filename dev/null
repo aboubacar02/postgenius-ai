@@ -1,0 +1,269 @@
+(() => {
+  var __require = /* @__PURE__ */ ((x) => typeof require !== "undefined" ? require : typeof Proxy !== "undefined" ? new Proxy(x, {
+    get: (a, b) => (typeof require !== "undefined" ? require : a)[b]
+  }) : x)(function(x) {
+    if (typeof require !== "undefined") return require.apply(this, arguments);
+    throw Error('Dynamic require of "' + x + '" is not supported');
+  });
+
+  // src/pages/dashboard.jsx
+  var import_react_router_dom = __require("react-router-dom");
+  var import_lucide_react = __require("lucide-react");
+  var import_skeleton = __require("../components/ui/skeleton");
+  var import_stat_card = __require("../components/dashboard/stat-card");
+  var import_retention_area_chart = __require("../components/dashboard/retention-area-chart");
+  var import_virality_radar_chart = __require("../components/dashboard/virality-radar-chart");
+  var import_creator_tier_card = __require("../components/dashboard/creator-tier-card");
+  var import_video_thumb = __require("../components/media/video-thumb");
+  var import_referral_card = __require("../components/referral/referral-card");
+  var import_app_context = __require("../lib/app-context");
+  var import_i18n = __require("../lib/i18n");
+  var import_format = __require("../lib/format");
+  var import_jsx_runtime = __require("react/jsx-runtime");
+  var METRICS = [
+    {
+      label: "Score viral moyen",
+      value: "78",
+      suffix: "/100",
+      change: "+12%",
+      description: "vs semaine derni\xE8re",
+      color: "indigo",
+      icon: import_lucide_react.Gauge,
+      points: "0,32 18,27 35,29 52,21 68,24 84,16 100,12"
+    },
+    {
+      label: "Vid\xE9os g\xE9n\xE9r\xE9es",
+      value: "14",
+      suffix: "",
+      change: "+3",
+      description: "cette semaine",
+      color: "cyan",
+      icon: import_lucide_react.Video,
+      points: "0,28 20,22 40,18 60,14 80,10 100,6"
+    },
+    {
+      label: "Taux de r\xE9tention",
+      value: "73",
+      suffix: "%",
+      change: "+8%",
+      description: "moyenne 30s",
+      color: "green",
+      icon: import_lucide_react.TrendingUp,
+      points: "0,40 25,30 50,22 75,16 100,10"
+    },
+    {
+      label: "Vues totales",
+      value: "2.4M",
+      suffix: "",
+      change: "+340K",
+      description: "ce mois",
+      color: "amber",
+      icon: import_lucide_react.Eye,
+      points: "0,38 20,28 40,20 60,14 80,8 100,4"
+    }
+  ];
+  var QUICK_ACTIONS = [
+    { to: "/generateur", icon: import_lucide_react.Wand2, title: "Script Generator", desc: "Hooks & teleprompter", color: "from-indigo-500/20 to-purple-500/10 text-indigo-400" },
+    { to: "/faceless", icon: import_lucide_react.Clapperboard, title: "Faceless Video", desc: "Timeline & sous-titres", color: "from-cyan-500/20 to-teal-500/10 text-cyan-400" },
+    { to: "/score-viral", icon: import_lucide_react.Gauge, title: "Score & R\xE9tention", desc: "Analyse mot par mot", color: "from-amber-500/20 to-orange-500/10 text-amber-400" },
+    { to: "/tendances", icon: import_lucide_react.Flame, title: "Tendances", desc: "Niches & id\xE9es virales", color: "from-rose-500/20 to-pink-500/10 text-rose-400" }
+  ];
+  function MiniSparkline({ points, color }) {
+    return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("svg", { viewBox: "0 0 100 40", className: "w-full h-full overflow-visible", preserveAspectRatio: "none", children: [
+      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("defs", { children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("linearGradient", { id: `spark-${color}`, x1: "0", y1: "0", x2: "0", y2: "1", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("stop", { offset: "0%", stopColor: "currentColor", stopOpacity: "0.3" }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("stop", { offset: "100%", stopColor: "currentColor", stopOpacity: "0" })
+      ] }) }),
+      /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
+        "polyline",
+        {
+          points,
+          fill: "none",
+          stroke: "currentColor",
+          strokeWidth: "2",
+          strokeLinecap: "round",
+          strokeLinejoin: "round"
+        }
+      ),
+      /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
+        "polygon",
+        {
+          points: `${points} 100,40 0,40`,
+          fill: `url(#spark-${color})`
+        }
+      )
+    ] });
+  }
+  function DashboardPage() {
+    const { creditsLeft, creditsTotal, history, historyLoading } = (0, import_app_context.useApp)();
+    const { t, lang } = (0, import_i18n.useI18n)();
+    const items = history.length ? history : [];
+    const avgScore = items.length ? Math.round(items.reduce((sum, h) => sum + h.score, 0) / items.length) : 78;
+    const bestScore = items.length ? Math.max(...items.map((h) => h.score)) : 94;
+    const recent = items.slice(0, 4);
+    const fmtDate = (iso) => {
+      const date = new Date(iso);
+      if (Number.isNaN(date.getTime())) return "Recently";
+      const diffMs = Date.now() - date.getTime();
+      const diffHours = Math.round(diffMs / (1e3 * 60 * 60));
+      if (diffHours < 1) return t("format.justNow");
+      if (diffHours < 24) return t("format.agoHours", { n: diffHours });
+      const diffDays = Math.round(diffHours / 24);
+      if (diffDays === 1) return t("format.yesterday");
+      if (diffDays < 7) return t("format.agoDays", { n: diffDays });
+      return date.toLocaleDateString(lang === "fr" ? "fr-FR" : lang, { day: "numeric", month: "short" });
+    };
+    return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "mx-auto flex w-full max-w-[1200px] flex-col gap-6 px-4 pb-16 pt-6 sm:px-8", children: [
+      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", { className: "reveal relative", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "relative z-10 flex flex-col gap-3", children: [
+          /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { className: "pg-badge inline-flex w-fit items-center gap-1.5 rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-wider text-primary", children: [
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_lucide_react.Sparkles, { className: "size-3" }),
+            t("dashboard.badge") || "Dashboard"
+          ] }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h1", { className: "text-2xl font-bold tracking-tight text-pg-text sm:text-3xl", children: t("dashboard.title") || "Welcome back" }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { className: "max-w-lg text-[15px] text-pg-muted", children: t("dashboard.subtitle") || "Generate scripts, produce faceless videos and maximize your algorithmic retention." })
+        ] }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "absolute -top-20 right-0 h-[200px] w-[300px] pointer-events-none opacity-30", children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "absolute inset-0 rounded-full bg-primary/20 blur-[80px]" }) })
+      ] }),
+      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("section", { className: "grid grid-cols-2 gap-3 sm:grid-cols-4 reveal-1", children: QUICK_ACTIONS.map((item) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(
+        import_react_router_dom.Link,
+        {
+          to: item.to,
+          className: "group relative overflow-hidden rounded-pg-lg border border-white/[0.06] bg-pg-surface p-4 transition-all duration-200 hover:border-white/[0.12] hover:-translate-y-0.5 hover:shadow-pg-md",
+          children: [
+            /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "relative z-10 flex flex-col gap-3", children: [
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: `flex size-9 items-center justify-center rounded-xl bg-gradient-to-br ${item.color} transition-transform duration-200 group-hover:scale-110`, children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(item.icon, { className: "size-4.5" }) }),
+              /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "flex flex-col gap-0.5", children: [
+                /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "text-[13px] font-semibold text-pg-text", children: item.title }),
+                /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "text-xs text-pg-muted", children: item.desc })
+              ] })
+            ] }),
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "absolute -bottom-4 -right-4 size-16 rounded-full bg-white/[0.02] transition-all duration-300 group-hover:scale-150" })
+          ]
+        },
+        item.to
+      )) }),
+      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("section", { className: "grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4 reveal-2", children: METRICS.map((m) => {
+        const Icon = m.icon;
+        const colorMap = {
+          indigo: "text-indigo-400",
+          cyan: "text-cyan-400",
+          green: "text-emerald-400",
+          amber: "text-amber-400"
+        };
+        return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(
+          "div",
+          {
+            className: "group relative overflow-hidden rounded-pg-lg border border-white/[0.06] bg-pg-surface p-4 transition-all duration-200 hover:border-white/[0.12] hover:shadow-pg-md",
+            children: [
+              /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "relative z-10", children: [
+                /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "mb-3 flex items-center justify-between", children: [
+                  /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "text-[12px] font-medium text-pg-muted", children: m.label }),
+                  /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: `flex size-8 items-center justify-center rounded-lg bg-white/[0.05] ${colorMap[m.color]}`, children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Icon, { className: "size-4" }) })
+                ] }),
+                /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "flex items-baseline gap-1.5", children: [
+                  /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: `text-2xl font-extrabold tracking-tight ${colorMap[m.color]}`, children: m.value }),
+                  m.suffix && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "text-sm text-pg-muted", children: m.suffix }),
+                  /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "pg-metric-change ml-1.5 rounded-full bg-emerald-500/10 px-1.5 py-0.5 text-[10px] font-bold text-emerald-400", children: m.change })
+                ] }),
+                /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "mt-1 block text-[11px] text-pg-subtle", children: m.description })
+              ] }),
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "absolute bottom-0 inset-x-0 h-12 pointer-events-none opacity-30", children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(MiniSparkline, { points: m.points, color: m.color }) })
+            ]
+          },
+          m.label
+        );
+      }) }),
+      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", { className: "grid grid-cols-1 gap-4 lg:grid-cols-12 reveal-3", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "lg:col-span-7", children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_retention_area_chart.RetentionAreaChart, { historyCount: items.length }) }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "lg:col-span-5", children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_virality_radar_chart.ViralityRadarChart, {}) })
+      ] }),
+      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", { className: "grid grid-cols-1 gap-4 lg:grid-cols-12 reveal-4", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "lg:col-span-6", children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_creator_tier_card.CreatorTierCard, { scriptCount: items.length }) }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "lg:col-span-6", children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_referral_card.ReferralCard, {}) })
+      ] }),
+      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", { className: "reveal-5 flex flex-col gap-4", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "flex items-center justify-between", children: [
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", { className: "text-lg font-bold tracking-tight text-pg-text", children: t("dashboard.recentCreations") }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(
+            import_react_router_dom.Link,
+            {
+              to: "/historique",
+              className: "flex items-center gap-1 text-sm font-medium text-primary transition-colors hover:text-primary/80",
+              children: [
+                t("dashboard.viewAll"),
+                /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_lucide_react.ArrowRight, { className: "size-3.5" })
+              ]
+            }
+          )
+        ] }),
+        historyLoading ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "grid grid-cols-2 gap-3 md:grid-cols-4 md:gap-4", children: [0, 1, 2, 3].map((i) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_skeleton.Skeleton, { className: "aspect-[9/16] rounded-pg-lg" }, i)) }) : recent.length === 0 ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "grid grid-cols-2 gap-3 md:grid-cols-4 md:gap-4", children: [
+          { id: "demo1", title: "3 IA secrets you missed in 2026", network: "tiktok", duration: 30, score: 94 },
+          { id: "demo2", title: "How to grow from 0 to 100k followers", network: "reels", duration: 45, score: 88 },
+          { id: "demo3", title: "The fatal productivity mistake", network: "shorts", duration: 25, score: 91 },
+          { id: "demo4", title: "Why this business is booming", network: "tiktok", duration: 60, score: 86 }
+        ].map((item) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(
+          import_react_router_dom.Link,
+          {
+            to: "/generateur",
+            className: "group relative aspect-[9/16] overflow-hidden rounded-pg-lg border border-white/[0.06] transition-all duration-200 hover:border-white/[0.12] hover:-translate-y-0.5 hover:shadow-pg-md",
+            children: [
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
+                import_video_thumb.VideoThumb,
+                {
+                  title: item.title,
+                  network: item.network,
+                  duration: item.duration,
+                  className: "absolute inset-0 h-full w-full rounded-none transition-transform duration-300 group-hover:scale-105"
+                }
+              ),
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" }),
+              /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "absolute inset-x-0 bottom-0 p-3 pt-10", children: [
+                /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "flex items-center justify-between gap-2", children: [
+                  /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "rounded-full bg-white/15 px-2 py-0.5 text-[10px] font-medium text-white/90 backdrop-blur-sm", children: (0, import_format.networkLabel)(item.network) }),
+                  /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { className: `font-mono text-xs font-bold ${(0, import_format.scoreColorClass)(item.score)}`, children: [
+                    item.score,
+                    "/100"
+                  ] })
+                ] }),
+                /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { className: "mt-1 line-clamp-2 text-sm font-semibold leading-snug text-white", children: item.title }),
+                /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { className: "mt-0.5 text-[11px] font-medium text-emerald-400", children: "Recommended template" })
+              ] })
+            ]
+          },
+          item.id
+        )) }) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "grid grid-cols-2 gap-3 md:grid-cols-4 md:gap-4", children: recent.map((item) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(
+          import_react_router_dom.Link,
+          {
+            to: "/historique",
+            className: "group relative aspect-[9/16] overflow-hidden rounded-pg-lg border border-white/[0.06] transition-all duration-200 hover:border-white/[0.12] hover:-translate-y-0.5 hover:shadow-pg-md",
+            children: [
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)(
+                import_video_thumb.VideoThumb,
+                {
+                  title: item.title,
+                  network: item.network,
+                  duration: item.duration,
+                  className: "absolute inset-0 h-full w-full rounded-none transition-transform duration-300 group-hover:scale-105"
+                }
+              ),
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", { className: "absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" }),
+              /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "absolute inset-x-0 bottom-0 p-3 pt-10", children: [
+                /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", { className: "flex items-center justify-between gap-2", children: [
+                  /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "rounded-full bg-white/15 px-2 py-0.5 text-[10px] font-medium text-white/90 backdrop-blur-sm", children: (0, import_format.networkLabel)(item.network) }),
+                  /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", { className: `font-mono text-xs font-bold ${(0, import_format.scoreColorClass)(item.score)}`, children: [
+                    item.score,
+                    "/100"
+                  ] })
+                ] }),
+                /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { className: "mt-1 line-clamp-2 text-sm font-semibold leading-snug text-white", children: item.title }),
+                /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { className: "mt-0.5 text-[11px] text-white/50", children: fmtDate(item.createdAt) })
+              ] })
+            ]
+          },
+          item.id
+        )) })
+      ] })
+    ] });
+  }
+})();

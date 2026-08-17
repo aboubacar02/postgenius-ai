@@ -278,14 +278,24 @@ export async function analyzeHook(hook) {
 Tu es un expert en marketing viral et copywriting.
 Analyse cette accroche de vidéo courte : "${hook}"
 
+Évalue-la selon ces critères (chacun sur 100) :
+- hookRetention : force de l'accroche des 3 premières secondes (curiosity gap, chiffre, promesse claire, scroll-stop).
+- pacing : qualité du rythme et densité d'informations du script.
+- seo : présence du mot-clé principal et cohérence du sujet.
+- emotionalPeak : intensité du pic émotionnel.
+- ctaEfficiency : force de l'appel à l'action.
+
 Réponds UNIQUEMENT en JSON valide avec cette structure exacte :
 {
   "score": 87,
-  "analysis": "analyse courte en français de 2-3 phrases expliquant la note",
-  "suggestions": ["amélioration 1 concrète", "amélioration 2", "amélioration 3"]
+  "analysis": "analyse courte en français de 2-3 phrases",
+  "reason": "explication détaillée en langage clair de POURQUOI ce score est attribué et ce qui manque (2-4 phrases)",
+  "actionPlan": ["action concrète 1 pour améliorer le hook et le montage", "action 2", "action 3"],
+  "suggestions": ["amélioration 1 concrète", "amélioration 2", "amélioration 3"],
+  "metrics": { "hookRetention": 82, "emotionalPeak": 70, "seo": 88, "ctaEfficiency": 65, "pacing": 74 }
 }
 
-Règles : note sur 100, analyse honnête et utile, suggestions actionnables.
+Règles : note sur 100, analyse honnête et utile, suggestions et plan d'action actionnables.
 `
 
   return callModel('analyze', prompt)

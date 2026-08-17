@@ -1,11 +1,14 @@
-import { useState } from 'react'
-import { Info, Sparkles } from 'lucide-react'
+import { useEffect, useRef, useState } from 'react'
+import { useLocation, useSearchParams } from 'react-router-dom'
+import { Info, Loader2, Sparkles, Tv, Zap } from 'lucide-react'
 import { toast } from '../components/ui/sonner'
 import { GeneratorForm } from '../components/generator/generator-form'
 import { ResultsPanel } from '../components/generator/results-panel'
+import { TeleprompterModal } from '../components/generator/teleprompter-modal'
 import { Button } from '../components/ui/button'
 import { Progress } from '../components/ui/progress'
 import { useApp } from '../lib/app-context'
+import { useI18n } from '../lib/i18n'
 
 const DEFAULT_INPUT = {
   network: 'tiktok',
@@ -14,25 +17,48 @@ const DEFAULT_INPUT = {
   duration: 30,
   audience: 'grand-public',
   cta: 'abonne',
-  market: 'fr',
   topic: ''
 }
 
 export default function GeneratorPage() {
   const { generate, creditsLeft, creditsTotal } = useApp()
+  const { t } = useI18n()
+  const location = useLocation()
+  const [searchParams] = useSearchParams()
   const [input, setInput] = useState(DEFAULT_INPUT)
   const [result, setResult] = useState(null)
   const [loading, setLoading] = useState(false)
+  const [prompterOpen, setPrompterOpen] = useState(false)
+  const resultsRef = useRef(null)
+
+  useEffect(() => {
+    const formatParam = searchParams.get('format') || location.state?.format
+    const topicParam = searchParams.get('topic') || location.state?.topic
+    if (formatParam || topicParam) {
+      setInput((prev) => ({
+        ...prev,
+        format: formatParam || prev.format,
+        topic: topicParam || prev.topic
+      }))
+      if (formatParam) {
+        toast.info(`✨ Format viral sélectionné : ${formatParam}`)
+      }
+    }
+  }, [searchParams, location.state])
 
   const canGenerate = input.topic.trim().length > 0 && creditsLeft > 0 && !loading
   const creditsPct = creditsTotal ? Math.round((creditsLeft / creditsTotal) * 100) : 0
 
   async function runGeneration(options = {}) {
     if (input.topic.trim().length === 0) {
-      toast.error('Décrivez votre sujet avant de générer un script.')
+      toast.error(t('generator.describeTopic'))
       return
     }
     setLoading(true)
+    setTimeout(() => {
+      resultsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }, 100)
+
     try {
       const script = await generate(
         {
@@ -42,18 +68,17 @@ export default function GeneratorPage() {
           duration: input.duration,
           audience: input.audience,
           cta: input.cta,
-          market: input.market,
           topic: input.topic
         },
         options
       )
       setResult(script)
-      toast.success('Script généré avec succès')
+      toast.success(t('generator.success'))
     } catch (err) {
       if (err.message === 'crédits') {
-        toast.error('Plus de crédits disponibles aujourd’hui — repasse demain ou passe en Pro.')
+        toast.error(t('generator.noCreditsToast'))
       } else {
-        toast.error('Échec de la génération, veuillez réessayer.')
+        toast.error(t('generator.failToast'))
       }
     } finally {
       setLoading(false)
@@ -61,81 +86,147 @@ export default function GeneratorPage() {
   }
 
   return (
-    <div className="mx-auto w-full max-w-[1200px] px-4 py-8 sm:px-8">
-      <div className="mb-8 flex flex-col gap-2">
-        <h1 className="font-heading text-3xl font-bold tracking-tight text-foreground md:text-4xl">
-          Créez votre prochain hit
+    <div className="mx-auto flex w-full max-w-[1240px] flex-col gap-8 px-4 pb-16 pt-4 sm:px-8">
+      {/* Header */}
+      <div className="reveal mb-8 flex flex-col gap-2">
+        <div className="flex items-center gap-2">
+          <span className="flex size-6 items-center justify-center rounded-md bg-primary/10 text-primary">
+            <Sparkles className="size-3.5" />
+          </span>
+          <span className="eyebrow text-primary">
+            Studio IA Canvas & Rétention
+          </span>
+        </div>
+        <h1 className="text-2xl font-bold tracking-tight">
+          {t('generator.title')}
         </h1>
-        <p className="max-w-xl text-sm leading-relaxed text-muted-foreground">
-          Configurez l&apos;IA pour générer un script viral sur mesure.
+        <p className="text-[15px] text-pg-muted">
+          {t('generator.subtitle')}
         </p>
       </div>
 
-      <div className="grid grid-cols-1 gap-8 lg:grid-cols-12">
+      {/* 2-Column Grid */}
+      <div className="reveal-1 grid grid-cols-1 gap-8 lg:grid-cols-12">
         <div className="min-w-0 lg:col-span-8">
           <GeneratorForm value={input} onChange={setInput} />
         </div>
 
+        {/* Action Panel Sticky */}
         <div className="lg:col-span-4">
-          <div className="glass premium-edge sticky top-24 flex flex-col gap-6 rounded-xl p-5 sm:p-6">
-            <div className="flex flex-col gap-1">
-              <h2 className="font-heading text-lg font-semibold text-foreground">Prêt à générer</h2>
-              <p className="text-sm text-muted-foreground">Coût estimé : 15 crédits</p>
+          <div className="border border-white/[0.06] bg-pg-surface sticky top-24 flex flex-col gap-5 rounded-xl p-5 shadow-sm">
+            <div className="flex flex-col gap-1.5">
+              <div className="flex items-center gap-2.5">
+                <span className="flex size-9 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                  <Sparkles className="size-4.5" />
+                </span>
+                <h2 className="font-heading text-lg font-bold text-pg-text">
+                  {t('generator.ready')}
+                </h2>
+              </div>
+              <p className="text-xs leading-relaxed text-pg-muted">
+                {t('generator.cost')}
+              </p>
             </div>
 
-            <div className="flex flex-col gap-3">
-              <div className="flex items-center justify-between text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                <span>Crédits</span>
-                <span className="font-mono text-foreground">
+            {/* Credits Counter */}
+            <div className="bg-white/[0.04] border border-white/[0.06] rounded-lg p-3">
+              <div className="flex items-center justify-between text-xs font-semibold uppercase tracking-wider">
+                <span className="flex items-center gap-1.5 text-pg-muted">
+                  <Zap className="size-3.5 text-warning" />
+                  {t('generator.credits')}
+                </span>
+                <span className="font-mono text-pg-text">
                   {creditsLeft} / {creditsTotal}
                 </span>
               </div>
               <Progress value={creditsPct} className="h-1.5" />
             </div>
 
-            <div className="flex flex-col gap-2.5">
+            {/* Dominant Generate Button */}
+            <div className="flex flex-col gap-3">
               <Button
                 size="lg"
-                className="w-full"
+                className="h-14 w-full gap-2.5 rounded-2xl bg-primary text-base font-bold text-white transition-all hover:scale-[1.03] active:scale-[0.97] disabled:opacity-40 disabled:hover:scale-100"
                 disabled={!canGenerate}
                 onClick={() => runGeneration()}
               >
-                <Sparkles data-icon="inline-start" />
-                {loading ? 'Génération…' : 'Générer le script'}
+                {loading ? (
+                  <>
+                    <Loader2 className="size-5 animate-spin" />
+                    <span>Génération en cours...</span>
+                  </>
+                ) : (
+                  <>
+                    <Sparkles className="size-5" />
+                    <span>{t('generator.generate')}</span>
+                  </>
+                )}
               </Button>
-              <p className="text-center text-xs text-muted-foreground">
+              <p className="text-center text-xs text-pg-muted">
                 {input.topic.trim().length === 0
-                  ? 'Décrivez d’abord votre sujet.'
+                  ? t('generator.describeFirst')
                   : creditsLeft <= 0
-                    ? 'Plus de crédits aujourd’hui.'
-                    : `${input.topic.length}/280 caractères`}
+                    ? t('generator.noCredits')
+                    : `${input.topic.length} / 280 caractères`}
               </p>
             </div>
 
-            <div className="flex items-start gap-3 rounded-lg border border-border-60 bg-muted-30 p-3.5">
+            {/* Pro Tip */}
+            <div className="flex items-start gap-3 rounded-xl bg-primary/5 border border-primary/10 p-3.5">
               <Info className="mt-0.5 size-4 shrink-0 text-primary" />
-              <p className="text-xs leading-relaxed text-muted-foreground">
-                Astuce : le format « Storytelling » performe 40% mieux sur le marché français en ce
-                moment.
+              <p className="text-xs leading-relaxed text-pg-muted">
+                {t('generator.tipText')}
               </p>
             </div>
           </div>
         </div>
       </div>
 
-      <div className="mt-8">
+      {/* Results Section */}
+      <div className="reveal-2 mt-12" ref={resultsRef}>
         {(result || loading) && (
-          <div className="mb-6 flex flex-col gap-1">
-            <h2 className="font-heading text-2xl font-bold tracking-tight text-foreground">
-              Résultats Générés
-            </h2>
-            <p className="text-sm text-muted-foreground">
-              Script optimisé pour la viralité {input.network === 'tiktok' ? 'TikTok' : input.network === 'reels' ? 'Reels' : 'Shorts'}
-            </p>
+          <div className="reveal mb-6 flex flex-col justify-between gap-3 sm:flex-row sm:items-center">
+            <div className="flex flex-col gap-1">
+              <h2 className="font-heading text-2xl font-bold tracking-tight text-pg-text sm:text-3xl">
+                {t('generator.resultsTitle')}
+              </h2>
+              <p className="text-sm text-pg-muted">
+                {t('generator.resultsSubtitle')}{' '}
+                <span className="font-semibold text-pg-text">
+                  {input.network === 'tiktok'
+                    ? 'TikTok'
+                    : input.network === 'reels'
+                      ? 'Instagram Reels'
+                      : 'YouTube Shorts'}
+                </span>
+              </p>
+            </div>
+
+            {result && (
+              <Button
+                variant="outline"
+                onClick={() => setPrompterOpen(true)}
+                className="gap-2 rounded-xl border-primary/40 bg-primary/10 text-primary hover:bg-primary/20 shadow-sm"
+              >
+                <Tv className="size-4" />
+                <span>Mode Teleprompter Pro</span>
+              </Button>
+            )}
           </div>
         )}
-        <ResultsPanel result={result} loading={loading} onRegenerate={() => runGeneration({ recharge: true })} />
+        <ResultsPanel
+          result={result}
+          loading={loading}
+          onRegenerate={() => runGeneration({ recharge: true })}
+        />
       </div>
+
+      {/* Teleprompter Fullscreen Modal */}
+      <TeleprompterModal
+        script={result}
+        open={prompterOpen}
+        onClose={() => setPrompterOpen(false)}
+      />
     </div>
   )
 }

@@ -13,7 +13,7 @@ export function Topbar({ onOpenCommandPalette }) {
   const { user, creditsLeft, creditsTotal, plan, logout } = useApp()
   const { t, lang, setLang } = useI18n()
   const [drawerOpen, setDrawerOpen] = useState(false)
-  const display = user || { name: 'Camille Aubert', email: 'camille.aubert@postgenius.ai', initials: 'CA', plan: 'Starter' }
+  const display = user
   const currentLang = LANGUAGES.find((l) => l.id === lang) || LANGUAGES[0]
 
   return (
@@ -74,10 +74,16 @@ export function Topbar({ onOpenCommandPalette }) {
               Nouvelle vidéo
             </button>
 
-            {/* AVATAR */}
-            <div className="ml-1 flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-cyan-400 to-indigo-500 text-xs font-bold text-white">
-              {display.initials}
-            </div>
+            {/* AVATAR OR LOGIN */}
+            {display ? (
+              <div className="ml-1 flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-cyan-400 to-indigo-500 text-xs font-bold text-white">
+                {display.initials}
+              </div>
+            ) : (
+              <Link to="/parametres" className="ml-1 px-3 py-1.5 text-xs font-medium text-zinc-300 hover:text-white bg-white/5 hover:bg-white/10 rounded-lg transition-colors border border-white/10">
+                Se connecter
+              </Link>
+            )}
           </div>
         </div>
       </header>

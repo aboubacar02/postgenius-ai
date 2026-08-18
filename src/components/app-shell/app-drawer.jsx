@@ -55,7 +55,7 @@ export function AppDrawer({ open, onOpenChange }) {
 
   if (!open) return null
 
-  const display = user || { name: 'Camille Aubert', email: 'camille.aubert@postgenius.ai', initials: 'CA', plan }
+  const display = user
 
   return (
     <div className="fixed inset-0 z-50">
@@ -66,13 +66,21 @@ export function AppDrawer({ open, onOpenChange }) {
       <div className="absolute inset-y-0 left-0 flex w-[85%] max-w-xs flex-col border-r border-white/[0.06] bg-pg-background shadow-2xl">
         <div className="flex items-center justify-between gap-2 border-b border-white/10 px-5 py-4">
           <div className="flex items-center gap-2.5">
-            <GradientAvatar initials={display.initials} className="size-9 text-sm" />
-            <div className="flex min-w-0 flex-col">
-              <span className="truncate text-sm font-semibold text-pg-text">{display.name}</span>
-              <span className="text-[11px] text-pg-muted">
-                {t('topbar.plan', { plan })}
-              </span>
-            </div>
+            {display ? (
+              <>
+                <GradientAvatar initials={display.initials} className="size-9 text-sm" />
+                <div className="flex min-w-0 flex-col">
+                  <span className="truncate text-sm font-semibold text-pg-text">{display.name}</span>
+                  <span className="text-[11px] text-pg-muted">
+                    {t('topbar.plan', { plan: display.plan || 'Free' })}
+                  </span>
+                </div>
+              </>
+            ) : (
+              <NavLink to="/parametres" onClick={() => onOpenChange?.(false)} className="text-sm font-semibold text-primary hover:underline">
+                Se connecter
+              </NavLink>
+            )}
           </div>
           <button
             type="button"

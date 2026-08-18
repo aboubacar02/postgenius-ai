@@ -7,7 +7,7 @@ import { ResultsPanel } from '../components/generator/results-panel'
 import { TeleprompterModal } from '../components/generator/teleprompter-modal'
 import { Button } from '../components/ui/button'
 import { Progress } from '../components/ui/progress'
-import { RequireAuth } from '../components/auth/require-auth'
+import { AuthModal } from '../components/auth/auth-modal'
 import { useApp } from '../lib/app-context'
 import { useI18n } from '../lib/i18n'
 
@@ -22,7 +22,7 @@ const DEFAULT_INPUT = {
 }
 
 export default function GeneratorPage() {
-  const { generate, creditsLeft, creditsTotal } = useApp()
+  const { user, generate, creditsLeft, creditsTotal } = useApp()
   const { t } = useI18n()
   const location = useLocation()
   const [searchParams] = useSearchParams()
@@ -30,6 +30,7 @@ export default function GeneratorPage() {
   const [result, setResult] = useState(null)
   const [loading, setLoading] = useState(false)
   const [prompterOpen, setPrompterOpen] = useState(false)
+  const [authModalOpen, setAuthModalOpen] = useState(false)
   const resultsRef = useRef(null)
 
   useEffect(() => {
@@ -51,6 +52,11 @@ export default function GeneratorPage() {
   const creditsPct = creditsTotal ? Math.round((creditsLeft / creditsTotal) * 100) : 0
 
   async function runGeneration(options = {}) {
+    if (!user) {
+      setAuthModalOpen(true)
+      return
+    }
+    
     if (input.topic.trim().length === 0) {
       toast.error(t('generator.describeTopic'))
       return
@@ -87,7 +93,7 @@ export default function GeneratorPage() {
   }
 
   return (
-    <RequireAuth>
+    <>
     <div className="mx-auto flex w-full max-w-[1240px] flex-col gap-8 px-4 pb-16 pt-4 sm:px-8">
       {/* Header */}
       <div className="reveal mb-8 flex flex-col gap-2">
@@ -228,7 +234,13 @@ export default function GeneratorPage() {
         open={prompterOpen}
         onClose={() => setPrompterOpen(false)}
       />
+      
+      {/* Auth Modal for Gated Action */}
+      <AuthModal 
+        open={authModalOpen} 
+        onClose={() => setAuthModalOpen(false)} 
+      />
     </div>
-    </RequireAuth>
+    </>
   )
 }

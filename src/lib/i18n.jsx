@@ -57,6 +57,7 @@ const fr = {
   'agent.stop': 'Arrêter la lecture',
   'agent.tooltip': 'Besoin d’aide ? Cliquez ici',
 
+  'dashboard.badge': 'Studio IA',
   'dashboard.title': 'Prêt à devenir viral ?',
   'dashboard.subtitle':
     'Générez des vidéos courtes percutantes en quelques secondes avec notre IA de dernière génération.',
@@ -72,6 +73,9 @@ const fr = {
   'dashboard.thisWeek': 'cette semaine',
   'dashboard.bestRecord': 'record personnel',
   'dashboard.todayLabel': "aujourd'hui",
+  'dashboard.totalScripts': 'Scripts générés',
+  'dashboard.emptyTitle': 'Aucune création pour le moment',
+  'dashboard.emptyDesc': 'Générez votre premier script pour commencer.',
   'dashboard.recentCreations': 'Créations Récentes',
   'dashboard.viewAll': 'Voir tout',
   'dashboard.empty': 'Aucune création pour le moment — lancez votre première génération.',
@@ -497,6 +501,7 @@ const en = {
   'agent.stop': 'Stop playback',
   'agent.tooltip': 'Need help? Click here',
 
+  'dashboard.badge': 'AI Studio',
   'dashboard.title': 'Ready to go viral?',
   'dashboard.subtitle':
     'Generate high-impact short videos in seconds with our latest-generation AI.',
@@ -512,6 +517,9 @@ const en = {
   'dashboard.thisWeek': 'this week',
   'dashboard.bestRecord': 'personal best',
   'dashboard.todayLabel': 'today',
+  'dashboard.totalScripts': 'Scripts generated',
+  'dashboard.emptyTitle': 'No creations yet',
+  'dashboard.emptyDesc': 'Generate your first script to get started.',
   'dashboard.recentCreations': 'Recent Creations',
   'dashboard.viewAll': 'View all',
   'dashboard.empty': 'No creations yet — launch your first generation.',
@@ -937,6 +945,7 @@ const es = {
   'agent.stop': 'Detener la reproducción',
   'agent.tooltip': '¿Necesitas ayuda? Haz clic aquí',
 
+  'dashboard.badge': 'Estudio IA',
   'dashboard.title': '¿Listo para ser viral?',
   'dashboard.subtitle':
     'Genera videos cortos de alto impacto en segundos con nuestra IA de última generación.',
@@ -952,6 +961,9 @@ const es = {
   'dashboard.thisWeek': 'esta semana',
   'dashboard.bestRecord': 'récord personal',
   'dashboard.todayLabel': 'hoy',
+  'dashboard.totalScripts': 'Guiones generados',
+  'dashboard.emptyTitle': 'Aún no hay creaciones',
+  'dashboard.emptyDesc': 'Genera tu primer guion para comenzar.',
   'dashboard.recentCreations': 'Creaciones Recientes',
   'dashboard.viewAll': 'Ver todo',
   'dashboard.empty': 'Aún no hay creaciones — lanza tu primera generación.',
@@ -1378,6 +1390,7 @@ const pt = {
   'agent.stop': 'Parar a reprodução',
   'agent.tooltip': 'Precisa de ajuda? Clique aqui',
 
+  'dashboard.badge': 'Estúdio IA',
   'dashboard.title': 'Pronto para viralizar?',
   'dashboard.subtitle':
     'Gere vídeos curtos de alto impacto em segundos com nossa IA de última geração.',
@@ -1393,6 +1406,9 @@ const pt = {
   'dashboard.thisWeek': 'esta semana',
   'dashboard.bestRecord': 'recorde pessoal',
   'dashboard.todayLabel': 'hoje',
+  'dashboard.totalScripts': 'Roteiros gerados',
+  'dashboard.emptyTitle': 'Nenhuma criação ainda',
+  'dashboard.emptyDesc': 'Gere seu primeiro roteiro para começar.',
   'dashboard.recentCreations': 'Criações Recentes',
   'dashboard.viewAll': 'Ver tudo',
   'dashboard.empty': 'Nenhuma criação ainda — lance sua primeira geração.',

@@ -10,7 +10,7 @@ export function BottomNav() {
   const { user, logout } = useApp()
   const navigate = useNavigate()
   const [expanded, setExpanded] = useState(false)
-  const display = user || { initials: 'U' }
+  const display = user
 
   const NAV_ITEMS = [
     { href: '/', label: t('nav.studio'), icon: LayoutDashboard, end: true },
@@ -60,20 +60,39 @@ export function BottomNav() {
         })}
 
         {/* Profile button */}
-        <button
-          type="button"
-          onClick={() => setExpanded(!expanded)}
-          className="relative flex min-h-[48px] min-w-[48px] flex-col items-center justify-center gap-0.5 rounded-lg px-1.5 py-1 transition-all duration-150 text-zinc-500 hover:text-zinc-300"
-        >
-          <div className="flex size-6 items-center justify-center rounded-full bg-gradient-to-br from-cyan-400 to-indigo-500 text-[9px] font-bold text-white">
-            {display.initials}
-          </div>
-          {expanded ? (
-            <ChevronLeft className="size-3 text-zinc-600" />
-          ) : (
-            <ChevronRight className="size-3 text-zinc-600" />
-          )}
-        </button>
+        {display ? (
+          <button
+            type="button"
+            onClick={() => setExpanded(!expanded)}
+            className="relative flex min-h-[48px] min-w-[48px] flex-col items-center justify-center gap-0.5 rounded-lg px-1.5 py-1 transition-all duration-150 text-zinc-500 hover:text-zinc-300"
+          >
+            <div className="flex size-6 items-center justify-center rounded-full bg-gradient-to-br from-cyan-400 to-indigo-500 text-[9px] font-bold text-white">
+              {display.initials}
+            </div>
+            {expanded ? (
+              <ChevronLeft className="size-3 text-zinc-600" />
+            ) : (
+              <ChevronRight className="size-3 text-zinc-600" />
+            )}
+          </button>
+        ) : (
+          <NavLink
+            to="/parametres"
+            className={({ isActive }) => cn("relative flex min-h-[48px] min-w-[48px] flex-col items-center justify-center gap-0.5 rounded-lg px-1.5 py-1 transition-all duration-150", isActive ? "text-indigo-400 font-semibold" : "text-zinc-500 hover:text-zinc-300 font-medium")}
+          >
+            {({ isActive }) => (
+              <>
+                {isActive && (
+                  <span className="absolute -top-0 left-1/2 h-0.5 w-5 -translate-x-1/2 rounded-full bg-indigo-400 shadow-[0_0_8px_rgba(99,102,241,0.4)]" />
+                )}
+                <Settings className="size-5 transition-colors" strokeWidth={isActive ? 2.2 : 1.6} />
+                <span className="text-[10px] leading-tight uppercase tracking-wider transition-all">
+                  Auth
+                </span>
+              </>
+            )}
+          </NavLink>
+        )}
       </div>
 
       {/* Expanded profile panel */}

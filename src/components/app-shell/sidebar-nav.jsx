@@ -32,7 +32,7 @@ const NAV_ITEMS = [
 export function SidebarNav({ collapsed, onToggle }) {
   const { t } = useI18n()
   const { user, creditsUsed, creditsTotal, plan } = useApp()
-  const display = user || { name: 'Utilisateur', email: '', initials: 'U', plan: 'Starter' }
+  const display = user
 
   return (
     <aside
@@ -116,12 +116,20 @@ export function SidebarNav({ collapsed, onToggle }) {
         )}
 
         <div className={cn('flex items-center gap-2.5 border-t border-white/[0.07] pt-2.5', collapsed && 'justify-center')}>
-          <GradientAvatar initials={display.initials} className="size-8 text-[11px]" />
-          {!collapsed && (
-            <div className="min-w-0 flex-1">
-              <p className="truncate text-[13px] font-medium text-pg-text">{display.name}</p>
-              <p className="truncate text-[11px] text-pg-muted">{display.plan}</p>
-            </div>
+          {display ? (
+            <>
+              <GradientAvatar initials={display.initials} className="size-8 text-[11px]" />
+              {!collapsed && (
+                <div className="min-w-0 flex-1">
+                  <p className="truncate text-[13px] font-medium text-pg-text">{display.name || 'Utilisateur'}</p>
+                  <p className="truncate text-[11px] text-pg-muted">{display.plan || 'Free'}</p>
+                </div>
+              )}
+            </>
+          ) : (
+            <Link to="/parametres" className={cn("w-full text-center py-1.5 text-xs font-medium text-zinc-300 hover:text-white bg-white/5 hover:bg-white/10 rounded-lg transition-colors border border-white/10", collapsed && "px-0 text-[10px]")}>
+              {collapsed ? 'Auth' : 'Se connecter'}
+            </Link>
           )}
         </div>
 

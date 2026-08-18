@@ -21,10 +21,10 @@ import { cn } from '../lib/utils'
 export default function SettingsPage() {
   const { user, isSignedIn, plan, creditsUsed, creditsTotal, theme, setTheme } = useApp()
   const { t, lang, setLang } = useI18n()
-  const display = user || { name: 'Utilisateur', email: 'utilisateur@postgenius.ai', initials: 'U', plan: 'Starter' }
+  const display = user
   const [tab, setTab] = useState('profil')
-  const [name, setName] = useState(display.name)
-  const [email, setEmail] = useState(display.email)
+  const [name, setName] = useState(display?.name || '')
+  const [email, setEmail] = useState(display?.email || '')
   const [language, setLanguage] = useState(lang)
   const [emailNotifs, setEmailNotifs] = useState(true)
   const [autoSubtitles, setAutoSubtitles] = useState(true)
@@ -38,7 +38,7 @@ export default function SettingsPage() {
     { id: 'securite', label: t('settings.security'), icon: ShieldCheck }
   ]
 
-  const currentPlan = PRICING_PLANS.find((p) => p.name === display.plan) || PRICING_PLANS[1]
+  const currentPlan = PRICING_PLANS.find((p) => p.name === display?.plan) || PRICING_PLANS[1]
   const usedPct = Math.min(100, (creditsUsed / creditsTotal) * 100)
 
   return (
@@ -109,19 +109,21 @@ export default function SettingsPage() {
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="flex flex-col gap-5 p-0">
-                  <div className="flex items-center gap-4">
-                    <div className="relative">
-                      <div className="absolute -inset-0.5 rounded-full bg-gradient-to-br from-primary to-fuchsia-500 opacity-60 blur-sm" />
-                      <Avatar className="relative size-14 border-2 border-background">
-                        <AvatarFallback className="bg-pg-surface font-bold text-pg-text">
-                          {display.initials}
-                        </AvatarFallback>
-                      </Avatar>
+                  {display && (
+                    <div className="flex items-center gap-4">
+                      <div className="relative">
+                        <div className="absolute -inset-0.5 rounded-full bg-gradient-to-br from-primary to-fuchsia-500 opacity-60 blur-sm" />
+                        <Avatar className="relative size-14 border-2 border-background">
+                          <AvatarFallback className="bg-pg-surface font-bold text-pg-text">
+                            {display.initials}
+                          </AvatarFallback>
+                        </Avatar>
+                      </div>
+                      <div className="flex flex-col gap-1">
+                        <span className="text-base font-bold text-pg-text">{name}</span>
+                      </div>
                     </div>
-                    <div className="flex flex-col gap-1">
-                      <span className="text-base font-bold text-pg-text">{name}</span>
-                    </div>
-                  </div>
+                  )}
 
                   <FieldGroup>
                     <Field>
@@ -279,7 +281,7 @@ export default function SettingsPage() {
                   <div className="flex flex-wrap items-center justify-between gap-3">
                     <div className="flex items-center gap-3">
                       <Badge className="rounded-full border-0 bg-primary px-3 py-1 text-xs font-bold text-white shadow-sm">
-                        {display.plan}
+                        {display?.plan || 'Free'}
                       </Badge>
                       <span className="font-mono text-xl font-black text-pg-text">
                         {currentPlan.price}€
@@ -324,7 +326,7 @@ export default function SettingsPage() {
                     <div className="flex min-w-0 flex-col gap-1.5">
                       <span className="text-sm font-bold text-pg-text">{t('settings.dailyCredits')}</span>
                       <span className="font-mono text-xs text-pg-muted">
-                        {isUnlimitedPlan(display.plan)
+                        {isUnlimitedPlan(display?.plan)
                           ? t('settings.unlimited')
                           : t('settings.today', { used: Math.min(creditsUsed, creditsTotal), total: creditsTotal })}
                       </span>

@@ -7,84 +7,132 @@ const isConfigured = supabaseUrl && supabaseAnonKey && !supabaseAnonKey.startsWi
 
 export const supabase = isConfigured
   ? createClient(supabaseUrl, supabaseAnonKey)
-  : createClient('https://placeholder.supabase.co', 'placeholder-key')
+  : null
 
 export const CREDITS_PER_DAY = 5
 
-/**
- * Récupère les crédits consommés aujourd'hui pour un utilisateur.
- * Table attendue dans Supabase :
- *   user_credits (user_id uuid, date date, credits_used int)
- */
+// ── localStorage fallback ─────────────────────────────────
+const LS_SCRIPTS_KEY = 'pg-generated-scripts'
+const LS_CREDITS_KEY = 'pg-credits'
+
+function lsGetScripts() {
+  try { return JSON.parse(localStorage.getItem(LS_SCRIPTS_KEY) || '[]') } catch { return [] }
+}
+function lsSetScripts(arr) {
+  try { localStorage.setItem(LS_SCRIPTS_KEY, JSON.stringify(arr)) } catch {}
+}
+function lsGetCredits() {
+  try {
+    const data = JSON.parse(localStorage.getItem(LS_CREDITS_KEY) || '{}')
+    const today = new Date().toISOString().slice(0, 10)
+    if (data.date === today) return data.used || 0
+    return 0
+  } catch { return 0 }
+}
+function lsSetCredits(used) {
+  try {
+    const today = new Date().toISOString().slice(0, 10)
+    localStorage.setItem(LS_CREDITS_KEY, JSON.stringify({ date: today, used }))
+  } catch {}
+}
+
+// ── Credits ───────────────────────────────────────────────
+
 export async function getCreditsUsed(userId) {
-  const today = new Date().toISOString().slice(0, 10)
-  const { data, error } = await supabase
-    .from('user_credits')
-    .select('credits_used')
-    .eq('user_id', userId)
-    .eq('date', today)
-    .maybeSingle()
-
-  if (error) throw error
-  return data?.credits_used ?? 0
-}
-
-/**
- * Enregistre la consommation d'un crédit pour la journée.
- */
-export async function incrementCreditsUsed(userId) {
-  const today = new Date().toISOString().slice(0, 10)
-
-  const { data: existing, error: selectError } = await supabase
-    .from('user_credits')
-    .select('id, credits_used')
-    .eq('user_id', userId)
-    .eq('date', today)
-    .maybeSingle()
-
-  if (selectError) throw selectError
-
-  if (existing) {
-    const { error } = await supabase
-      .from('user_credits')
-      .update({ credits_used: existing.credits_used + 1 })
-      .eq('id', existing.id)
-    if (error) throw error
-  } else {
-    const { error } = await supabase
-      .from('user_credits')
-      .insert({ user_id: userId, date: today, credits_used: 1 })
-    if (error) throw error
+  if (supabase) {
+    try {
+      const today = new Date().toISOString().slice(0, 10)
+      const { data, error } = await supabase
+        .from('user_credits')
+        .select('credits_used')
+        .eq('user_id', userId)
+        .eq('date', today)
+        .maybeSingle()
+      if (error) throw error
+      return data?.credits_used ?? 0
+    } catch {
+      return lsGetCredits()
+    }
   }
+  return lsGetCredits()
 }
 
-/**
- * Sauvegarde un script généré dans l'historique.
- * Table attendue : generated_scripts (id, user_id, network, topic, result, created_at)
- */
+export async function incrementCreditsUsed(userId) {
+  if (supabase) {
+    try {
+      const today = new Date().toISOString().slice(0, 10)
+      const { data: existing } = await supabase
+        .from('user_credits')
+        .select('id, credits_used')
+        .eq('user_id', userId)
+        .eq('date', today)
+        .maybeSingle()
+
+      if (existing) {
+        await supabase.from('user_credits').update({ credits_used: existing.credits_used + 1 }).eq('id', existing.id)
+      } else {
+        await supabase.from('user_credits').insert({ user_id: userId, date: today, credits_used: 1 })
+      }
+      return
+    } catch {
+      /* fallback to local */
+    }
+  }
+  lsSetCredits(lsGetCredits() + 1)
+}
+
+// ── History ───────────────────────────────────────────────
+
 export async function saveGeneratedScript(userId, network, topic, result) {
-  const { error } = await supabase
-    .from('generated_scripts')
-    .insert({ user_id: userId, network, topic, result })
-  if (error) throw error
+  if (supabase) {
+    try {
+      await supabase.from('generated_scripts').insert({ user_id: userId, network, topic, result })
+      return
+    } catch {
+      /* fallback to local */
+    }
+  }
+  const scripts = lsGetScripts()
+  scripts.unshift({
+    id: crypto.randomUUID(),
+    user_id: userId || 'local',
+    network,
+    topic,
+    result,
+    created_at: new Date().toISOString()
+  })
+  if (scripts.length > 100) scripts.length = 100
+  lsSetScripts(scripts)
 }
 
 export async function fetchGeneratedScripts(userId, limit = 50) {
-  const { data, error } = await supabase
-    .from('generated_scripts')
-    .select('*')
-    .eq('user_id', userId)
-    .order('created_at', { ascending: false })
-    .limit(limit)
-  if (error) throw error
-  return data
+  if (supabase) {
+    try {
+      const { data, error } = await supabase
+        .from('generated_scripts')
+        .select('*')
+        .eq('user_id', userId)
+        .order('created_at', { ascending: false })
+        .limit(limit)
+      if (error) throw error
+      return data
+    } catch {
+      /* fallback to local */
+    }
+  }
+  return lsGetScripts()
+    .filter((s) => s.user_id === userId || s.user_id === 'local')
+    .slice(0, limit)
 }
 
 export async function deleteGeneratedScript(userId, scriptId) {
-  const { error } = await supabase
-    .from('generated_scripts')
-    .delete()
-    .eq('user_id', userId)
-    .eq('id', scriptId)
-  if (error) throw error
+  if (supabase) {
+    try {
+      await supabase.from('generated_scripts').delete().eq('user_id', userId).eq('id', scriptId)
+      return
+    } catch {
+      /* fallback to local */
+    }
+  }
+  lsSetScripts(lsGetScripts().filter((s) => s.id !== scriptId))
 }

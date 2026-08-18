@@ -306,6 +306,11 @@
     to { opacity: 1; transform: translateY(0); }
   }
 
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-8px); }
+  }
+
   .page-in {
     animation: page-in 0.35s var(--ease) both;
   }

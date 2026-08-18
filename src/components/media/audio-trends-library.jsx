@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { Download, Music, Pause, Play, RefreshCw, TrendingUp } from 'lucide-react'
+import { Download, Loader2, Music, Pause, Play, RefreshCw, Search, TrendingUp, X } from 'lucide-react'
 import { Button } from '../ui/button'
 import { toast } from '../ui/sonner'
 import { cn } from '../../lib/utils'
@@ -23,6 +23,9 @@ export function AudioTrendsLibrary() {
   const [tracks, setTracks] = useState(() => getTrendingMusic())
   const [lastUpdate, setLastUpdate] = useState(new Date())
   const [waveBars, setWaveBars] = useState(Array(16).fill(4))
+  const [musicSearch, setMusicSearch] = useState('')
+  const [musicSearching, setMusicSearching] = useState(false)
+  const [ytResults, setYtResults] = useState([])
   const ctxRef = useRef(null)
   const nodesRef = useRef([])
   const timerRef = useRef(null)
@@ -40,6 +43,26 @@ export function AudioTrendsLibrary() {
     setTracks(getTrendingMusic())
     setLastUpdate(new Date())
     toast.success('Données tendance actualisées !')
+  }
+
+  async function searchYouTubeMusic() {
+    const q = musicSearch.trim()
+    if (!q || musicSearching) return
+    setMusicSearching(true)
+    try {
+      const res = await fetch(`/api/youtube/music?q=${encodeURIComponent(q)}&max=10`)
+      const data = await res.json()
+      if (data.items?.length > 0) {
+        setYtResults(data.items)
+        toast.success(`${data.items.length} musiques trouvées !`)
+      } else {
+        toast.error(data.error || 'Aucun résultat')
+      }
+    } catch {
+      toast.error('Recherche indisponible')
+    } finally {
+      setMusicSearching(false)
+    }
   }
 
   function stopAudio() {
@@ -250,6 +273,59 @@ export function AudioTrendsLibrary() {
           </Button>
         </div>
       </div>
+
+      {/* YouTube Music Search */}
+      <form
+        className="flex gap-2"
+        onSubmit={(e) => { e.preventDefault(); searchYouTubeMusic() }}
+      >
+        <div className="relative flex-1">
+          <Search className="pointer-events-none absolute top-1/2 left-3 size-3.5 -translate-y-1/2 text-zinc-600" />
+          <input
+            value={musicSearch}
+            onChange={(e) => setMusicSearch(e.target.value)}
+            placeholder="Chercher une musique sur YouTube..."
+            className="h-10 w-full rounded-full border border-white/[0.06] bg-white/[0.03] pl-9 pr-4 text-xs text-zinc-300 placeholder:text-zinc-600 outline-none transition-all focus:border-indigo-500/40 focus:ring-1 focus:ring-indigo-500/20"
+          />
+        </div>
+        <Button type="submit" size="sm" disabled={!musicSearch.trim() || musicSearching} className="h-10 rounded-full bg-indigo-600/80 px-4 text-xs font-semibold text-white hover:bg-indigo-500">
+          {musicSearching ? <Loader2 className="size-3.5 animate-spin" /> : <Search className="size-3.5" />}
+          YouTube
+        </Button>
+        {ytResults.length > 0 && (
+          <Button type="button" size="sm" variant="ghost" onClick={() => setYtResults([])} className="h-10 rounded-full text-zinc-500 hover:text-zinc-200">
+            <X className="size-3.5" />
+          </Button>
+        )}
+      </form>
+
+      {/* YouTube Results */}
+      {ytResults.length > 0 && (
+        <div className="flex flex-col gap-2">
+          <span className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-emerald-400">
+            <Music className="size-3" />
+            Résultats YouTube — {ytResults.length} pistes
+          </span>
+          {ytResults.map((v, i) => (
+            <a
+              key={v.youtubeId || i}
+              href={`https://www.youtube.com/watch?v=${v.youtubeId}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group flex items-center gap-3 rounded-xl border border-white/[0.04] bg-white/[0.02] p-2.5 transition-all hover:border-emerald-500/30 hover:bg-emerald-500/5"
+            >
+              {v.thumbnail && (
+                <img src={v.thumbnail} alt={v.title} className="size-10 shrink-0 rounded-lg object-cover" loading="lazy" />
+              )}
+              <div className="flex-1 min-w-0">
+                <p className="text-xs font-semibold text-zinc-200 truncate group-hover:text-emerald-400">{v.title}</p>
+                <p className="text-[10px] text-zinc-600 truncate">{v.channel} {v.views ? `· ${v.views}` : ''} {v.duration ? `· ${v.duration}` : ''}</p>
+              </div>
+              <Play className="size-3.5 text-zinc-600 group-hover:text-emerald-400 shrink-0" />
+            </a>
+          ))}
+        </div>
+      )}
 
       <div className="flex flex-col gap-2">
         {tracks.map((track, i) => {

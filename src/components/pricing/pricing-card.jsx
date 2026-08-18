@@ -17,12 +17,22 @@ export function PricingCard({ plan, currency, onSubscribe }) {
   return (
     <div
       className={cn(
-        'reveal group relative flex flex-col overflow-hidden rounded-3xl border backdrop-blur-md transition-all duration-300',
+        'reveal group relative flex flex-col overflow-hidden rounded-3xl border backdrop-blur-md transition-all duration-500',
         plan.featured
-          ? 'border-primary/40 bg-gradient-to-b from-primary/10 via-card/80 to-card/60 shadow-[0_0_50px_-12px_rgba(139,92,246,0.35)] md:scale-[1.04] z-10'
-          : 'border-white/5 bg-card/40 hover:border-white/15 hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.3)] hover:-translate-y-2'
+          ? 'border-primary/40 bg-gradient-to-b from-primary/10 via-card/80 to-card/60 shadow-[0_0_60px_-12px_rgba(139,92,246,0.45)] md:scale-[1.05] z-10 animate-[float_4s_ease-in-out_infinite]'
+          : 'border-white/5 bg-card/40 hover:border-white/15 hover:shadow-[0_20px_60px_-15px_rgba(0,0,0,0.4)] hover:-translate-y-3 animate-[float_5s_ease-in-out_infinite]'
       )}
     >
+      {/* Neon glow ring */}
+      {plan.featured && (
+        <div className="pointer-events-none absolute -inset-px rounded-3xl bg-gradient-to-r from-primary via-fuchsia-500 to-cyan-400 opacity-20 blur-sm" />
+      )}
+
+      {/* Floating orb */}
+      <div className={cn(
+        'pointer-events-none absolute -top-20 -right-20 h-40 w-40 rounded-full blur-3xl transition-opacity duration-500',
+        plan.featured ? 'bg-primary/25 opacity-100' : 'bg-white/5 opacity-0 group-hover:opacity-100'
+      )} />
       {/* Featured glow overlay */}
       {plan.featured && (
         <>

@@ -16,7 +16,7 @@ import { creditReferrerForPayment } from '../services/referral'
 export default function PricingPage() {
   const { upgradeToPlan } = useApp()
   const { t } = useI18n()
-  const [currency, setCurrency] = useState(defaultCurrency)
+  const [currency, setCurrency] = useState(defaultCurrency())
   const [payingPlan, setPayingPlan] = useState(null)
 
   useEffect(() => {

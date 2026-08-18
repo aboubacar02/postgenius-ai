@@ -288,12 +288,12 @@ export function AudioTrendsLibrary() {
             className="h-10 w-full rounded-full border border-white/[0.06] bg-white/[0.03] pl-9 pr-4 text-xs text-zinc-300 placeholder:text-zinc-600 outline-none transition-all focus:border-indigo-500/40 focus:ring-1 focus:ring-indigo-500/20"
           />
         </div>
-        <Button type="submit" size="sm" disabled={!musicSearch.trim() || musicSearching} className="h-10 rounded-full bg-indigo-600/80 px-4 text-xs font-semibold text-white hover:bg-indigo-500">
+        <Button type="submit" size="sm" disabled={!musicSearch.trim() || musicSearching} className="h-11 rounded-full bg-indigo-600/80 px-4 text-xs font-semibold text-white hover:bg-indigo-500">
           {musicSearching ? <Loader2 className="size-3.5 animate-spin" /> : <Search className="size-3.5" />}
           YouTube
         </Button>
         {ytResults.length > 0 && (
-          <Button type="button" size="sm" variant="ghost" onClick={() => setYtResults([])} className="h-10 rounded-full text-zinc-500 hover:text-zinc-200">
+          <Button type="button" size="sm" variant="ghost" onClick={() => setYtResults([])} className="h-11 rounded-full text-zinc-500 hover:text-zinc-200">
             <X className="size-3.5" />
           </Button>
         )}
@@ -302,7 +302,7 @@ export function AudioTrendsLibrary() {
       {/* YouTube Results */}
       {ytResults.length > 0 && (
         <div className="flex flex-col gap-2">
-          <span className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-emerald-400">
+          <span className="flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-emerald-400">
             <Music className="size-3" />
             Résultats YouTube — {ytResults.length} pistes
           </span>
@@ -356,7 +356,7 @@ export function AudioTrendsLibrary() {
                 <p className="text-xs text-zinc-500 truncate">{track.artist} · {track.genre}</p>
                 <div className="flex items-center gap-2 mt-1">
                   {track.tags.slice(0, 2).map((tag) => (
-                    <span key={tag} className="rounded-md bg-white/[0.04] px-1.5 py-0.5 text-[9px] font-mono text-zinc-600">
+                    <span key={tag} className="rounded-md bg-white/[0.04] px-1.5 py-0.5 text-[10px] font-mono text-zinc-600">
                       {tag}
                     </span>
                   ))}
@@ -364,8 +364,8 @@ export function AudioTrendsLibrary() {
               </div>
 
               <div className="hidden sm:flex flex-col items-end gap-1 shrink-0">
-                <span className="font-mono text-[10px] font-bold text-zinc-600">{track.bpm} BPM</span>
-                <span className="text-[10px] text-zinc-700">{track.platform}</span>
+                <span className="font-mono text-[11px] font-bold text-zinc-600">{track.bpm} BPM</span>
+                <span className="text-[11px] text-zinc-700">{track.platform}</span>
               </div>
 
               <div className="flex items-center gap-1 shrink-0">

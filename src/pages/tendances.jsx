@@ -160,11 +160,11 @@ export default function TendancesPage() {
       {liveMode && liveResults.length > 0 && (
         <section className="flex flex-col gap-4">
           <div className="reveal flex items-center justify-between">
-            <span className="flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-zinc-500">
+            <span className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-zinc-500">
               <Video className="size-3.5 text-emerald-400" />
               {liveResults.length} résultats pour « {searchQuery} »
             </span>
-            <Button size="sm" variant="ghost" onClick={resetSearch} className="gap-1 text-[10px] text-zinc-500 hover:text-white">
+            <Button size="sm" variant="ghost" onClick={resetSearch} className="gap-1 min-h-[40px] text-[11px] text-zinc-500 hover:text-white">
               <X className="size-3" /> Effacer
             </Button>
           </div>
@@ -191,17 +191,17 @@ export default function TendancesPage() {
                       <Play className="size-6 fill-white text-white ml-1" />
                     </div>
                   </div>
-                  <div className="absolute top-3 left-3 flex items-center gap-1 rounded-full bg-black/50 backdrop-blur-sm px-2 py-0.5 text-[10px] font-bold text-white">
+                  <div className="absolute top-3 left-3 flex items-center gap-1 rounded-full bg-black/50 backdrop-blur-sm px-2 py-0.5 text-[11px] font-bold text-white">
                     <span className="font-mono text-xs">#{i + 1}</span>
                   </div>
                   <div className="absolute top-3 right-3 flex items-center gap-1.5">
                     {v.duration && (
-                      <span className="rounded-full bg-black/60 backdrop-blur-sm px-2 py-0.5 text-[10px] font-bold text-white">
+                      <span className="rounded-full bg-black/60 backdrop-blur-sm px-2 py-0.5 text-[11px] font-bold text-white">
                         {v.duration}
                       </span>
                     )}
                     {v.views && (
-                      <span className="rounded-full bg-black/50 backdrop-blur-sm px-2 py-0.5 text-[10px] font-bold text-white flex items-center gap-1">
+                      <span className="rounded-full bg-black/50 backdrop-blur-sm px-2 py-0.5 text-[11px] font-bold text-white flex items-center gap-1">
                         <Zap className="size-3" />
                         {v.views}
                       </span>
@@ -248,7 +248,7 @@ export default function TendancesPage() {
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-12">
         <section className="flex flex-col gap-4 lg:col-span-8">
           <div className="reveal flex items-center justify-between">
-            <span className="flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-zinc-500">
+            <span className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-zinc-500">
               <TrendingUp className="size-3.5 text-indigo-400" />
               {t('trending.ideasToday')}
             </span>
@@ -280,7 +280,7 @@ export default function TendancesPage() {
                         <CardTitle className="text-sm font-bold text-zinc-100">{niche.name}</CardTitle>
                         <div className="flex items-center gap-1.5 mt-0.5">
                           {niche.tags.map((tag) => (
-                            <span key={tag} className="font-mono text-[10px] text-zinc-600">{tag}</span>
+                            <span key={tag} className="font-mono text-[11px] text-zinc-600">{tag}</span>
                           ))}
                         </div>
                       </div>
@@ -299,7 +299,7 @@ export default function TendancesPage() {
                           key={idea}
                           className="flex items-start gap-2.5 rounded-xl px-2 py-1.5 text-sm leading-relaxed text-zinc-400 transition-colors hover:bg-white/[0.03] hover:text-zinc-300"
                         >
-                          <span className="mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-md bg-white/[0.05] font-mono text-[10px] font-bold text-zinc-600">
+                          <span className="mt-0.5 flex size-6 shrink-0 items-center justify-center rounded-md bg-white/[0.05] font-mono text-[11px] font-bold text-zinc-600">
                             {idx + 1}
                           </span>
                           <span className="line-clamp-2">{idea}</span>
@@ -314,7 +314,7 @@ export default function TendancesPage() {
         </section>
 
         <section className="flex flex-col gap-4 lg:col-span-4">
-          <span className="reveal flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-zinc-500">
+          <span className="reveal flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-zinc-500">
             <Clock className="size-3.5 text-indigo-400" />
             {t('trending.bestTimes')}
           </span>
@@ -331,13 +331,13 @@ export default function TendancesPage() {
                       <span className="text-lg">{bt.emoji}</span>
                       {bt.platform}
                     </span>
-                    <span className="font-mono text-[10px] font-bold text-indigo-400">{bt.strength}/100</span>
+                     <span className="font-mono text-[11px] font-bold text-indigo-400">{bt.strength}/100</span>
                   </div>
                   <div className={`rounded-xl bg-gradient-to-br px-4 py-3 text-center text-lg font-bold text-white shadow-lg ${bt.color}`}>
                     {bt.window}
                   </div>
-                  <span className="text-[11px] font-semibold text-zinc-500">{bt.secondary}</span>
-                  <p className="text-xs leading-relaxed text-zinc-600">{bt.advice}</p>
+                   <span className="text-xs font-semibold text-zinc-500">{bt.secondary}</span>
+                   <p className="text-xs leading-relaxed text-zinc-600">{bt.advice}</p>
                   <Progress value={bt.strength} gradient className="h-1.5" />
                 </CardContent>
               </Card>
@@ -348,7 +348,7 @@ export default function TendancesPage() {
 
       {/* ── Resources ──────── */}
       <section className="flex flex-col gap-4">
-        <span className="reveal flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-zinc-500">
+        <span className="reveal flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-zinc-500">
           <ExternalLink className="size-3.5 text-indigo-400" />
           {t('trending.resources')}
         </span>
@@ -365,7 +365,7 @@ export default function TendancesPage() {
               <div className={`relative flex h-32 items-center justify-center bg-gradient-to-br ${r.gradient} overflow-hidden`}>
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_25%,rgba(255,255,255,0.12),transparent_60%)]" />
                 <span className="relative text-4xl">{r.icon}</span>
-                <div className="absolute right-3 bottom-3 rounded-lg bg-black/50 backdrop-blur-sm px-2 py-0.5 font-mono text-[10px] font-bold text-white border border-white/10">
+                <div className="absolute right-3 bottom-3 rounded-lg bg-black/50 backdrop-blur-sm px-2 py-0.5 font-mono text-[11px] font-bold text-white border border-white/10">
                   {r.duration}
                 </div>
               </div>
@@ -387,7 +387,7 @@ export default function TendancesPage() {
 
       {/* ── Audio Trends Library ──────────────────────── */}
       <section className="reveal flex flex-col gap-4">
-        <span className="flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-zinc-500">
+        <span className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-zinc-500">
           <Music className="size-3.5 text-indigo-400" />
           {t('trending.audioLibrary')}
         </span>

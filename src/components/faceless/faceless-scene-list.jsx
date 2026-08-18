@@ -45,16 +45,16 @@ export function FacelessSceneList({ script, activeIdx, playing, sceneCount, scen
                   <button
                     type="button"
                     onClick={(e) => { e.stopPropagation(); regenerateScene(idx) }}
-                    className="flex items-center gap-1 rounded-md bg-white/20 px-2 py-1 text-[9px] font-bold text-white hover:bg-white/30"
+                    className="flex min-h-[36px] items-center gap-1 rounded-md bg-white/20 px-3 py-1.5 text-[11px] font-bold text-white hover:bg-white/30"
                   >
                     <RefreshCcw className="size-2.5" /> Recharger
                   </button>
                 </div>
-                <span className="absolute left-1 top-1 rounded bg-black/70 px-1 py-0.5 font-mono text-[8px] font-bold text-white">
+                <span className="absolute left-1 top-1 rounded bg-black/70 px-1.5 py-0.5 font-mono text-[10px] font-bold text-white">
                   {String(idx + 1).padStart(2, '0')}
                 </span>
                 {m?.videoUrl && (
-                  <span className="absolute bottom-1 right-1 rounded bg-green-500/80 px-1 py-0.5 font-mono text-[7px] font-bold text-white">
+                  <span className="absolute bottom-1 right-1 rounded bg-green-500/80 px-1.5 py-0.5 font-mono text-[10px] font-bold text-white">
                     MP4
                   </span>
                 )}
@@ -62,12 +62,12 @@ export function FacelessSceneList({ script, activeIdx, playing, sceneCount, scen
 
               <div className="flex flex-1 flex-col justify-between min-w-0 py-0.5">
                 <div className="flex flex-col gap-0.5">
-                  <span className="font-mono text-[10px] font-bold text-violet-400 uppercase">
+                  <span className="font-mono text-[11px] font-bold text-violet-400 uppercase">
                     Scene {idx + 1} {active && playing && <span className="text-green-400">&#9654;</span>}
                   </span>
                   <p className="text-xs font-medium text-pg-text line-clamp-1">{s.narration}</p>
                 </div>
-                <div className="flex items-center gap-2 text-[10px] text-pg-subtle">
+                <div className="flex items-center gap-2 text-[11px] text-pg-subtle">
                   <span className="flex items-center gap-1"><Image className="size-3" />{s.imageKeyword || 'B-roll'}</span>
                   {s.wordImages && s.wordImages.length > 0 && (
                     <span className="flex items-center gap-1 text-indigo-400/60">
@@ -82,7 +82,7 @@ export function FacelessSceneList({ script, activeIdx, playing, sceneCount, scen
                 <button
                   onClick={(e) => { e.stopPropagation(); downloadSceneVideo(idx) }}
                   disabled={downloading === `scene-${idx}`}
-                  className="self-center shrink-0 flex items-center gap-1 rounded-lg bg-white/[0.06] px-2 py-1.5 text-[9px] font-bold text-pg-muted hover:bg-white/[0.1] hover:text-pg-text transition-colors"
+                  className="self-center shrink-0 flex min-h-[36px] items-center gap-1 rounded-lg bg-white/[0.06] px-3 py-1.5 text-[11px] font-bold text-pg-muted hover:bg-white/[0.1] hover:text-pg-text transition-colors"
                 >
                   {downloading === `scene-${idx}` ? <Loader2 className="size-3 animate-spin" /> : <Download className="size-3" />}
                   MP4
@@ -92,7 +92,7 @@ export function FacelessSceneList({ script, activeIdx, playing, sceneCount, scen
               {active && (
                 <button
                   onClick={(e) => { e.stopPropagation(); togglePlay() }}
-                  className="self-center shrink-0 size-8 flex items-center justify-center rounded-full bg-violet-500/20 text-violet-400 hover:bg-violet-500/30 transition-colors"
+                  className="self-center shrink-0 size-10 flex items-center justify-center rounded-full bg-violet-500/20 text-violet-400 hover:bg-violet-500/30 transition-colors"
                 >
                   {playing ? <Pause className="size-3.5" /> : <Play className="size-3.5 ml-0.5" />}
                 </button>

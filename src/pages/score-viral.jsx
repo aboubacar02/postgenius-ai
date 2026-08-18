@@ -205,13 +205,13 @@ export default function ScorePage() {
                 <span className="text-[11px] font-semibold uppercase tracking-wider text-pg-muted">
                   {t('score.examples')}
                 </span>
-                <div className="flex flex-col gap-1.5">
-                  {EXAMPLES.map((ex) => (
-                    <button
-                      key={ex}
-                      type="button"
-                      onClick={() => doAnalyze(t(ex))}
-                      className="group flex items-center justify-between rounded-xl border border-white/[0.04] bg-white/[0.03] px-3 py-2 text-left text-xs text-pg-muted transition-all hover:border-indigo-500/40 hover:bg-white/[0.06] hover:text-pg-text"
+                    <div className="flex flex-col gap-1.5">
+                      {EXAMPLES.map((ex) => (
+                        <button
+                          key={ex}
+                          type="button"
+                          onClick={() => doAnalyze(t(ex))}
+                          className="group flex items-center justify-between rounded-xl border border-white/[0.04] bg-white/[0.03] px-3 py-2.5 min-h-[44px] text-left text-xs text-pg-muted transition-all hover:border-indigo-500/40 hover:bg-white/[0.06] hover:text-pg-text"
                     >
                       <span className="truncate pr-2">« {t(ex)} »</span>
                       <Sparkles className="size-3 shrink-0 text-primary opacity-0 transition-opacity group-hover:opacity-100" />
@@ -310,7 +310,7 @@ export default function ScorePage() {
                               </span>
                               <span
                                 className={cn(
-                                  'flex items-center gap-1 rounded-full border px-2 py-0.5 font-mono text-[10px] font-bold',
+                                  'flex items-center gap-1 rounded-full border px-2 py-0.5 font-mono text-[11px] font-bold',
                                   badge.cls
                                 )}
                               >
@@ -341,7 +341,7 @@ export default function ScorePage() {
                           <Wand2 className="size-3.5" />
                           5 Clones Ultra-Viraux de Remplacement
                         </span>
-                        <span className="font-mono text-[10px] text-pg-muted">1-clic pour tester</span>
+                        <span className="font-mono text-[11px] text-pg-muted">1-clic pour tester</span>
                       </div>
 
                       <div className="flex flex-col gap-2">
@@ -352,7 +352,7 @@ export default function ScorePage() {
                           >
                             <div className="flex flex-col gap-0.5 min-w-0">
                               <div className="flex items-center gap-2">
-                                <span className="rounded bg-primary/10 px-1.5 py-0.5 font-mono text-[10px] font-bold text-primary">
+                                <span className="rounded bg-primary/10 px-1.5 py-0.5 font-mono text-[11px] font-bold text-primary">
                                   {c.tag}
                                 </span>
                                 <span className="font-mono text-[11px] font-bold text-emerald-400">
@@ -365,10 +365,10 @@ export default function ScorePage() {
                             </div>
 
                             <Button
-                              size="sm"
+                              size="default"
                               variant="outline"
                               onClick={() => copyAndTestHook(c.hook, i)}
-                              className="shrink-0 gap-1 rounded-xl text-xs border-primary/30 text-primary hover:bg-primary/10"
+                              className="shrink-0 gap-1 rounded-xl min-h-[40px] text-xs border-primary/30 text-primary hover:bg-primary/10"
                             >
                               {copiedClone === i ? <Check className="size-3.5" /> : <ArrowRight className="size-3.5" />}
                               <span>Tester</span>

@@ -164,8 +164,7 @@ export default function GeneratorPage() {
                   </>
                 )}
               </Button>
-              <p className="text-center text-xs text-pg-muted">
-                {input.topic.trim().length === 0
+              <p className="text-center text-xs text-pg-muted">                {input.topic.trim().length === 0
                   ? t('generator.describeFirst')
                   : creditsLeft <= 0
                     ? t('generator.noCredits')

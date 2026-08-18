@@ -111,7 +111,7 @@ export default function HistoryPage() {
           <button
             onClick={() => setNetwork(ALL)}
             className={cn(
-              'rounded-xl border px-3.5 py-1.5 text-xs font-semibold transition-all',
+              'rounded-xl border px-3.5 py-2 text-xs font-semibold transition-all min-h-[40px]',
               network === ALL
                 ? 'border-primary/40 bg-primary/15 text-primary shadow-sm'
                 : 'border-white/[0.04] bg-white/[0.02] text-pg-muted hover:border-primary/30 hover:text-pg-text'
@@ -124,7 +124,7 @@ export default function HistoryPage() {
               key={n.value}
               onClick={() => setNetwork(n.value)}
               className={cn(
-                'rounded-xl border px-3.5 py-1.5 text-xs font-semibold transition-all',
+                'rounded-xl border px-3.5 py-2 text-xs font-semibold transition-all min-h-[40px]',
                 network === n.value
                   ? 'border-primary/40 bg-primary/15 text-primary shadow-sm'
                   : 'border-white/[0.04] bg-white/[0.02] text-pg-muted hover:border-primary/30 hover:text-pg-text'
@@ -205,7 +205,7 @@ export default function HistoryPage() {
                       {item.score}
                     </span>
                     {/* Duration */}
-                    <span className="absolute bottom-2.5 left-2.5 rounded-full border border-white/[0.06] bg-black/60 px-2 py-0.5 font-mono text-[10px] font-bold text-white backdrop-blur-sm">
+                    <span className="rounded-full border border-white/[0.06] bg-black/60 px-2 py-0.5 font-mono text-[11px] font-bold text-white backdrop-blur-sm">
                       {item.duration}s
                     </span>
                   </div>
@@ -213,11 +213,11 @@ export default function HistoryPage() {
                   {/* Content */}
                   <div className="flex flex-1 flex-col gap-2 px-1">
                     <div className="flex flex-wrap items-center gap-1.5">
-                      <span
-                        className={cn(
-                          'rounded-lg border px-2 py-0.5 text-[10px] font-bold',
-                          networkBadgeClass(item.network)
-                        )}
+                    <span
+                      className={cn(
+                        'rounded-lg border px-2 py-0.5 text-[11px] font-bold',
+                        networkBadgeClass(item.network)
+                      )}
                       >
                         {networkLabel(item.network)}
                       </span>
@@ -234,7 +234,7 @@ export default function HistoryPage() {
                       {item.title}
                     </h3>
                     <div className="flex items-center gap-2 text-xs text-pg-muted">
-                      <span className="rounded-lg border border-white/[0.06] bg-white/[0.04] px-2 py-0.5 text-[10px] font-semibold">
+                      <span className="rounded-lg border border-white/[0.06] bg-white/[0.04] px-2 py-0.5 text-[11px] font-semibold">
                         {fmtLabel(item.format)}
                       </span>
                     </div>
@@ -259,7 +259,7 @@ export default function HistoryPage() {
                       <Button
                         variant="ghost"
                         size="icon-sm"
-                        className="rounded-xl text-pg-muted hover:text-primary"
+                        className="rounded-xl min-h-[40px] min-w-[40px] text-pg-muted hover:text-primary"
                         onClick={async () => {
                           const meta = item.result?._meta || {}
                           try {
@@ -280,7 +280,7 @@ export default function HistoryPage() {
                       <Button
                         variant="ghost"
                         size="icon-sm"
-                        className="rounded-xl text-pg-muted hover:text-pg-text"
+                        className="rounded-xl min-h-[40px] min-w-[40px] text-pg-muted hover:text-pg-text"
                         onClick={() => copyText(item.title).then((ok) => toast.success(ok ? t('history.titleCopied') : t('results.copyFail')))}
                       >
                         <Copy className="size-3.5" />
@@ -290,7 +290,7 @@ export default function HistoryPage() {
                       <Button
                         variant="ghost"
                         size="icon-sm"
-                        className="rounded-xl text-pg-muted hover:text-destructive"
+                        className="rounded-xl min-h-[40px] min-w-[40px] text-pg-muted hover:text-destructive"
                         onClick={async () => {
                           await removeHistoryItem(item.id)
                           toast.success(t('history.deleted'))

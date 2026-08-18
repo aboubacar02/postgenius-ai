@@ -44,7 +44,7 @@ export function PricingCard({ plan, currency, onSubscribe }) {
       {/* POPULAR badge */}
       {plan.featured && (
         <div className="absolute top-0 left-0 right-0 z-20 flex justify-center pt-0">
-          <span className="flex items-center gap-1.5 rounded-b-xl border border-t-0 border-primary/40 bg-gradient-to-r from-primary via-primary to-fuchsia-600 px-4 py-1.5 text-[10px] font-black uppercase tracking-[0.2em] text-white shadow-[0_4px_20px_rgba(139,92,246,0.4)]">
+          <span className="flex items-center gap-1.5 rounded-b-xl border border-t-0 border-primary/40 bg-gradient-to-r from-primary via-primary to-fuchsia-600 px-4 py-1.5 text-[11px] font-black uppercase tracking-[0.2em] text-white shadow-[0_4px_20px_rgba(139,92,246,0.4)]">
             <Crown className="size-5" />
             POPULAIRE
           </span>

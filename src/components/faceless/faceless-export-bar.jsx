@@ -25,7 +25,7 @@ export function FacelessExportBar({ downloading, downloadVoiceOff, downloadAllVi
             placeholder="ex: motivation epic cinematic"
             className="flex-1 rounded-xl border border-white/10 bg-white/[0.04] px-3 py-2.5 text-xs text-pg-text placeholder:text-pg-subtle outline-none focus:border-emerald-500/40"
           />
-          <Button type="submit" size="sm" disabled={!musicQuery.trim() || musicSearching} className="h-10 gap-1.5 rounded-xl bg-emerald-600/80 px-4 text-xs font-semibold text-white hover:bg-emerald-500">
+          <Button type="submit" size="sm" disabled={!musicQuery.trim() || musicSearching} className="h-11 gap-1.5 rounded-xl bg-emerald-600/80 px-4 text-xs font-semibold text-white hover:bg-emerald-500">
             {musicSearching ? <Loader2 className="size-3.5 animate-spin" /> : <Search className="size-3.5" />}
             Chercher
           </Button>
@@ -35,9 +35,9 @@ export function FacelessExportBar({ downloading, downloadVoiceOff, downloadAllVi
             {musicTrack.thumbnail && <img src={musicTrack.thumbnail} alt="" className="size-10 shrink-0 rounded-lg object-cover" loading="lazy" />}
             <div className="flex-1 min-w-0">
               <p className="text-xs font-semibold text-pg-text truncate">{musicTrack.title}</p>
-              <p className="text-[10px] text-pg-subtle truncate">{musicTrack.channel} {musicTrack.duration ? `· ${musicTrack.duration}` : ''}</p>
+              <p className="text-xs text-pg-subtle truncate">{musicTrack.channel} {musicTrack.duration ? `· ${musicTrack.duration}` : ''}</p>
             </div>
-            <Button size="sm" variant="outline" onClick={downloadMusic} className="h-8 gap-1 rounded-lg border-emerald-500/30 text-[10px] font-bold text-emerald-400 hover:bg-emerald-500/10">
+            <Button size="sm" variant="outline" onClick={downloadMusic} className="h-9 gap-1 rounded-lg border-emerald-500/30 text-[11px] font-bold text-emerald-400 hover:bg-emerald-500/10">
               <Download className="size-3" /> YouTube
             </Button>
           </div>

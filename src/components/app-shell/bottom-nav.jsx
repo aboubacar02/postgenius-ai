@@ -24,7 +24,7 @@ export function BottomNav() {
 
   return (
     <nav className="fixed inset-x-0 bottom-0 z-40 border-t border-white/[0.07] bg-zinc-900/95 backdrop-blur-xl md:hidden">
-      <div className="mx-auto flex h-14 max-w-[600px] items-center justify-around px-2">
+      <div className="mx-auto flex h-16 max-w-[600px] items-center justify-around px-1">
         {NAV_ITEMS.map((item) => {
           const Icon = item.icon
           return (
@@ -34,7 +34,7 @@ export function BottomNav() {
               end={item.end}
               className={({ isActive }) =>
                 cn(
-                  'relative flex flex-col items-center justify-center gap-0.5 rounded-lg px-2 py-1 transition-all duration-150',
+                  'relative flex min-h-[48px] min-w-[48px] flex-col items-center justify-center gap-0.5 rounded-lg px-1.5 py-1 transition-all duration-150',
                   isActive
                     ? 'text-indigo-400'
                     : 'text-zinc-500 hover:text-zinc-300'
@@ -48,7 +48,7 @@ export function BottomNav() {
                   )}
                   <Icon className="size-5 transition-colors" strokeWidth={isActive ? 2.2 : 1.6} />
                   <span className={cn(
-                    'text-[9px] uppercase tracking-wider transition-all',
+                    'text-[10px] leading-tight uppercase tracking-wider transition-all',
                     isActive ? 'font-semibold text-indigo-400' : 'font-medium'
                   )}>
                     {item.label}
@@ -63,9 +63,9 @@ export function BottomNav() {
         <button
           type="button"
           onClick={() => setExpanded(!expanded)}
-          className="relative flex flex-col items-center justify-center gap-0.5 rounded-lg px-2 py-1 transition-all duration-150 text-zinc-500 hover:text-zinc-300"
+          className="relative flex min-h-[48px] min-w-[48px] flex-col items-center justify-center gap-0.5 rounded-lg px-1.5 py-1 transition-all duration-150 text-zinc-500 hover:text-zinc-300"
         >
-          <div className="flex size-5 items-center justify-center rounded-full bg-gradient-to-br from-cyan-400 to-indigo-500 text-[8px] font-bold text-white">
+          <div className="flex size-6 items-center justify-center rounded-full bg-gradient-to-br from-cyan-400 to-indigo-500 text-[9px] font-bold text-white">
             {display.initials}
           </div>
           {expanded ? (

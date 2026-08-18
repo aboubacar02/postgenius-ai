@@ -70,7 +70,7 @@ export default function SettingsPage() {
                   type="button"
                   onClick={() => setTab(item.id)}
                   className={cn(
-                    'relative flex shrink-0 items-center gap-2.5 rounded-xl px-3.5 py-2.5 text-sm font-medium transition-all active:scale-95',
+                    'relative flex shrink-0 items-center gap-2.5 rounded-xl px-3.5 py-3 text-sm font-medium transition-all active:scale-95 min-h-[44px]',
                     active
                       ? 'bg-primary/10 font-bold text-primary shadow-sm'
                       : 'text-pg-muted hover:bg-white/[0.04] hover:text-pg-text'
@@ -148,8 +148,7 @@ export default function SettingsPage() {
                         disabled={!isSignedIn}
                         className="rounded-xl border-white/[0.06] bg-white/[0.04]"
                       />
-                      <FieldDescription className="text-[11px] text-pg-muted">
-                        {t('settings.emailDesc')}
+                      <FieldDescription className="text-xs text-pg-muted">
                       </FieldDescription>
                     </Field>
                   </FieldGroup>
@@ -214,7 +213,7 @@ export default function SettingsPage() {
                       <FieldLabel htmlFor="theme-switch" className="text-xs font-bold text-pg-text/80">
                         {t('settings.darkTheme')}
                       </FieldLabel>
-                      <FieldDescription className="text-[11px] text-pg-muted">
+                      <FieldDescription className="text-xs text-pg-muted">
                         {t('settings.darkThemeDesc')}
                       </FieldDescription>
                     </div>
@@ -232,7 +231,7 @@ export default function SettingsPage() {
                       <FieldLabel htmlFor="notifs" className="text-xs font-bold text-pg-text/80">
                         {t('settings.emailNotifs')}
                       </FieldLabel>
-                      <FieldDescription className="text-[11px] text-pg-muted">
+                      <FieldDescription className="text-xs text-pg-muted">
                         {t('settings.emailNotifsDesc')}
                       </FieldDescription>
                     </div>
@@ -246,7 +245,7 @@ export default function SettingsPage() {
                       <FieldLabel htmlFor="subs" className="text-xs font-bold text-pg-text/80">
                         {t('settings.autoSubs')}
                       </FieldLabel>
-                      <FieldDescription className="text-[11px] text-pg-muted">
+                      <FieldDescription className="text-xs text-pg-muted">
                         {t('settings.autoSubsDesc')}
                       </FieldDescription>
                     </div>
@@ -411,7 +410,7 @@ export default function SettingsPage() {
                   <div className="flex items-center justify-between">
                     <div className="flex flex-col gap-0.5">
                       <span className="text-sm font-bold text-pg-text">Double authentification (2FA)</span>
-                      <span className="text-[11px] text-pg-muted">
+                      <span className="text-xs text-pg-muted">
                         Ajoute une couche de sécurité supplémentaire à ton compte.
                       </span>
                     </div>
@@ -421,7 +420,7 @@ export default function SettingsPage() {
                       onCheckedChange={() => toast.info('2FA bientôt disponible.')}
                     />
                   </div>
-                  <p className="text-[11px] text-zinc-600">
+                  <p className="text-xs text-zinc-600">
                     La double authentification sera disponible prochainement via email ou application d'authentification.
                   </p>
                 </div>

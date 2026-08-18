@@ -260,7 +260,7 @@ export function AgentWidget() {
                     setVoiceId(e.target.value)
                   }}
                   aria-label={t('agent.voice')}
-                  className="w-28 truncate rounded-md border-white/[0.06] bg-pg-surface px-1.5 py-0.5 text-[11px] text-pg-text outline-none focus-visible:border-primary"
+                  className="max-w-32 flex-1 truncate rounded-md border-white/[0.06] bg-pg-surface px-1.5 py-0.5 text-[11px] text-pg-text outline-none focus-visible:border-primary"
                 >
                   {EDGE_VOICES.map((v) => (
                     <option key={v.id} value={v.id}>
@@ -346,7 +346,7 @@ export function AgentWidget() {
                 placeholder={t('agent.placeholder')}
                 className="h-10 min-w-0 flex-1 rounded-lg border-white/[0.06] bg-pg-surface px-3 text-sm text-pg-text outline-none placeholder:text-pg-muted focus-visible:border-primary"
               />
-              <Button type="submit" size="icon" disabled={!input.trim() || thinking} aria-label={t('agent.send')}>
+              <Button type="submit" size="icon" disabled={!input.trim() || thinking} aria-label={t('agent.send')} className="shrink-0">
                 <Send className="size-4" />
               </Button>
             </form>

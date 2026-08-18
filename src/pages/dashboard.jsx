@@ -162,7 +162,7 @@ export default function DashboardPage() {
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
                 <div className="absolute inset-x-0 bottom-0 p-3 pt-10">
                   <div className="flex items-center justify-between gap-2">
-                    <span className="rounded-full bg-white/15 px-2 py-0.5 text-[10px] font-medium text-white/90 backdrop-blur-sm">
+            <span className="rounded-full bg-white/15 px-2 py-0.5 text-[11px] font-medium text-white/90 backdrop-blur-sm">
                       {networkLabel(item.network)}
                     </span>
                     <span className={`font-mono text-xs font-bold ${scoreColorClass(item.score)}`}>

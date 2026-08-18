@@ -45,7 +45,7 @@ export function FacelessConfig({ topic, setTopic, niche, setNiche, duration, set
             <select
               value={duration}
               onChange={(e) => setDuration(Number(e.target.value))}
-              className="rounded-xl border border-white/10 bg-white/[0.04] px-3 py-2.5 text-xs font-semibold text-pg-text outline-none"
+              className="rounded-xl border border-white/10 bg-white/[0.04] px-3 py-3 text-sm font-semibold text-pg-text outline-none"
             >
               <option value={15}>15s (Fast)</option>
               <option value={30}>30s (Viral)</option>
@@ -57,7 +57,7 @@ export function FacelessConfig({ topic, setTopic, niche, setNiche, duration, set
             <select
               value={`${gender}-${voiceStyle}`}
               onChange={(e) => { const [g, s] = e.target.value.split('-'); setGender(g); setVoiceStyle(s) }}
-              className="rounded-xl border border-white/10 bg-white/[0.04] px-3 py-2.5 text-xs font-semibold text-pg-text outline-none"
+              className="rounded-xl border border-white/10 bg-white/[0.04] px-3 py-3 text-sm font-semibold text-pg-text outline-none"
             >
               <option value="male-energetic">Homme Ener</option>
               <option value="female-energetic">Femme Ener</option>
@@ -69,7 +69,7 @@ export function FacelessConfig({ topic, setTopic, niche, setNiche, duration, set
             <Button
               onClick={onGenerate}
               disabled={busy}
-              className="h-10 w-full gap-2 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 font-bold text-white text-xs shadow-lg shadow-violet-500/20 hover:opacity-90 transition-all"
+              className="h-11 w-full gap-2 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 font-bold text-white text-sm shadow-lg shadow-violet-500/20 hover:opacity-90 transition-all"
             >
               {busy ? <Loader2 className="size-4 animate-spin" /> : <Sparkles className="size-4" />}
               <span>{busy ? 'Generation...' : 'Generer'}</span>

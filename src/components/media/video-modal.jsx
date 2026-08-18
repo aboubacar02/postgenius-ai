@@ -31,7 +31,7 @@ export function VideoModal({ video, onClose }) {
       <button
         type="button"
         onClick={onClose}
-        className="absolute top-4 right-4 z-20 flex size-10 items-center justify-center rounded-full bg-white/10 text-white transition-colors hover:bg-white/20"
+        className="absolute top-4 right-4 z-20 flex size-11 items-center justify-center rounded-full bg-white/10 text-white transition-colors hover:bg-white/20"
       >
         <X className="size-5" />
       </button>
@@ -78,7 +78,7 @@ export function VideoModal({ video, onClose }) {
       </div>
 
       {/* Meta bar below */}
-      <div className="mt-3 flex items-center gap-3 px-4 pb-4 text-sm text-white/60">
+      <div className="mt-3 flex items-center gap-3 px-4 pb-4 text-xs sm:text-sm text-white/60 flex-wrap">
         {video.channel && <span>{video.channel}</span>}
         {video.views && <><span className="text-white/30">·</span><span>{video.views}</span></>}
         {video.publishedAt && <><span className="text-white/30">·</span><span>{video.publishedAt}</span></>}

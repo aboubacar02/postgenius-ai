@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Loader2 } from 'lucide-react'
+import { Eye, EyeOff, Loader2, Mail, Lock } from 'lucide-react'
 import { toast } from '../../components/ui/sonner'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '../../components/ui/card'
 import { Field, FieldGroup, FieldLabel } from '../../components/ui/field'
@@ -22,30 +22,33 @@ function GoogleIcon({ className }) {
   )
 }
 
-export function GoogleIconComponent({ className }) {
-  return <GoogleIcon className={className} />
-}
-
 export function AuthCard() {
   const { signIn, signUp } = useApp()
   const { t } = useI18n()
   const [mode, setMode] = useState('login')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
+  const [showPassword, setShowPassword] = useState(false)
+  const [showConfirm, setShowConfirm] = useState(false)
   const [loading, setLoading] = useState(false)
   const [googleLoading, setGoogleLoading] = useState(false)
   const [error, setError] = useState(null)
 
   async function submit(e) {
     e.preventDefault()
+    if (mode === 'register' && password !== confirmPassword) {
+      setError('Les mots de passe ne correspondent pas.')
+      return
+    }
     setLoading(true)
     setError(null)
     try {
       if (mode === 'login') await signIn(email, password)
       else await signUp(email, password)
-      toast.success(mode === 'login' ? t('settings.loginSuccess') : t('settings.signUpSuccess'))
+      toast.success(mode === 'login' ? 'Connexion réussie !' : 'Compte créé avec succès !')
     } catch (err) {
-      setError(err.message || t('settings.genericError'))
+      setError(err.message || 'Une erreur est survenue.')
     } finally {
       setLoading(false)
     }
@@ -57,100 +60,141 @@ export function AuthCard() {
     try {
       await signInWithGoogle()
     } catch (err) {
-      setError(err.message || t('settings.googleFail'))
+      setError(err.message || 'Connexion Google échouée.')
       setGoogleLoading(false)
     }
   }
 
   return (
-    <Card className="border border-white/[0.06] bg-pg-surface rounded-xl p-6">
-      <CardHeader className="p-0 pb-5">
-        <CardTitle className="font-heading text-lg font-bold text-pg-text">
-          {mode === 'login' ? t('settings.signIn') : t('settings.signUp')}
+    <Card className="overflow-hidden border border-white/[0.06] bg-zinc-900/60 backdrop-blur-xl rounded-2xl">
+      <div className="h-1.5 bg-gradient-to-r from-indigo-500 via-purple-500 to-cyan-500" />
+      <CardHeader className="p-6 pb-4">
+        <CardTitle className="font-heading text-xl font-bold text-zinc-100">
+          {mode === 'login' ? 'Bienvenue' : 'Créer un compte'}
         </CardTitle>
-        <CardDescription className="text-xs text-pg-muted">
-          {mode === 'login' ? t('settings.signInDesc') : t('settings.signUpDesc')}
+        <CardDescription className="text-sm text-zinc-500">
+          {mode === 'login' ? 'Connecte-toi pour accéder à ton studio.' : 'Rejoins Post Genius et crée du contenu viral.'}
         </CardDescription>
       </CardHeader>
-      <CardContent className="flex flex-col gap-5 p-0">
+      <CardContent className="flex flex-col gap-5 px-6 pb-6">
+        {/* Google button */}
         <button
           type="button"
           onClick={googleSignIn}
           disabled={googleLoading || loading}
           className={cn(
-            'group flex h-12 w-full items-center justify-center gap-3 rounded-2xl border border-white/[0.06] bg-pg-surface px-4 text-sm font-semibold text-pg-text shadow-[0_2px_10px_rgba(0,0,0,0.3)] transition-all hover:shadow-[0_4px_20px_rgba(0,0,0,0.4)] hover:border-white/[0.12] active:scale-[0.98] disabled:opacity-50',
+            'group flex h-12 w-full items-center justify-center gap-3 rounded-xl border border-white/[0.08] bg-white/[0.03] px-4 text-sm font-semibold text-zinc-200 transition-all hover:bg-white/[0.06] hover:border-white/[0.15] active:scale-[0.98] disabled:opacity-50',
             googleLoading && 'cursor-wait'
           )}
         >
           {googleLoading ? (
-            <Loader2 className="size-5 animate-spin text-pg-subtle" />
+            <Loader2 className="size-5 animate-spin text-zinc-500" />
           ) : (
             <GoogleIcon className="size-5 shrink-0" />
           )}
-          <span>{googleLoading ? t('settings.waiting') : t('settings.google')}</span>
+          <span>{googleLoading ? 'Connexion...' : 'Continuer avec Google'}</span>
         </button>
 
         <div className="flex items-center gap-3">
-          <Separator className="flex-1 bg-border" />
-          <span className="text-[10px] font-bold uppercase tracking-widest text-pg-muted">
-            {t('settings.or')}
-          </span>
-          <Separator className="flex-1 bg-border" />
+          <Separator className="flex-1 bg-white/[0.06]" />
+          <span className="text-[10px] font-bold uppercase tracking-widest text-zinc-600">ou</span>
+          <Separator className="flex-1 bg-white/[0.06]" />
         </div>
 
         <form onSubmit={submit} className="flex flex-col gap-4">
           <FieldGroup>
             <Field>
-              <FieldLabel htmlFor="auth-email" className="text-xs font-bold text-pg-text/80">
-                {t('settings.email')}
+              <FieldLabel htmlFor="auth-email" className="text-xs font-bold text-zinc-400">
+                Email
               </FieldLabel>
-              <Input
-                id="auth-email"
-                type="email"
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder={t('settings.emailPlaceholder')}
-                className="rounded-xl border-white/[0.06] bg-white/[0.04] focus:border-primary"
-              />
+              <div className="relative">
+                <Mail className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-zinc-600" />
+                <Input
+                  id="auth-email"
+                  type="email"
+                  required
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="toi@email.com"
+                  className="h-11 rounded-xl border-white/[0.06] bg-white/[0.03] pl-10 focus:border-indigo-500/50"
+                />
+              </div>
             </Field>
             <Field>
-              <FieldLabel htmlFor="auth-password" className="text-xs font-bold text-pg-text/80">
-                {t('settings.password')}
+              <FieldLabel htmlFor="auth-password" className="text-xs font-bold text-zinc-400">
+                Mot de passe
               </FieldLabel>
-              <Input
-                id="auth-password"
-                type="password"
-                required
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="••••••••"
-                className="rounded-xl border-white/[0.06] bg-white/[0.04] focus:border-primary"
-              />
+              <div className="relative">
+                <Lock className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-zinc-600" />
+                <Input
+                  id="auth-password"
+                  type={showPassword ? 'text' : 'password'}
+                  required
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="••••••••"
+                  className="h-11 rounded-xl border-white/[0.06] bg-white/[0.03] pl-10 pr-10 focus:border-indigo-500/50"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute top-1/2 right-3 -translate-y-1/2 text-zinc-600 hover:text-zinc-400 transition-colors"
+                >
+                  {showPassword ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
+                </button>
+              </div>
             </Field>
+            {mode === 'register' && (
+              <Field>
+                <FieldLabel htmlFor="auth-confirm" className="text-xs font-bold text-zinc-400">
+                  Confirmer le mot de passe
+                </FieldLabel>
+                <div className="relative">
+                  <Lock className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-zinc-600" />
+                  <Input
+                    id="auth-confirm"
+                    type={showConfirm ? 'text' : 'password'}
+                    required
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    placeholder="••••••••"
+                    className="h-11 rounded-xl border-white/[0.06] bg-white/[0.03] pl-10 pr-10 focus:border-indigo-500/50"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowConfirm(!showConfirm)}
+                    className="absolute top-1/2 right-3 -translate-y-1/2 text-zinc-600 hover:text-zinc-400 transition-colors"
+                  >
+                    {showConfirm ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
+                  </button>
+                </div>
+              </Field>
+            )}
           </FieldGroup>
+
           {error && (
-            <div className="rounded-xl border border-destructive/30 bg-destructive/10 px-3 py-2 text-xs font-medium text-destructive">
+            <div className="rounded-xl border border-red-500/30 bg-red-500/10 px-3 py-2 text-xs font-medium text-red-400">
               {error}
             </div>
           )}
+
           <div className="flex items-center justify-between gap-3 pt-1">
             <button
               type="button"
-              onClick={() => setMode((m) => (m === 'login' ? 'register' : 'login'))}
-              className="text-xs font-semibold text-primary hover:underline"
+              onClick={() => { setMode((m) => (m === 'login' ? 'register' : 'login')); setError(null); }}
+              className="text-xs font-semibold text-indigo-400 hover:text-indigo-300 transition-colors"
             >
-              {mode === 'login' ? t('settings.createAccount') : t('settings.haveAccount')}
+              {mode === 'login' ? 'Créer un compte' : 'Déjà un compte ? Se connecter'}
             </button>
             <Button
               type="submit"
               disabled={loading || !email || !password}
-              className="rounded-xl bg-primary px-6 font-bold text-white shadow-sm"
+              className="rounded-xl bg-indigo-600 px-6 font-bold text-white shadow-lg shadow-indigo-600/20 hover:bg-indigo-500 transition-all"
             >
               {loading ? (
                 <Loader2 className="size-4 animate-spin" />
               ) : (
-                mode === 'login' ? t('settings.signInBtn') : t('settings.signUpBtn')
+                mode === 'login' ? 'Se connecter' : "S'inscrire"
               )}
             </Button>
           </div>

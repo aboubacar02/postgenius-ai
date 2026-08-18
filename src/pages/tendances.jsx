@@ -8,7 +8,35 @@ import { VideoModal } from '../components/media/video-modal'
 import { useI18n } from '../lib/i18n'
 import { NICHES } from '../lib/niches'
 import { searchYoutube } from '../services/youtube'
-import { BEST_TIMES, VIRAL_FORMATS, RESOURCES, VIRAL_VIDEOS, seedFromString } from '../lib/trends-data'
+import { BEST_TIMES, VIRAL_FORMATS, RESOURCES, seedFromString } from '../lib/trends-data'
+
+const SEARCH_CONTEXT = [
+  { keywords: ['tiktok', 'tik tok'], enriched: 'TikTok viral content creation tips 2025' },
+  { keywords: ['youtube', 'yt'], enriched: 'YouTube channel growth strategy viral videos' },
+  { keywords: ['reels', 'instagram', 'ig'], enriched: 'Instagram Reels viral content creation tips' },
+  { keywords: ['shorts', 'short'], enriched: 'YouTube Shorts viral growth strategy' },
+  { keywords: ['capcut', 'montage', 'editing'], enriched: 'CapCut video editing tutorial advanced effects' },
+  { keywords: ['hook', 'accroche'], enriched: 'viral hook techniques first 3 seconds retention' },
+  { keywords: ['monetisation', 'money', 'revenu', 'argent'], enriched: 'content creator monetization strategy revenue' },
+  { keywords: ['faceless', 'sans visage', 'anon'], enriched: 'faceless YouTube channel viral strategy no face' },
+  { keywords: ['podcast', 'audio'], enriched: 'podcast viral clips repurposing strategy' },
+  { keywords: ['musique', 'music', 'son'], enriched: 'viral trending music audio for content creation' },
+  { keywords: ['tendance', 'trend', 'trending'], enriched: 'social media trends viral content analysis 2025' },
+  { keywords: ['script', 'écriture', 'writing'], enriched: 'viral video script writing storytelling technique' },
+  { keywords: [' thumbnail', 'miniature'], enriched: 'YouTube thumbnail design click-through rate optimization' },
+  { keywords: ['算法', 'algorithme', 'algorithm'], enriched: 'social media algorithm growth hacks tips' },
+  { keywords: ['IA', 'ai', 'intelligence artificielle'], enriched: 'AI tools for content creation video generation' },
+]
+
+function enrichQuery(raw) {
+  const lower = raw.toLowerCase().trim()
+  for (const ctx of SEARCH_CONTEXT) {
+    if (ctx.keywords.some((k) => lower.includes(k))) {
+      return ctx.enriched
+    }
+  }
+  return `${raw} content creation viral tips`
+}
 
 export default function TendancesPage() {
   const { t } = useI18n()
@@ -21,22 +49,23 @@ export default function TendancesPage() {
   const [searchNotice, setSearchNotice] = useState('')
 
   async function runSearch() {
-    const q = searchQuery.trim()
-    if (!q || searching) return
+    const raw = searchQuery.trim()
+    if (!raw || searching) return
     setSearching(true)
     setSearchNotice('')
     try {
-      const data = await searchYoutube(q)
+      const enriched = enrichQuery(raw)
+      const data = await searchYoutube(enriched)
       if (data.live && data.items.length > 0) {
         setLiveResults(data.items)
         setLiveMode(true)
       } else if (data.live) {
-        setSearchNotice(t('trending.noResults'))
+        setSearchNotice('Aucun résultat pour cette recherche. Essaie avec d\'autres mots-clés.')
       } else {
-        setSearchNotice(t('trending.noKey'))
+        setSearchNotice(data.error || 'Recherche indisponible. Vérifie la configuration API.')
       }
-    } catch {
-      setSearchNotice(t('trending.noKey'))
+    } catch (err) {
+      setSearchNotice('Erreur de connexion. Réessaie plus tard.')
     } finally {
       setSearching(false)
     }
@@ -51,9 +80,7 @@ export default function TendancesPage() {
 
   useEffect(() => {
     if (!activeVideo) return
-    const onKey = (e) => {
-      if (e.key === 'Escape') setActiveVideo(null)
-    }
+    const onKey = (e) => { if (e.key === 'Escape') setActiveVideo(null) }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
   }, [activeVideo])
@@ -79,7 +106,7 @@ export default function TendancesPage() {
         </p>
       </div>
 
-      {/* ── Search (glass morphism, rounded-full) ──────── */}
+      {/* ── Search bar ──────────────────────────────── */}
       <form
         className="reveal-1 flex gap-2"
         onSubmit={(e) => { e.preventDefault(); runSearch() }}
@@ -89,32 +116,109 @@ export default function TendancesPage() {
           <input
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder={t('trending.searchPlaceholder')}
-            className="h-11 w-full rounded-full border border-white/[0.08] bg-zinc-900/60 backdrop-blur-xl pl-11 pr-4 text-sm text-zinc-200 placeholder:text-zinc-600 outline-none transition-all duration-200 focus:border-indigo-500/50 focus:ring-2 focus:ring-indigo-500/20 focus:bg-zinc-800/60 focus:shadow-lg focus:shadow-indigo-500/5"
+            placeholder="Rechercher des tutoriels, tendances, musiques virales..."
+            className="h-12 w-full rounded-full border border-white/[0.08] bg-zinc-900/60 backdrop-blur-xl pl-11 pr-4 text-sm text-zinc-200 placeholder:text-zinc-600 outline-none transition-all duration-200 focus:border-indigo-500/50 focus:ring-2 focus:ring-indigo-500/20 focus:bg-zinc-800/60 focus:shadow-lg focus:shadow-indigo-500/5"
           />
         </div>
-        <Button type="submit" size="default" disabled={!searchQuery.trim() || searching} className="rounded-full bg-indigo-600 px-5 font-semibold text-white hover:bg-indigo-500 shadow-lg shadow-indigo-600/20 transition-all">
+        <Button type="submit" size="default" disabled={!searchQuery.trim() || searching} className="h-12 rounded-full bg-indigo-600 px-6 font-semibold text-white hover:bg-indigo-500 shadow-lg shadow-indigo-600/20 transition-all">
           {searching ? <Loader2 className="size-4 animate-spin" /> : <Search className="size-4" />}
-          <span className="hidden sm:inline">{t('trending.search')}</span>
+          <span className="hidden sm:inline">Rechercher</span>
         </Button>
         {liveMode && (
-          <Button type="button" variant="outline" size="icon" onClick={resetSearch} aria-label={t('trending.clearSearch')} className="rounded-full border-white/[0.08] bg-zinc-900/60">
+          <Button type="button" variant="outline" size="icon" onClick={resetSearch} aria-label="Effacer" className="h-12 w-12 rounded-full border-white/[0.08] bg-zinc-900/60">
             <X className="size-4" />
           </Button>
         )}
       </form>
 
-      {liveMode && (
-        <span className="flex w-fit items-center gap-1.5 rounded-full border border-indigo-500/30 bg-indigo-500/15 px-3 py-1 text-[10px] font-bold text-indigo-400">
-          <Video className="size-3.5" />
-          {t('trending.liveBadge')}
-        </span>
+      {/* Quick search chips */}
+      {!liveMode && (
+        <div className="reveal-2 flex flex-wrap gap-2">
+          {['TikTok viral', 'CapCut montage', 'YouTube growth', 'Hook accroche', 'Faceless AI'].map((chip) => (
+            <button
+              key={chip}
+              type="button"
+              onClick={() => { setSearchQuery(chip); }}
+              className="rounded-full border border-white/[0.06] bg-white/[0.03] px-3 py-1.5 text-xs font-medium text-zinc-500 transition-all hover:border-indigo-500/30 hover:text-indigo-400 hover:bg-indigo-500/5"
+            >
+              {chip}
+            </button>
+          ))}
+        </div>
       )}
-      {searchNotice && !liveMode && (
+
+      {searchNotice && (
         <div className="flex items-center gap-2 rounded-xl border border-amber-500/30 bg-amber-500/10 px-4 py-3 text-xs font-medium text-amber-400">
           <Info className="size-4 shrink-0" />
           {searchNotice}
         </div>
+      )}
+
+      {/* ── SEARCH RESULTS (only when searching) ──── */}
+      {liveMode && liveResults.length > 0 && (
+        <section className="flex flex-col gap-4">
+          <div className="reveal flex items-center justify-between">
+            <span className="flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-zinc-500">
+              <Video className="size-3.5 text-emerald-400" />
+              {liveResults.length} résultats pour « {searchQuery} »
+            </span>
+            <Button size="sm" variant="ghost" onClick={resetSearch} className="gap-1 text-[10px] text-zinc-500 hover:text-white">
+              <X className="size-3" /> Effacer
+            </Button>
+          </div>
+
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {liveResults.map((v, i) => (
+              <button
+                key={v.youtubeId || i}
+                type="button"
+                onClick={() => setActiveVideo(v)}
+                className="reveal group relative overflow-hidden rounded-2xl border border-white/[0.06] bg-zinc-900/60 backdrop-blur-xl p-0 text-left transition-all duration-300 hover:border-indigo-500/30 hover:shadow-xl hover:shadow-black/30 hover:-translate-y-0.5"
+                style={{ animationDelay: `${i * 50 + 100}ms` }}
+              >
+                <div className="relative h-40 overflow-hidden">
+                  {v.thumbnail ? (
+                    <img src={v.thumbnail} alt={v.title} className="size-full object-cover transition-transform duration-300 group-hover:scale-105" loading="lazy" />
+                  ) : (
+                    <div className="flex size-full items-center justify-center bg-gradient-to-br from-zinc-700 to-zinc-900">
+                      <Play className="size-10 text-zinc-600" />
+                    </div>
+                  )}
+                  <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                    <div className="flex size-14 items-center justify-center rounded-full bg-indigo-600/90 backdrop-blur-sm shadow-lg shadow-indigo-600/30">
+                      <Play className="size-6 fill-white text-white ml-1" />
+                    </div>
+                  </div>
+                  <div className="absolute top-3 left-3 flex items-center gap-1 rounded-full bg-black/50 backdrop-blur-sm px-2 py-0.5 text-[10px] font-bold text-white">
+                    <span className="font-mono text-xs">#{i + 1}</span>
+                  </div>
+                  <div className="absolute top-3 right-3 flex items-center gap-1.5">
+                    {v.duration && (
+                      <span className="rounded-full bg-black/60 backdrop-blur-sm px-2 py-0.5 text-[10px] font-bold text-white">
+                        {v.duration}
+                      </span>
+                    )}
+                    {v.views && (
+                      <span className="rounded-full bg-black/50 backdrop-blur-sm px-2 py-0.5 text-[10px] font-bold text-white flex items-center gap-1">
+                        <Zap className="size-3" />
+                        {v.views}
+                      </span>
+                    )}
+                  </div>
+                </div>
+                <div className="flex flex-col gap-1.5 p-4">
+                  <span className="line-clamp-2 text-sm font-bold leading-snug text-zinc-100 transition-colors group-hover:text-indigo-400">
+                    {v.title}
+                  </span>
+                  <div className="flex items-center gap-2 text-xs text-zinc-600">
+                    <span>{v.channel}</span>
+                    {v.publishedAt && <><span>·</span><span>{v.publishedAt}</span></>}
+                  </div>
+                </div>
+              </button>
+            ))}
+          </div>
+        </section>
       )}
 
       {/* ── Viral Formats (horizontal scroll chips) ──── */}
@@ -138,98 +242,7 @@ export default function TendancesPage() {
         </div>
       </section>
 
-      {/* ── Viral Videos / Formats (ranked gradient cards) ──── */}
-      <section className="flex flex-col gap-4">
-        <div className="reveal flex items-center justify-between">
-          <span className="flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-zinc-500">
-            <Play className="size-3.5 text-indigo-400" />
-            {t('trending.videos')}
-          </span>
-          <span className="text-xs text-zinc-600">{t('trending.videosDesc')}</span>
-        </div>
-
-        {liveMode && liveResults.length > 0 && (
-          <div className="flex items-center gap-2 rounded-xl border border-emerald-500/20 bg-emerald-500/10 px-4 py-2.5 text-xs text-emerald-400">
-            <Sparkles className="size-3.5" />
-            {liveResults.length} résultats trouvés pour « {searchQuery} »
-            <Button size="sm" variant="ghost" onClick={() => { setLiveMode(false); setLiveResults([]); setSearchQuery('') }} className="ml-auto gap-1 text-[10px] text-emerald-400 hover:text-white">
-              <X className="size-3" /> Effacer
-            </Button>
-          </div>
-        )}
-
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
-          {(liveMode ? liveResults : VIRAL_VIDEOS).map((v, i) => {
-            const isLive = liveMode && v.youtubeId
-            return (
-              <button
-                key={v.id || v.youtubeId || i}
-                type="button"
-                onClick={() => setActiveVideo(v)}
-                className="reveal group relative overflow-hidden rounded-2xl border border-white/[0.06] bg-zinc-900/60 backdrop-blur-xl p-0 text-left transition-all duration-300 hover:border-indigo-500/30 hover:shadow-xl hover:shadow-black/30 hover:-translate-y-0.5"
-                style={{ animationDelay: `${i * 50 + 100}ms` }}
-              >
-                {/* Thumbnail or Gradient header */}
-                <div className="relative h-36 overflow-hidden">
-                  {isLive && v.thumbnail ? (
-                    <img src={v.thumbnail} alt={v.title} className="size-full object-cover transition-transform duration-300 group-hover:scale-105" loading="lazy" />
-                  ) : (
-                    <div className={`flex size-full items-center justify-center bg-gradient-to-br ${v.gradient || 'from-zinc-700 to-zinc-900'}`}>
-                      <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_25%,rgba(255,255,255,0.15),transparent_60%)]" />
-                      <span className="relative text-5xl transition-transform duration-300 group-hover:scale-110">{v.icon || '🎬'}</span>
-                    </div>
-                  )}
-                  {/* Play overlay */}
-                  <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                    <div className="flex size-14 items-center justify-center rounded-full bg-black/50 backdrop-blur-sm ring-2 ring-white/30">
-                      <Play className="size-6 fill-white text-white ml-1" />
-                    </div>
-                  </div>
-                  {/* Rank pill */}
-                  <div className="absolute top-3 left-3 flex items-center gap-1 rounded-full bg-black/40 backdrop-blur-sm px-2.5 py-1 text-[10px] font-bold text-white border border-white/10">
-                    <span className="font-mono text-xs">#{i + 1}</span>
-                  </div>
-                  {/* Views / Duration */}
-                  <div className="absolute top-3 right-3 flex items-center gap-1.5">
-                    {v.duration && (
-                      <span className="rounded-full bg-black/60 backdrop-blur-sm px-2 py-0.5 text-[10px] font-bold text-white border border-white/10">
-                        {v.duration}
-                      </span>
-                    )}
-                    {v.views && (
-                      <span className="rounded-full bg-black/40 backdrop-blur-sm px-2.5 py-1 text-[10px] font-bold text-white border border-white/10 flex items-center gap-1">
-                        <Zap className="size-3" />
-                        {v.views}
-                      </span>
-                    )}
-                  </div>
-                </div>
-                {/* Content */}
-                <div className="flex flex-col gap-2 p-4">
-                  <span className="line-clamp-2 text-sm font-bold leading-snug text-zinc-100 transition-colors group-hover:text-indigo-400">
-                    {v.title}
-                  </span>
-                  {v.description && (
-                    <p className="line-clamp-2 text-xs text-zinc-500 leading-relaxed">{v.description}</p>
-                  )}
-                  <div className="flex items-center justify-between pt-1">
-                    <span className="text-xs text-zinc-600">{v.channel}</span>
-                    {v.niche ? (
-                      <span className="rounded-full border border-white/[0.06] bg-white/[0.04] px-2 py-0.5 text-[10px] font-semibold text-zinc-500">
-                        {v.niche}
-                      </span>
-                    ) : v.publishedAt ? (
-                      <span className="text-[10px] text-zinc-700">{v.publishedAt}</span>
-                    ) : null}
-                  </div>
-                </div>
-              </button>
-            )
-          })}
-        </div>
-      </section>
-
-      {/* ── Niche Ideas (ranked horizontal cards) ─────── */}
+      {/* ── Niche Ideas + Best Times ─────── */}
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-12">
         <section className="flex flex-col gap-4 lg:col-span-8">
           <div className="reveal flex items-center justify-between">
@@ -247,10 +260,7 @@ export default function TendancesPage() {
             {NICHES.map((niche, n) => {
               const seed = seedFromString(niche.name + lot)
               const offset = seed % niche.ideas.length
-              const rotated = [
-                ...niche.ideas.slice(offset),
-                ...niche.ideas.slice(0, offset)
-              ].slice(0, 4)
+              const rotated = [...niche.ideas.slice(offset), ...niche.ideas.slice(0, offset)].slice(0, 4)
               const viral = 58 + (seed % 40)
               return (
                 <Card
@@ -258,7 +268,6 @@ export default function TendancesPage() {
                   className="reveal overflow-hidden border border-white/[0.06] bg-zinc-900/60 backdrop-blur-xl rounded-2xl transition-all duration-300 hover:border-white/[0.12] hover:shadow-xl hover:shadow-black/20"
                   style={{ animationDelay: `${n * 50 + 100}ms` }}
                 >
-                  {/* Gradient header strip */}
                   <div className={`h-1.5 bg-gradient-to-r ${niche.color}`} />
                   <CardHeader className="flex flex-row items-center justify-between gap-3 p-4 pb-2">
                     <div className="flex items-center gap-3">
@@ -268,10 +277,8 @@ export default function TendancesPage() {
                       <div>
                         <CardTitle className="text-sm font-bold text-zinc-100">{niche.name}</CardTitle>
                         <div className="flex items-center gap-1.5 mt-0.5">
-                          {niche.tags.map((t) => (
-                            <span key={t} className="font-mono text-[10px] text-zinc-600">
-                              {t}
-                            </span>
+                          {niche.tags.map((tag) => (
+                            <span key={tag} className="font-mono text-[10px] text-zinc-600">{tag}</span>
                           ))}
                         </div>
                       </div>
@@ -304,7 +311,6 @@ export default function TendancesPage() {
           </div>
         </section>
 
-        {/* ── Best Times Sidebar ──────────────────────── */}
         <section className="flex flex-col gap-4 lg:col-span-4">
           <span className="reveal flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-zinc-500">
             <Clock className="size-3.5 text-indigo-400" />
@@ -338,7 +344,7 @@ export default function TendancesPage() {
         </section>
       </div>
 
-      {/* ── Resources (gradient cards, no images) ──────── */}
+      {/* ── Resources ──────── */}
       <section className="flex flex-col gap-4">
         <span className="reveal flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-zinc-500">
           <ExternalLink className="size-3.5 text-indigo-400" />
@@ -354,7 +360,6 @@ export default function TendancesPage() {
               className="reveal group relative overflow-hidden rounded-2xl border border-white/[0.06] bg-zinc-900/60 backdrop-blur-xl transition-all duration-300 hover:border-indigo-500/30 hover:shadow-xl hover:shadow-black/30 hover:-translate-y-0.5"
               style={{ animationDelay: `${i * 50 + 200}ms` }}
             >
-              {/* Gradient header */}
               <div className={`relative flex h-32 items-center justify-center bg-gradient-to-br ${r.gradient} overflow-hidden`}>
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_25%,rgba(255,255,255,0.12),transparent_60%)]" />
                 <span className="relative text-4xl">{r.icon}</span>
@@ -362,7 +367,6 @@ export default function TendancesPage() {
                   {r.duration}
                 </div>
               </div>
-              {/* Content */}
               <div className="flex flex-col gap-2 p-4">
                 <span className="line-clamp-2 text-sm font-bold leading-snug text-zinc-100 transition-colors group-hover:text-indigo-400">
                   {r.title}

@@ -32,7 +32,7 @@ const NAV_ITEMS = [
 export function SidebarNav({ collapsed, onToggle }) {
   const { t } = useI18n()
   const { user, creditsUsed, creditsTotal, plan } = useApp()
-  const display = user || { name: 'Camille Aubert', email: 'camille.aubert@postgenius.ai', initials: 'CA', plan: 'Starter' }
+  const display = user || { name: 'Utilisateur', email: '', initials: 'U', plan: 'Starter' }
 
   return (
     <aside

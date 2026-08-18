@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { MapPin, Wallet, Sparkles } from 'lucide-react'
+import { Sparkles } from 'lucide-react'
 import { toast } from '../components/ui/sonner'
 import { PRICING_PLANS } from '../lib/mock-data'
 import { PricingCard } from '../components/pricing/pricing-card'
@@ -44,18 +44,6 @@ export default function PricingPage() {
         </h1>
         <p className="max-w-lg text-[15px] text-pg-muted">
           {t('pricing.subtitle')}
-        </p>
-      </div>
-
-      {/* Currency indicator */}
-      <div className="reveal-1 flex flex-col items-center gap-2">
-        <span className="flex items-center gap-1.5 rounded-full border border-white/[0.06] bg-white/[0.04] px-3 py-1 text-xs font-semibold text-pg-muted">
-          <MapPin className="size-3 text-primary" />
-          {currency.flag} {t('pricing.currencyAuto')}
-        </span>
-        <p className="flex items-center gap-1 text-xs text-pg-muted">
-          <Wallet className="size-3 text-primary" />
-          {mobile ? t('pricing.mobile') : t('pricing.card')}
         </p>
       </div>
 

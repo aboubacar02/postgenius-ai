@@ -21,7 +21,7 @@ import { cn } from '../lib/utils'
 export default function SettingsPage() {
   const { user, isSignedIn, plan, creditsUsed, creditsTotal, theme, setTheme } = useApp()
   const { t, lang, setLang } = useI18n()
-  const display = user || { name: 'Camille Aubert', email: 'camille.aubert@postgenius.ai', initials: 'CA', plan }
+  const display = user || { name: 'Utilisateur', email: 'utilisateur@postgenius.ai', initials: 'U', plan: 'Starter' }
   const [tab, setTab] = useState('profil')
   const [name, setName] = useState(display.name)
   const [email, setEmail] = useState(display.email)
@@ -120,9 +120,6 @@ export default function SettingsPage() {
                     </div>
                     <div className="flex flex-col gap-1">
                       <span className="text-base font-bold text-pg-text">{name}</span>
-                      <Badge variant="secondary" className="w-fit rounded-full border border-primary/30 bg-primary/10 text-xs font-bold text-primary">
-                        {t('topbar.plan', { plan: display.plan })}
-                      </Badge>
                     </div>
                   </div>
 
@@ -407,6 +404,27 @@ export default function SettingsPage() {
                 ) : (
                   <p className="text-sm text-pg-muted">{t('settings.useProfileTab')}</p>
                 )}
+
+                {/* 2FA Section */}
+                <FieldSeparator className="my-2" />
+                <div className="flex flex-col gap-3">
+                  <div className="flex items-center justify-between">
+                    <div className="flex flex-col gap-0.5">
+                      <span className="text-sm font-bold text-pg-text">Double authentification (2FA)</span>
+                      <span className="text-[11px] text-pg-muted">
+                        Ajoute une couche de sécurité supplémentaire à ton compte.
+                      </span>
+                    </div>
+                    <Switch
+                      id="twofa-switch"
+                      checked={false}
+                      onCheckedChange={() => toast.info('2FA bientôt disponible.')}
+                    />
+                  </div>
+                  <p className="text-[11px] text-zinc-600">
+                    La double authentification sera disponible prochainement via email ou application d'authentification.
+                  </p>
+                </div>
               </CardContent>
               {isSignedIn && (
                 <CardFooter className="justify-end p-0 pt-4">

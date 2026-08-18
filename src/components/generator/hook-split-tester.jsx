@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Check, Flame, Gauge, Sparkles, Trophy, Zap } from 'lucide-react'
+import { Check, Gauge } from 'lucide-react'
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '../ui/card'
 import { Button } from '../ui/button'
 import { cn } from '../../lib/utils'

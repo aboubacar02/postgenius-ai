@@ -35,7 +35,7 @@ export function PricingCard({ plan, currency, onSubscribe }) {
       {plan.featured && (
         <div className="absolute top-0 left-0 right-0 z-20 flex justify-center pt-0">
           <span className="flex items-center gap-1.5 rounded-b-xl border border-t-0 border-primary/40 bg-gradient-to-r from-primary via-primary to-fuchsia-600 px-4 py-1.5 text-[10px] font-black uppercase tracking-[0.2em] text-white shadow-[0_4px_20px_rgba(139,92,246,0.4)]">
-            <Crown className="size-3" />
+            <Crown className="size-5" />
             POPULAIRE
           </span>
         </div>
@@ -46,11 +46,11 @@ export function PricingCard({ plan, currency, onSubscribe }) {
         <div className="flex items-center gap-2">
           {plan.featured ? (
             <span className="flex size-8 items-center justify-center rounded-xl bg-primary/20 text-primary">
-              <Sparkles className="size-4" />
+              <Sparkles className="size-5" />
             </span>
           ) : (
             <span className="flex size-8 items-center justify-center rounded-xl bg-white/5 text-muted-foreground">
-              {plan.price === 0 ? <Zap className="size-4" /> : <Check className="size-4" />}
+              {plan.price === 0 ? <Zap className="size-5" /> : <Check className="size-5" />}
             </span>
           )}
           <span

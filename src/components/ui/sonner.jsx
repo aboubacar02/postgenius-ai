@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { CheckCircle2, XCircle, X } from 'lucide-react'
 import { cn } from '../../lib/utils'
 
 let listeners = []
@@ -63,18 +64,8 @@ export function Toaster({ className, position = 'bottom-left' }) {
             t.type === 'success' && 'border-success-20 bg-success-10 text-success'
           )}
         >
-          {t.type === 'success' && (
-            <svg className="size-4 shrink-0 text-success" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-              <circle cx="8" cy="8" r="6.5" fill="currentColor" opacity="0.15" />
-              <path d="m5 8.2 2 2 4-4.4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-          )}
-          {t.type === 'error' && (
-            <svg className="size-4 shrink-0 text-destructive" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-              <circle cx="8" cy="8" r="6.5" fill="currentColor" opacity="0.15" />
-              <path d="m6 6 4 4M10 6l-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-            </svg>
-          )}
+          {t.type === 'success' && <CheckCircle2 className="size-4 shrink-0 text-success" />}
+          {t.type === 'error' && <XCircle className="size-4 shrink-0 text-destructive" />}
           {t.type === 'info' && <span className="size-2 shrink-0 rounded-full bg-primary" />}
           <span className="flex-1">{t.message}</span>
           <button
@@ -83,9 +74,7 @@ export function Toaster({ className, position = 'bottom-left' }) {
             className="ml-auto inline-flex size-6 shrink-0 items-center justify-center rounded-md hover:bg-muted-60"
             aria-label="Fermer"
           >
-            <svg className="size-3.5" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-              <path d="m4 4 8 8M12 4l-8 8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-            </svg>
+            <X className="size-3.5" />
           </button>
         </div>
       ))}

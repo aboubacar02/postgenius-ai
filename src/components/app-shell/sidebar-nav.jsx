@@ -65,7 +65,7 @@ export function SidebarNav({ collapsed, onToggle }) {
               title={t(item.labelKey)}
               className={({ isActive }) =>
                 cn(
-                  'group relative flex items-center gap-2.5 rounded-pg text-[13px] font-medium transition-all duration-150',
+                  'group relative flex items-center gap-2 rounded-pg text-[13px] font-medium transition-all duration-150',
                   collapsed ? 'h-9 justify-center' : 'h-9 px-2.5',
                   'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50',
                   isActive
@@ -81,7 +81,7 @@ export function SidebarNav({ collapsed, onToggle }) {
                   )}
                   <Icon
                     className={cn(
-                      'size-[18px] shrink-0 transition-colors duration-150',
+                      'size-5 shrink-0 transition-colors duration-150',
                       isActive ? 'text-primary' : 'text-pg-muted group-hover:text-pg-text'
                     )}
                     strokeWidth={isActive ? 2.2 : 1.8}

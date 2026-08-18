@@ -1,19 +1,18 @@
 import { useState } from 'react'
 import {
-  AlertTriangle,
   ArrowRight,
   Check,
   CheckCircle2,
-  Copy,
+  CircleAlert,
+  CircleCheck,
   Flame,
   Gauge,
   Lightbulb,
   ListChecks,
   ShieldAlert,
   Sparkles,
-  Target,
   Wand2,
-  Zap
+  XCircle
 } from 'lucide-react'
 import { Button } from '../components/ui/button'
 import { Textarea } from '../components/ui/textarea'
@@ -40,18 +39,21 @@ const WEAK_PATTERNS = [
 function getSubscoreBadge(ratio) {
   if (ratio >= 0.8) {
     return {
-      text: '🟢 Excellent',
+      text: 'Excellent',
+      icon: CircleCheck,
       cls: 'border-success-20 bg-success-10 text-success'
     }
   }
   if (ratio >= 0.5) {
     return {
-      text: '🟡 À améliorer',
+      text: 'À améliorer',
+      icon: CircleAlert,
       cls: 'border-warning/30 bg-warning-10 text-warning'
     }
   }
   return {
-    text: '🔴 À corriger',
+    text: 'À corriger',
+    icon: XCircle,
     cls: 'border-destructive-20 bg-destructive-10 text-destructive'
   }
 }
@@ -127,8 +129,8 @@ export default function ScorePage() {
       {/* Header */}
       <div className="reveal flex flex-col gap-2">
         <div className="flex items-center gap-2">
-          <span className="flex size-6 items-center justify-center rounded-md bg-amber-400/20 text-amber-400">
-            <Gauge className="size-3.5" />
+          <span className="flex size-7 items-center justify-center rounded-lg bg-amber-400/20 text-amber-400">
+            <Gauge className="size-5" />
           </span>
           <span className="eyebrow text-amber-400">
             Diagnostic & Simulateur de Rétention 0-30s
@@ -308,10 +310,11 @@ export default function ScorePage() {
                               </span>
                               <span
                                 className={cn(
-                                  'rounded-full border px-2 py-0.5 font-mono text-[10px] font-bold',
+                                  'flex items-center gap-1 rounded-full border px-2 py-0.5 font-mono text-[10px] font-bold',
                                   badge.cls
                                 )}
                               >
+                                <badge.icon className="size-3" />
                                 {badge.text}
                               </span>
                             </div>

@@ -6,7 +6,7 @@ import { useI18n } from '../../lib/i18n'
 import { chatWithAgent } from '../../services/agent'
 import { synthesizeVoice } from '../../services/gemini'
 import { EDGE_VOICES, speakWithEdge } from '../../services/voice'
-import { NICHES } from '../../pages/tendances'
+import { NICHES } from '../../lib/niches'
 
 function Waveform() {
   const heights = [8, 12, 6, 14, 9]

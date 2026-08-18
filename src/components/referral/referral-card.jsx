@@ -35,7 +35,6 @@ export function ReferralCard({ className }) {
       <div className="pointer-events-none absolute -right-16 -top-16 size-48 rounded-full bg-primary/15 blur-3xl" />
       <div className="pointer-events-none absolute -bottom-16 -left-16 size-48 rounded-full bg-cyan-500/10 blur-3xl" />
 
-      {/* Header */}
       <div className="relative z-10 flex items-center justify-between gap-2 px-6 pt-6 pb-2">
         <div className="flex items-center gap-3">
           <span className="flex size-9 items-center justify-center rounded-xl bg-primary text-white shadow-sm">
@@ -57,7 +56,6 @@ export function ReferralCard({ className }) {
       </div>
 
       <div className="relative z-10 flex flex-col gap-5 px-6 pb-6 pt-2">
-        {/* Link */}
         <Field>
           <FieldLabel className="text-xs font-semibold uppercase tracking-wider text-pg-muted">
             {t('referral.linkLabel')}
@@ -87,7 +85,6 @@ export function ReferralCard({ className }) {
 
         <Separator className="bg-white/[0.06]" />
 
-        {/* Counter */}
         <div className="flex items-center gap-3 rounded-pg-lg border border-white/[0.06] bg-white/[0.03] p-3.5">
           <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-primary/15 text-primary">
             <Users className="size-5" />
@@ -114,7 +111,6 @@ export function ReferralCard({ className }) {
           </div>
         )}
 
-        {/* Tiers */}
         <div className="flex flex-col gap-2">
           <span className="text-xs font-semibold uppercase tracking-wider text-pg-muted">
             {t('referral.tiers')}

@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { ChevronDown, LogIn, LogOut, Menu, Plus, Search, Sparkles, Zap } from 'lucide-react'
+import { Menu, Plus, Search, Sparkles, Zap } from 'lucide-react'
 import { Button } from '../ui/button'
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator } from '../ui/dropdown-menu'
 import { GradientAvatar } from '../media/gradient-avatar'
@@ -47,18 +47,18 @@ export function Topbar({ onOpenCommandPalette }) {
             <button
               type="button"
               onClick={() => onOpenCommandPalette?.(true)}
-              className="hidden h-9 w-[230px] items-center gap-2 rounded-pg border border-white/[0.08] bg-white/[0.025] px-3 text-left text-xs text-pg-muted transition hover:border-white/[0.14] hover:bg-white/[0.04] md:flex"
+              className="hidden h-9 w-[240px] items-center gap-2.5 rounded-full border border-white/[0.08] bg-zinc-900/60 backdrop-blur-xl px-3.5 text-left text-xs text-zinc-500 transition-all duration-200 hover:border-white/[0.15] hover:bg-zinc-800/60 hover:text-zinc-400 hover:shadow-lg hover:shadow-black/10 md:flex"
             >
-              <Search size={14} />
-              <span className="flex-1">{t('topbar.search') || 'Rechercher...'}</span>
-              <span className="flex items-center gap-0.5 rounded border border-white/[0.08] px-1.5 py-0.5 text-[9px] text-pg-subtle">
+              <Search className="size-3.5 text-zinc-600" />
+              <span className="flex-1 font-medium">{t('topbar.search') || 'Rechercher...'}</span>
+              <span className="flex items-center gap-0.5 rounded-md border border-white/[0.08] bg-white/[0.05] px-1.5 py-0.5 font-mono text-[9px] font-semibold text-zinc-600">
                 ⌘K
               </span>
             </button>
 
             {/* CREDITS */}
             <div className="hidden h-9 items-center gap-2 rounded-pg border border-white/[0.08] bg-white/[0.025] px-3 text-xs sm:flex">
-              <span className="text-pg-amber">⚡</span>
+              <Zap className="size-4 text-pg-amber" />
               <span className="font-medium text-pg-text">
                 {isUnlimitedPlan(plan) ? '∞' : `${Math.min(creditsLeft, creditsTotal)} / ${creditsTotal}`}
               </span>
@@ -70,7 +70,7 @@ export function Topbar({ onOpenCommandPalette }) {
               onClick={() => navigate('/generateur')}
               className="pg-button-primary hidden sm:inline-flex items-center gap-1.5 rounded-pg bg-gradient-to-r from-primary to-purple-500 px-3.5 py-2 text-xs font-semibold text-white shadow-[0_0_20px_rgba(99,102,241,0.3)] transition-all hover:shadow-[0_0_30px_rgba(99,102,241,0.5)] hover:scale-[1.02] active:scale-[0.98]"
             >
-              <Plus size={14} />
+              <Plus className="size-4" />
               Nouvelle vidéo
             </button>
 

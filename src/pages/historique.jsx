@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { Download, Copy, RotateCcw, Trash2, FolderOpen, History, Loader2, Eye, Search } from 'lucide-react'
+import { Download, Copy, RotateCcw, Trash2, FolderOpen, History, Search } from 'lucide-react'
 import { Input } from '../components/ui/input'
 import { InputGroup, InputGroupAddon } from '../components/ui/input-group'
 import { Button } from '../components/ui/button'
@@ -79,8 +79,8 @@ export default function HistoryPage() {
       {/* Header */}
       <div className="reveal flex flex-col gap-2">
         <div className="flex items-center gap-2">
-          <span className="flex size-6 items-center justify-center rounded-md bg-primary/10 text-primary">
-            <History className="size-3.5" />
+          <span className="flex size-7 items-center justify-center rounded-lg bg-primary/10 text-primary">
+            <History className="size-5" />
           </span>
           <span className="eyebrow text-primary">
             {t('history.badge')}
@@ -147,7 +147,7 @@ export default function HistoryPage() {
                 <Empty className="border border-white/[0.06] bg-pg-surface rounded-xl py-20 reveal">
           <EmptyHeader>
             <EmptyMedia className="flex size-16 items-center justify-center rounded-xl bg-primary/10 text-primary">
-              <FolderOpen className="size-8" />
+              <FolderOpen className="size-12" />
             </EmptyMedia>
             <EmptyTitle className="mt-3 text-base font-bold text-pg-text">
               {history.length === 0 ? t('history.emptyTitle') : t('history.noResults')}

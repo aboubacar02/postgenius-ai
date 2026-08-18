@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { AlertTriangle, CheckCircle2, Flame, Gauge, Sparkles, TrendingDown } from 'lucide-react'
+import { TrendingDown } from 'lucide-react'
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '../ui/card'
 import { cn } from '../../lib/utils'
 

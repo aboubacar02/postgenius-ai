@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Sparkles, Wand2, ArrowRight, Check, Loader2 } from 'lucide-react'
+import { Wand2, ArrowRight, Loader2 } from 'lucide-react'
 import { Button } from '../ui/button'
 import { cn } from '../../lib/utils'
 

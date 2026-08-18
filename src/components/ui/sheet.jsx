@@ -1,4 +1,5 @@
 import { useEffect } from 'react'
+import { X } from 'lucide-react'
 import { cn } from '../../lib/utils'
 
 function Sheet({ open = false, onOpenChange, children }) {
@@ -26,9 +27,7 @@ function SheetTitle({ className, ...props }) {
 function SheetClose({ className, onClick, ...props }) {
   return (
     <button type="button" onClick={onClick} className={cn('ml-auto size-7 inline-flex items-center justify-center rounded-md hover:bg-muted', className)} {...props}>
-      <svg className="size-4" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-        <path d="m4 4 8 8M12 4l-8 8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-      </svg>
+      <X className="size-4" />
     </button>
   )
 }

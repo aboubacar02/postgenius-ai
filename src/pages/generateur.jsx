@@ -90,8 +90,8 @@ export default function GeneratorPage() {
       {/* Header */}
       <div className="reveal mb-8 flex flex-col gap-2">
         <div className="flex items-center gap-2">
-          <span className="flex size-6 items-center justify-center rounded-md bg-primary/10 text-primary">
-            <Sparkles className="size-3.5" />
+          <span className="flex size-7 items-center justify-center rounded-lg bg-primary/10 text-primary">
+            <Sparkles className="size-5" />
           </span>
           <span className="eyebrow text-primary">
             Studio IA Canvas & Rétention

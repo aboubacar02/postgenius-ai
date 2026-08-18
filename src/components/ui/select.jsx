@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { Check, ChevronDown } from 'lucide-react'
 import { cn } from '../../lib/utils'
 
 function Select({ className, value, defaultValue, onValueChange, placeholder = 'Sélectionner…', disabled = false, children, ...props }) {
@@ -47,9 +48,7 @@ function Select({ className, value, defaultValue, onValueChange, placeholder = '
         )}
       >
         <span className={cn('truncate', !current && 'text-muted-foreground')}>{selectedLabel}</span>
-        <svg className="size-3.5 shrink-0 opacity-50" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-          <path d="m4 6 4 4 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-        </svg>
+        <ChevronDown className="size-3.5 shrink-0 opacity-50" />
       </button>
       {open && (
         <div className="absolute z-50 mt-1 w-full min-w-[8rem] overflow-hidden rounded-lg border border-border bg-popover p-1 text-popover-foreground shadow-md">
@@ -73,11 +72,7 @@ function Select({ className, value, defaultValue, onValueChange, placeholder = '
                 )}
               >
                 <span>{item.props.children}</span>
-                {on && (
-                  <svg className="size-3.5 text-primary" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-                    <path d="m3.5 8.5 3 3 6-7" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
-                )}
+                {on && <Check className="size-3.5 text-primary" />}
               </button>
             )
           })}

@@ -1,3 +1,4 @@
+import { CircleAlert, CircleCheck, XCircle } from 'lucide-react'
 import { useCountUp } from '../../lib/use-count-up'
 import { scoreColorClass, scoreLevel } from '../../lib/format'
 import { cn } from '../../lib/utils'
@@ -5,19 +6,22 @@ import { cn } from '../../lib/utils'
 const LEVEL_CONFIG = {
   fort: {
     label: 'Fort potentiel viral',
-    badge: '🟢 Excellent',
+    badge: 'Excellent',
+    badgeIcon: CircleCheck,
     glow: 'rgba(74, 222, 128, 0.35)',
     gradient: ['#4ade80', '#22d3ee']
   },
   moyen: {
     label: 'Potentiel modéré',
-    badge: '🟡 À améliorer',
+    badge: 'À améliorer',
+    badgeIcon: CircleAlert,
     glow: 'rgba(251, 191, 36, 0.35)',
     gradient: ['#fbbf24', '#f97316']
   },
   faible: {
     label: 'Potentiel faible',
-    badge: '🔴 À corriger',
+    badge: 'À corriger',
+    badgeIcon: XCircle,
     glow: 'rgba(248, 113, 113, 0.35)',
     gradient: ['#f87171', '#ef4444']
   }
@@ -79,7 +83,8 @@ export function ScoreGauge({ score }) {
       </div>
 
       <div className="flex flex-col items-center gap-1">
-        <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1 font-mono text-xs font-bold text-foreground">
+        <span className={cn('flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 py-1 font-mono text-xs font-bold text-foreground', scoreColorClass(score))}>
+          <cfg.badgeIcon className="size-3.5" />
           {cfg.badge}
         </span>
         <p className="text-xs font-medium text-muted-foreground">{cfg.label}</p>

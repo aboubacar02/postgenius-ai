@@ -51,8 +51,8 @@ export const MARKETS = [
   {
     value: 'wa',
     flag: '🌍',
-    label: 'Afrique de l’Ouest',
-    longLabel: 'Afrique de l’Ouest (CI, Sénégal…)',
+    label: "Afrique de l'Ouest",
+    longLabel: "Afrique de l'Ouest (CI, Sénégal…)",
     lang: 'fr',
     desc: 'Français local et tendances régionales — nouchi à Abidjan, wolof à Dakar.'
   },
@@ -79,74 +79,6 @@ export const MARKETS = [
     longLabel: 'USA / International',
     lang: 'en',
     desc: 'Script généré directement en anglais, ton US punchy.'
-  }
-]
-
-// Profil "démo" — remplacé par l'utilisateur réel connecté (Supabase) côté UI.
-export const CURRENT_USER = {
-  name: 'Camille Aubert',
-  email: 'camille.aubert@postgenius.ai',
-  initials: 'CA',
-  plan: 'Pro'
-}
-
-// Compteur d'exemple — la vraie consommation vient de la table user_credits.
-export const DAILY_CREDITS = {
-  used: 7,
-  total: 20,
-  resetsInHours: 6
-}
-
-export const HISTORY_ITEMS = [
-  {
-    id: 'h1',
-    title: '3 erreurs qui tuent ton reach sur TikTok',
-    network: 'tiktok',
-    format: 'liste',
-    createdAt: '2026-08-13T09:12:00Z',
-    duration: 30,
-    score: 87,
-    hashtags: ['#tiktoktips', '#growth', '#contentcreator']
-  },
-  {
-    id: 'h2',
-    title: "J'ai testé l'IA pour écrire mes scripts pendant 30 jours",
-    network: 'reels',
-    format: 'hook-histoire',
-    createdAt: '2026-08-12T18:40:00Z',
-    duration: 60,
-    score: 74,
-    hashtags: ['#iagenerative', '#contentcreation', '#reels']
-  },
-  {
-    id: 'h3',
-    title: 'Le hook parfait en 3 secondes (méthode complète)',
-    network: 'shorts',
-    format: 'tutoriel',
-    createdAt: '2026-08-11T14:02:00Z',
-    duration: 30,
-    score: 91,
-    hashtags: ['#shorts', '#copywriting', '#viral']
-  },
-  {
-    id: 'h4',
-    title: 'Avant / après : ma routine de post à 2h vs 20min',
-    network: 'tiktok',
-    format: 'avant-apres',
-    createdAt: '2026-08-10T08:20:00Z',
-    duration: 15,
-    score: 68,
-    hashtags: ['#productivite', '#creator']
-  },
-  {
-    id: 'h5',
-    title: 'Pourquoi 90% de vos vidéos ne dépassent pas 500 vues',
-    network: 'reels',
-    format: 'question-reponse',
-    createdAt: '2026-08-08T11:55:00Z',
-    duration: 30,
-    score: 79,
-    hashtags: ['#algorithm', '#reelstips']
   }
 ]
 

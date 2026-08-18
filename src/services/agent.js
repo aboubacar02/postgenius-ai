@@ -1,6 +1,6 @@
 // Appels côté client vers le Post AI Agent via le proxy serveur /api/gemini/agent.
 // La clé API Gemini reste côté serveur et n'est jamais embarquée dans le bundle.
-import { NICHES } from '../pages/tendances'
+import { NICHES } from '../lib/niches'
 
 function buildTrendContext() {
   const hourKey = Math.floor(Date.now() / 3_600_000)

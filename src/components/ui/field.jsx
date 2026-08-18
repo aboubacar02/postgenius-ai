@@ -1,5 +1,4 @@
 import { cn } from '../../lib/utils'
-import { Label } from './label'
 import { Separator } from './separator'
 
 function FieldGroup({ className, ...props }) {
@@ -35,7 +34,7 @@ function FieldContent({ className, ...props }) {
 
 function FieldLabel({ className, ...props }) {
   return (
-    <Label
+    <label
       data-slot="field-label"
       className={cn('group/field-label w-fit gap-2 leading-snug', className)}
       {...props}

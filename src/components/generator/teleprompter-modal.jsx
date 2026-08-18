@@ -1,15 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import {
-  Maximize2,
-  Minimize2,
-  MoveDown,
-  Pause,
-  Play,
-  RotateCcw,
-  Sliders,
-  Type,
-  X
-} from 'lucide-react'
+import { Pause, Play, RotateCcw, Type, X } from 'lucide-react'
 import { Button } from '../ui/button'
 import { cn } from '../../lib/utils'
 

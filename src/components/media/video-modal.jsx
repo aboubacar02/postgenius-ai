@@ -8,52 +8,46 @@ export function VideoModal({ video, onClose }) {
 
   return (
     <div
-      className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-sm"
+      className="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 p-4 backdrop-blur-md"
       onClick={onClose}
     >
       <div
-        className="fade-in-up mx-4 flex max-h-[90vh] w-full max-w-3xl flex-col overflow-hidden rounded-2xl border border-white/[0.08] bg-zinc-900 shadow-2xl shadow-black/50"
+        className="fade-in-up relative flex w-full max-w-4xl flex-col gap-4"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Close button */}
-        <div className="absolute top-3 right-3 z-10">
-          <Button
-            variant="ghost"
-            size="icon-sm"
-            onClick={onClose}
-            className="rounded-full bg-black/50 text-white hover:bg-black/70 backdrop-blur-sm"
-          >
-            <X className="size-4" />
-          </Button>
-        </div>
+        <Button
+          variant="ghost"
+          size="icon-sm"
+          onClick={onClose}
+          className="absolute -top-12 right-0 rounded-full text-zinc-400 hover:text-white"
+        >
+          <X className="size-5" />
+        </Button>
 
-        {/* Video player or thumbnail */}
+        {/* Player — always on top, always visible */}
         {hasVideo ? (
-          <div className="relative w-full bg-black">
-            <iframe
-              key={video.youtubeId}
-              src={`https://www.youtube-nocookie.com/embed/${video.youtubeId}?autoplay=1&rel=0&playsinline=1`}
-              title={video.title}
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-              allowFullScreen
-              className="aspect-video w-full border-0"
-            />
-          </div>
+          <iframe
+            key={video.youtubeId}
+            src={`https://www.youtube-nocookie.com/embed/${video.youtubeId}?autoplay=1&rel=0&playsinline=1`}
+            title={video.title}
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowFullScreen
+            className="aspect-video w-full rounded-2xl border-0 bg-black shadow-2xl shadow-black/60"
+          />
         ) : (
-          <div className={`relative flex h-48 items-center justify-center bg-gradient-to-br ${video.gradient || 'from-zinc-700 to-zinc-900'}`}>
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_25%,rgba(255,255,255,0.15),transparent_60%)]" />
-            <span className="relative text-7xl">{video.icon || '🎬'}</span>
+          <div className={`flex aspect-video w-full items-center justify-center rounded-2xl bg-gradient-to-br ${video.gradient || 'from-zinc-700 to-zinc-900'} shadow-2xl shadow-black/60`}>
+            <span className="text-8xl">{video.icon || '🎬'}</span>
           </div>
         )}
 
-        {/* Info */}
-        <div className="flex flex-col gap-2 p-4">
-          <h3 className="text-base font-bold text-zinc-100">{video.title}</h3>
-          <div className="flex items-center gap-2 text-xs text-zinc-500">
-            <span>{video.channel}</span>
-            {video.views && <span>· {video.views}</span>}
-            {video.publishedAt && <span>· {video.publishedAt}</span>}
-          </div>
+        {/* Info bar below the player */}
+        <div className="flex items-center gap-3 text-sm text-zinc-400">
+          <span className="font-bold text-zinc-100">{video.title}</span>
+          <span className="text-zinc-600">·</span>
+          <span>{video.channel}</span>
+          {video.views && <><span className="text-zinc-600">·</span><span>{video.views}</span></>}
+          {video.publishedAt && <><span className="text-zinc-600">·</span><span>{video.publishedAt}</span></>}
         </div>
       </div>
     </div>

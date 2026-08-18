@@ -13,13 +13,5 @@
         }
       ]
     }
-  ],
-  "functions": {
-    "api/**/*.js": {
-      "runtime": "@vercel/node@3"
-    },
-    "api/**/*.mjs": {
-      "runtime": "@vercel/node@3"
-    }
-  }
+  ]
 }

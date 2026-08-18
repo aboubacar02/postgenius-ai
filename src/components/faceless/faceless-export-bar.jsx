@@ -32,7 +32,7 @@ export function FacelessExportBar({ downloading, downloadVoiceOff, downloadAllVi
         </form>
         {musicTrack && (
           <div className="mt-3 flex items-center gap-3 rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-3">
-            {musicTrack.thumbnail && <img src={musicTrack.thumbnail} alt="" className="size-10 shrink-0 rounded-lg object-cover" />}
+            {musicTrack.thumbnail && <img src={musicTrack.thumbnail} alt="" className="size-10 shrink-0 rounded-lg object-cover" loading="lazy" />}
             <div className="flex-1 min-w-0">
               <p className="text-xs font-semibold text-pg-text truncate">{musicTrack.title}</p>
               <p className="text-[10px] text-pg-subtle truncate">{musicTrack.channel} {musicTrack.duration ? `· ${musicTrack.duration}` : ''}</p>

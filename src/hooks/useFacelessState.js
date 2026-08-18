@@ -72,7 +72,7 @@ export function useFacelessState() {
 
   useEffect(() => {
     if (!scene || medias[activeIdx]) return
-    const kw = scene.imageKeyword || niche || 'cinematic'
+    const kw = (scene.wordImages && scene.wordImages.length > 0) ? scene.wordImages[0] : (scene.imageKeyword || niche || 'cinematic')
     fetchBrollVideo(kw)
       .then((d) => setMedias((m) => ({ ...m, [activeIdx]: { videoUrl: d.videoUrl, imageUrl: d.imageUrl || d.url, credit: d.credit, duration: d.duration } })))
       .catch(() => setMedias((m) => ({ ...m, [activeIdx]: { videoUrl: null, imageUrl: `https://images.unsplash.com/photo-${FALLBACK_PHOTOS[activeIdx % FALLBACK_PHOTOS.length]}?w=1080&auto=format&fit=crop&q=80`, credit: null } })))
@@ -82,7 +82,7 @@ export function useFacelessState() {
     if (!isGenerated || !script?.scenes) return
     script.scenes.forEach((s, i) => {
       if (medias[i]) return
-      const kw = s.imageKeyword || niche || 'cinematic'
+      const kw = (s.wordImages && s.wordImages.length > 0) ? s.wordImages[0] : (s.imageKeyword || niche || 'cinematic')
       fetchBrollVideo(kw)
         .then((d) => setMedias((m) => ({ ...m, [i]: { videoUrl: d.videoUrl, imageUrl: d.imageUrl || d.url, credit: d.credit, duration: d.duration } })))
         .catch(() => setMedias((m) => ({ ...m, [i]: { videoUrl: null, imageUrl: `https://images.unsplash.com/photo-${FALLBACK_PHOTOS[i % FALLBACK_PHOTOS.length]}?w=1080&auto=format&fit=crop&q=80`, credit: null } })))
@@ -117,7 +117,7 @@ export function useFacelessState() {
     for (let i = 0; i < sceneCount; i++) {
       if (!all[i]) {
         const s = script.scenes[i]
-        const d = await fetchBrollVideo(s.imageKeyword || niche || 'cinematic')
+        const d = await fetchBrollVideo((s.wordImages && s.wordImages.length > 0) ? s.wordImages[0] : (s.imageKeyword || niche || 'cinematic'))
         all[i] = { videoUrl: d.videoUrl, imageUrl: d.imageUrl || d.url, credit: d.credit, duration: d.duration }
       }
     }
@@ -169,7 +169,7 @@ export function useFacelessState() {
       a.download = `voix-off-${script.title?.slice(0, 30) || 'faceless'}.mp3`
       a.click(); URL.revokeObjectURL(a.href)
       toast.success('Voix-off MP3 telechargee !')
-    } catch { toast.error('Erreur audio') } finally { setDownloading(null) }
+    } catch { toast.error('Erreur lors du téléchargement audio. Réessaie.') } finally { setDownloading(null) }
   }
 
   async function downloadSceneVideo(i) {
@@ -182,7 +182,7 @@ export function useFacelessState() {
       a.download = `scene-${i + 1}-broll.mp4`
       a.click(); URL.revokeObjectURL(a.href)
       toast.success(`Scene ${i + 1} MP4 telechargee !`)
-    } catch { toast.error('Erreur video') } finally { setDownloading(null) }
+    } catch { toast.error('Erreur lors du téléchargement vidéo. Réessaie.') } finally { setDownloading(null) }
   }
 
   async function downloadAllVideos() {
@@ -200,7 +200,7 @@ export function useFacelessState() {
         await new Promise((r) => setTimeout(r, 400))
       }
       toast.success(`${count} videos MP4 telechargees !`)
-    } catch { toast.error('Erreur videos') } finally { setDownloading(null) }
+    } catch { toast.error('Erreur lors du téléchargement des vidéos. Réessaie.') } finally { setDownloading(null) }
   }
 
   async function downloadFullPack() {
@@ -233,7 +233,7 @@ export function useFacelessState() {
 
       await downloadAllVideos()
       toast.success('Pack CapCut complet telecharge !')
-    } catch { toast.error('Erreur pack') } finally { setDownloading(null) }
+    } catch { toast.error('Erreur lors du téléchargement du pack. Réessaie.') } finally { setDownloading(null) }
   }
 
   function exportScript() {

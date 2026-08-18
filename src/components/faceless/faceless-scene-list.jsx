@@ -35,7 +35,7 @@ export function FacelessSceneList({ script, activeIdx, playing, sceneCount, scen
                 {m?.videoUrl ? (
                   <video src={m.videoUrl} className="h-full w-full object-cover" muted playsInline preload="metadata" />
                 ) : m?.imageUrl ? (
-                  <img src={m.imageUrl} alt="" className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
+                  <img src={m.imageUrl} alt="" className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy" />
                 ) : (
                   <div className="flex h-full w-full items-center justify-center bg-white/[0.04]">
                     <Loader2 className="size-3.5 animate-spin text-pg-subtle" />

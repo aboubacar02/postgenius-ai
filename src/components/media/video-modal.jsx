@@ -1,9 +1,10 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { X, ExternalLink } from 'lucide-react'
 import { Button } from '../ui/button'
 
 export function VideoModal({ video, onClose }) {
   const iframeRef = useRef(null)
+  const [ytError, setYtError] = useState(false)
 
   useEffect(() => {
     if (!video) return
@@ -47,7 +48,7 @@ export function VideoModal({ video, onClose }) {
 
       {/* THE PLAYER — centered, fills available space */}
       <div className="relative flex w-full max-w-5xl flex-1 items-center justify-center px-4" onClick={(e) => e.stopPropagation()}>
-        {hasVideo ? (
+        {hasVideo && !ytError ? (
           <iframe
             ref={iframeRef}
             key={video.youtubeId}
@@ -55,9 +56,20 @@ export function VideoModal({ video, onClose }) {
             title={video.title}
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
             allowFullScreen
+            onError={() => setYtError(true)}
             className="h-full w-full rounded-2xl border-0 bg-black"
             style={{ maxHeight: 'calc(100vh - 140px)', aspectRatio: '16/9' }}
           />
+        ) : ytError ? (
+          <div className="flex aspect-video w-full max-w-5xl flex-col items-center justify-center gap-3 rounded-2xl bg-zinc-800 text-center">
+            <span className="text-5xl">⚠️</span>
+            <p className="text-white/70">Impossible de charger la vidéo YouTube.</p>
+            {ytUrl && (
+              <a href={ytUrl} target="_blank" rel="noopener noreferrer" className="mt-2 text-sm text-blue-400 hover:underline">
+                Ouvrir sur YouTube ↗
+              </a>
+            )}
+          </div>
         ) : (
           <div className={`flex aspect-video w-full max-w-5xl items-center justify-center rounded-2xl bg-gradient-to-br ${video.gradient || 'from-zinc-700 to-zinc-900'}`}>
             <span className="text-8xl">{video.icon || '🎬'}</span>

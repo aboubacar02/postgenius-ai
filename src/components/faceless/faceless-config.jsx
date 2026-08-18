@@ -39,7 +39,7 @@ export function FacelessConfig({ topic, setTopic, niche, setNiche, duration, set
           </div>
         </div>
 
-        <div className="grid grid-cols-3 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
           <div className="flex flex-col gap-1.5">
             <span className="eyebrow text-pg-muted">Duree</span>
             <select

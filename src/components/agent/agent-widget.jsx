@@ -230,8 +230,11 @@ export function AgentWidget() {
     try {
       const reply = await chatWithAgent(next)
       setMessages((m) => [...m, { role: 'agent', content: reply }])
-    } catch {
-      setMessages((m) => [...m, { role: 'agent', content: t('agent.error') }])
+    } catch (err) {
+      const msg = err?.message?.includes('indisponible') || err?.message?.includes('network')
+        ? 'Erreur de connexion. Vérifie ta connexion internet et réessaie.'
+        : t('agent.error')
+      setMessages((m) => [...m, { role: 'agent', content: msg }])
     } finally {
       setThinking(false)
     }
@@ -240,7 +243,7 @@ export function AgentWidget() {
   return (
     <>
       {open && (
-        <div className="fixed inset-x-0 bottom-20 z-[60] mx-auto flex h-[min(560px,calc(100dvh-8rem))] w-[calc(100%-2rem)] max-w-sm flex-col overflow-hidden rounded-2xl border border-indigo-500/20 bg-pg-background/95 shadow-[0_0_40px_rgba(139,92,246,0.25)] backdrop-blur-xl md:bottom-24 md:right-6 md:left-auto md:mx-0">
+        <div className="fixed inset-x-0 bottom-20 z-[60] mx-auto flex h-[min(560px,calc(100dvh-8rem))] w-[calc(100%-2rem)] max-w-sm flex-col overflow-hidden rounded-2xl border border-indigo-500/20 bg-pg-background/95 shadow-[0_0_40px_rgba(139,92,246,0.25)] backdrop-blur-xl md:bottom-6 md:right-6 md:left-auto md:mx-0">
           <div className="flex items-center gap-3 border-b border-white/10 bg-gradient-to-r from-indigo-500/15 to-indigo-500/5 px-4 py-3">
             <span className="relative flex size-9 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-[0_0_15px_rgba(139,92,246,0.4)]">
               <Bot className="size-4" />
@@ -351,7 +354,7 @@ export function AgentWidget() {
         </div>
       )}
 
-      <div className="fixed right-4 bottom-16 z-[55] flex flex-col items-end gap-2.5 md:right-6 md:bottom-6">
+      <div className="fixed right-4 bottom-20 z-[55] flex flex-col items-end gap-2.5 md:bottom-6 md:right-6">
         {!open && !tooltipDismissed && (
           <div className="fade-in-up flex items-center gap-1.5 rounded-full border border-primary/25 bg-white/[0.06] px-3.5 py-2 text-xs font-medium text-pg-text shadow-[0_0_20px_rgba(139,92,246,0.25)] backdrop-blur">
             <Sparkles className="size-3.5 text-primary" />

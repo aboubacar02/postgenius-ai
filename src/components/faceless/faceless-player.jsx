@@ -7,7 +7,7 @@ export function FacelessPlayer({ activeIdx, sceneCount, sceneDur, activeMedia, h
         {activeMedia?.videoUrl ? (
           <video key={activeIdx} src={activeMedia.videoUrl} className="absolute inset-0 h-full w-full object-cover" muted loop playsInline autoPlay preload="metadata" />
         ) : activeMedia?.imageUrl ? (
-          <img src={activeMedia.imageUrl} alt="" className="absolute inset-0 h-full w-full object-cover transition-transform duration-1000" />
+          <img src={activeMedia.imageUrl} alt="" className="absolute inset-0 h-full w-full object-cover transition-transform duration-1000" loading="lazy" />
         ) : (
           <div className="absolute inset-0 flex items-center justify-center">
             <Loader2 className="size-6 animate-spin text-pg-subtle" />

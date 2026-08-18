@@ -148,55 +148,84 @@ export default function TendancesPage() {
           <span className="text-xs text-zinc-600">{t('trending.videosDesc')}</span>
         </div>
 
+        {liveMode && liveResults.length > 0 && (
+          <div className="flex items-center gap-2 rounded-xl border border-emerald-500/20 bg-emerald-500/10 px-4 py-2.5 text-xs text-emerald-400">
+            <Sparkles className="size-3.5" />
+            {liveResults.length} résultats trouvés pour « {searchQuery} »
+            <Button size="sm" variant="ghost" onClick={() => { setLiveMode(false); setLiveResults([]); setSearchQuery('') }} className="ml-auto gap-1 text-[10px] text-emerald-400 hover:text-white">
+              <X className="size-3" /> Effacer
+            </Button>
+          </div>
+        )}
+
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
-          {(liveMode ? liveResults : VIRAL_VIDEOS).map((v, i) => (
-            <button
-              key={v.id}
-              type="button"
-              onClick={() => setActiveVideo(v)}
-              className="reveal group relative overflow-hidden rounded-2xl border border-white/[0.06] bg-zinc-900/60 backdrop-blur-xl p-0 text-left transition-all duration-300 hover:border-indigo-500/30 hover:shadow-xl hover:shadow-black/30 hover:-translate-y-0.5"
-              style={{ animationDelay: `${i * 50 + 100}ms` }}
-            >
-              {/* Gradient header */}
-              <div className={`relative flex h-36 items-center justify-center bg-gradient-to-br ${v.gradient || 'from-zinc-700 to-zinc-900'} overflow-hidden`}>
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_25%,rgba(255,255,255,0.15),transparent_60%)]" />
-                <span className="relative text-5xl transition-transform duration-300 group-hover:scale-110">{v.icon}</span>
-                {/* Play overlay */}
-                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                  <div className="flex size-14 items-center justify-center rounded-full bg-black/50 backdrop-blur-sm ring-2 ring-white/30">
-                    <Play className="size-6 fill-white text-white ml-1" />
-                  </div>
-                </div>
-                {/* Rank pill */}
-                <div className="absolute top-3 left-3 flex items-center gap-1 rounded-full bg-black/40 backdrop-blur-sm px-2.5 py-1 text-[10px] font-bold text-white border border-white/10">
-                  <span className="font-mono text-xs">#{i + 1}</span>
-                </div>
-                {v.views && (
-                  <div className="absolute top-3 right-3 flex items-center gap-1 rounded-full bg-black/40 backdrop-blur-sm px-2.5 py-1 text-[10px] font-bold text-white border border-white/10">
-                    <Zap className="size-3" />
-                    {v.views}
-                  </div>
-                )}
-              </div>
-              {/* Content */}
-              <div className="flex flex-col gap-2 p-4">
-                <span className="line-clamp-2 text-sm font-bold leading-snug text-zinc-100 transition-colors group-hover:text-indigo-400">
-                  {v.title}
-                </span>
-                {v.description && (
-                  <p className="line-clamp-2 text-xs text-zinc-500 leading-relaxed">{v.description}</p>
-                )}
-                <div className="flex items-center justify-between pt-1">
-                  <span className="text-xs text-zinc-600">{v.channel}</span>
-                  {v.niche && (
-                    <span className="rounded-full border border-white/[0.06] bg-white/[0.04] px-2 py-0.5 text-[10px] font-semibold text-zinc-500">
-                      {v.niche}
-                    </span>
+          {(liveMode ? liveResults : VIRAL_VIDEOS).map((v, i) => {
+            const isLive = liveMode && v.youtubeId
+            return (
+              <button
+                key={v.id || v.youtubeId || i}
+                type="button"
+                onClick={() => setActiveVideo(v)}
+                className="reveal group relative overflow-hidden rounded-2xl border border-white/[0.06] bg-zinc-900/60 backdrop-blur-xl p-0 text-left transition-all duration-300 hover:border-indigo-500/30 hover:shadow-xl hover:shadow-black/30 hover:-translate-y-0.5"
+                style={{ animationDelay: `${i * 50 + 100}ms` }}
+              >
+                {/* Thumbnail or Gradient header */}
+                <div className="relative h-36 overflow-hidden">
+                  {isLive && v.thumbnail ? (
+                    <img src={v.thumbnail} alt={v.title} className="size-full object-cover transition-transform duration-300 group-hover:scale-105" loading="lazy" />
+                  ) : (
+                    <div className={`flex size-full items-center justify-center bg-gradient-to-br ${v.gradient || 'from-zinc-700 to-zinc-900'}`}>
+                      <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_25%,rgba(255,255,255,0.15),transparent_60%)]" />
+                      <span className="relative text-5xl transition-transform duration-300 group-hover:scale-110">{v.icon || '🎬'}</span>
+                    </div>
                   )}
+                  {/* Play overlay */}
+                  <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                    <div className="flex size-14 items-center justify-center rounded-full bg-black/50 backdrop-blur-sm ring-2 ring-white/30">
+                      <Play className="size-6 fill-white text-white ml-1" />
+                    </div>
+                  </div>
+                  {/* Rank pill */}
+                  <div className="absolute top-3 left-3 flex items-center gap-1 rounded-full bg-black/40 backdrop-blur-sm px-2.5 py-1 text-[10px] font-bold text-white border border-white/10">
+                    <span className="font-mono text-xs">#{i + 1}</span>
+                  </div>
+                  {/* Views / Duration */}
+                  <div className="absolute top-3 right-3 flex items-center gap-1.5">
+                    {v.duration && (
+                      <span className="rounded-full bg-black/60 backdrop-blur-sm px-2 py-0.5 text-[10px] font-bold text-white border border-white/10">
+                        {v.duration}
+                      </span>
+                    )}
+                    {v.views && (
+                      <span className="rounded-full bg-black/40 backdrop-blur-sm px-2.5 py-1 text-[10px] font-bold text-white border border-white/10 flex items-center gap-1">
+                        <Zap className="size-3" />
+                        {v.views}
+                      </span>
+                    )}
+                  </div>
                 </div>
-              </div>
-            </button>
-          ))}
+                {/* Content */}
+                <div className="flex flex-col gap-2 p-4">
+                  <span className="line-clamp-2 text-sm font-bold leading-snug text-zinc-100 transition-colors group-hover:text-indigo-400">
+                    {v.title}
+                  </span>
+                  {v.description && (
+                    <p className="line-clamp-2 text-xs text-zinc-500 leading-relaxed">{v.description}</p>
+                  )}
+                  <div className="flex items-center justify-between pt-1">
+                    <span className="text-xs text-zinc-600">{v.channel}</span>
+                    {v.niche ? (
+                      <span className="rounded-full border border-white/[0.06] bg-white/[0.04] px-2 py-0.5 text-[10px] font-semibold text-zinc-500">
+                        {v.niche}
+                      </span>
+                    ) : v.publishedAt ? (
+                      <span className="text-[10px] text-zinc-700">{v.publishedAt}</span>
+                    ) : null}
+                  </div>
+                </div>
+              </button>
+            )
+          })}
         </div>
       </section>
 

@@ -1,0 +1,16 @@
+{
+  "name": "PostGenius AI",
+  "short_name": "PostGenius",
+  "description": "Générez des scripts viraux pour TikTok, Reels et Shorts avec l'IA.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0B0F17",
+  "theme_color": "#0B0F17",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}

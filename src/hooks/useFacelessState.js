@@ -21,9 +21,9 @@ const DEFAULT_SCRIPT = {
   title: 'Le secret des millionnaires a 25 ans',
   niche: 'Business',
   scenes: [
-    { caption: '99% des gens ignorent cette regle fondamentale sur l\u2019argent.', narration: 'Quatre-vingt-dix-neuf pour cent des gens ignorent cette regle fondamentale sur l\u2019argent.', visual: 'Homme marchant dans un bureau moderne', imageKeyword: 'luxury finance modern business' },
-    { caption: 'Ce n\u2019est pas le travail acharne qui compte, mais le levier.', narration: 'Ce n\u2019est pas le travail acharne qui compte, mais le levier que vous utilisez.', visual: 'Graphiques boursiers sur ecran', imageKeyword: 'trading analytics success laptop' },
-    { caption: 'Appliquez ceci des aujourd\u2019hui pour multiplier vos resultats par dix.', narration: 'Appliquez ceci des aujourd\u2019hui pour multiplier vos resultats par dix.', visual: 'Poignee de main et succes', imageKeyword: 'entrepreneur victory celebration' }
+    { caption: '99% des gens ignorent cette regle fondamentale sur l\u2019argent.', narration: 'Quatre-vingt-dix-neuf pour cent des gens ignorent cette regle fondamentale sur l\u2019argent.', visual: 'Homme marchant dans un bureau moderne', imageKeyword: 'luxury finance modern business', wordImages: ['luxury', 'finance', 'money'] },
+    { caption: 'Ce n\u2019est pas le travail acharne qui compte, mais le levier.', narration: 'Ce n\u2019est pas le travail acharne qui compte, mais le levier que vous utilisez.', visual: 'Graphiques boursiers sur ecran', imageKeyword: 'trading analytics success laptop', wordImages: ['trading', 'analytics', 'success'] },
+    { caption: 'Appliquez ceci des aujourd\u2019hui pour multiplier vos resultats par dix.', narration: 'Appliquez ceci des aujourd\u2019hui pour multiplier vos resultats par dix.', visual: 'Poignee de main et succes', imageKeyword: 'entrepreneur victory celebration', wordImages: ['entrepreneur', 'victory', 'celebration'] }
   ],
   hashtags: ['#business', '#mindset', '#success', '#viral', '#motivation']
 }
@@ -45,6 +45,8 @@ export function useFacelessState() {
   const [medias, setMedias] = useState({})
   const [narrations, setNarrations] = useState({})
   const [downloading, setDownloading] = useState(null)
+  const [musicTrack, setMusicTrack] = useState(null)
+  const [musicSearching, setMusicSearching] = useState(false)
   const audioRef = useRef(null)
   const videoRef = useRef(null)
 
@@ -245,6 +247,54 @@ export function useFacelessState() {
     URL.revokeObjectURL(a.href); toast.success('Script exporte !')
   }
 
+  function downloadSrt() {
+    if (!script?.scenes) return
+    const srtLines = []
+    let cur = 0
+    const sec = duration / sceneCount
+    script.scenes.forEach((s, i) => {
+      const start = cur; cur += sec
+      const pad = (n, l = 2) => String(Math.floor(n)).padStart(l, '0')
+      const fmt = (t) => `${pad(t / 3600)}:${pad((t % 3600) / 60)}:${pad(t % 60)},${String(Math.floor((t % 1) * 1000)).padStart(3, '0')}`
+      srtLines.push(`${i + 1}\n${fmt(start)} --> ${fmt(cur)}\n${s.caption}\n`)
+    })
+    const blob = new Blob([srtLines.join('\n')], { type: 'text/plain;charset=utf-8' })
+    const a = document.createElement('a')
+    a.href = URL.createObjectURL(blob)
+    a.download = `sous-titres-${script.title?.slice(0, 20) || 'faceless'}.srt`
+    a.click(); URL.revokeObjectURL(a.href)
+    toast.success('Fichier SRT telecharge !')
+  }
+
+  async function searchMusic(query) {
+    if (!query?.trim()) return
+    setMusicSearching(true)
+    try {
+      const res = await fetch(`/api/youtube/music?q=${encodeURIComponent(query)}&max=5`)
+      const data = await res.json()
+      if (data.items?.length > 0) {
+        setMusicTrack(data.items[0])
+        toast.success(`Musique trouvee : ${data.items[0].title}`)
+      } else {
+        toast.error(data.error || 'Aucune musique trouvee')
+      }
+    } catch {
+      toast.error('Recherche musicale indisponible')
+    } finally {
+      setMusicSearching(false)
+    }
+  }
+
+  function downloadMusic() {
+    if (!musicTrack) return
+    const a = document.createElement('a')
+    a.href = `https://www.youtube.com/watch?v=${musicTrack.youtubeId}`
+    a.target = '_blank'
+    a.rel = 'noopener noreferrer'
+    a.click()
+    toast.info('Ouvre YouTube pour telecharger la musique libre de droits.')
+  }
+
   function regenerateScene(idx) {
     const s = script?.scenes?.[idx]; if (!s) return
     setMedias((m) => { const n = { ...m }; delete n[idx]; return n })
@@ -256,11 +306,13 @@ export function useFacelessState() {
     gender, setGender, voiceStyle, setVoiceStyle,
     script, isGenerated, busy, activeIdx, playing, elapsed, audioDuration,
     medias, narrations, downloading,
+    musicTrack, musicSearching,
     audioRef, videoRef,
     scene, voiceId, sceneCount, sceneDur, activeMedia, hasVideo,
     handleGenerate, ensureNarration, ensureAllNarrations, ensureAllMedias,
     playScene, togglePlay, jumpTo, formatTime,
     downloadVoiceOff, downloadSceneVideo, downloadAllVideos, downloadFullPack,
-    exportScript, regenerateScene, setActiveIdx
+    downloadSrt, exportScript, regenerateScene, setActiveIdx,
+    searchMusic, downloadMusic
   }
 }

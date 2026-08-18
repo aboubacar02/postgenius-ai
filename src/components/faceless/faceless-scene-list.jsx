@@ -69,6 +69,11 @@ export function FacelessSceneList({ script, activeIdx, playing, sceneCount, scen
                 </div>
                 <div className="flex items-center gap-2 text-[10px] text-pg-subtle">
                   <span className="flex items-center gap-1"><Image className="size-3" />{s.imageKeyword || 'B-roll'}</span>
+                  {s.wordImages && s.wordImages.length > 0 && (
+                    <span className="flex items-center gap-1 text-indigo-400/60">
+                      <Image className="size-3" />{s.wordImages.join(' + ')}
+                    </span>
+                  )}
                   <span className="flex items-center gap-1"><FileText className="size-3" />{s.caption?.slice(0, 25)}...</span>
                 </div>
               </div>

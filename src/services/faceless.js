@@ -112,7 +112,8 @@ Réponds UNIQUEMENT en JSON valide, avec cette structure exacte (pas de texte av
       "narration": "phrase orale naturelle et rythmée (6-15 mots)",
       "visual": "description précise de l'image B-roll à montrer à l'écran",
       "imageKeyword": "mots-clés EN ANGLAIS pour chercher l'image (3 mots max)",
-      "caption": "sous-titre court (3-6 mots), avec le mot le plus fort en MAJUSCULES"
+      "caption": "sous-titre court (3-6 mots), avec le mot le plus fort en MAJUSCULES",
+      "wordImages": ["mot1", "mot2", "mot3"]
     }
   ],
   "hashtags": ["#short1", "#short2", "#short3", "#short4", "#short5"]
@@ -120,6 +121,8 @@ Réponds UNIQUEMENT en JSON valide, avec cette structure exacte (pas de texte av
 Règles : style oral vivant façon créateur (phrases scandées, power words), chaque scène =
 une idée, la dernière scène contient un appel à l'action naturel, les captions reprennent
 les mots du spoken-word pour un sous-titrage dynamique style TikTok/Alex Hormozi.
+wordImages : pour chaque mot clé du caption, donne le mot traduit en anglais (1 seul mot).
+Ces mots seront utilisés pour chercher des images B-roll spécifiques par mot.
 `
 
   try {

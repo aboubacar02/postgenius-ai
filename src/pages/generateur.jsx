@@ -7,6 +7,7 @@ import { ResultsPanel } from '../components/generator/results-panel'
 import { TeleprompterModal } from '../components/generator/teleprompter-modal'
 import { Button } from '../components/ui/button'
 import { Progress } from '../components/ui/progress'
+import { RequireAuth } from '../components/auth/require-auth'
 import { useApp } from '../lib/app-context'
 import { useI18n } from '../lib/i18n'
 
@@ -86,6 +87,7 @@ export default function GeneratorPage() {
   }
 
   return (
+    <RequireAuth>
     <div className="mx-auto flex w-full max-w-[1240px] flex-col gap-8 px-4 pb-16 pt-4 sm:px-8">
       {/* Header */}
       <div className="reveal mb-8 flex flex-col gap-2">
@@ -228,5 +230,6 @@ export default function GeneratorPage() {
         onClose={() => setPrompterOpen(false)}
       />
     </div>
+    </RequireAuth>
   )
 }

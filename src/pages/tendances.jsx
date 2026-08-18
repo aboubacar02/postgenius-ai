@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card'
 import { Progress } from '../components/ui/progress'
 import { AudioTrendsLibrary } from '../components/media/audio-trends-library'
 import { VideoModal } from '../components/media/video-modal'
+import { RequireAuth } from '../components/auth/require-auth'
 import { useI18n } from '../lib/i18n'
 import { NICHES } from '../lib/niches'
 import { searchYoutube } from '../services/youtube'
@@ -86,6 +87,7 @@ export default function TendancesPage() {
   }, [activeVideo])
 
   return (
+    <RequireAuth>
     <div className="mx-auto flex w-full max-w-[1240px] flex-col gap-10 px-4 pb-16 pt-6 sm:px-8">
 
       {/* ── Header ─────────────────────────────────────── */}
@@ -395,5 +397,6 @@ export default function TendancesPage() {
       {/* Video modal */}
       {activeVideo && <VideoModal video={activeVideo} onClose={() => setActiveVideo(null)} />}
     </div>
+    </RequireAuth>
   )
 }

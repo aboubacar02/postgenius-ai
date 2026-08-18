@@ -5,11 +5,13 @@ import { FacelessPlayer } from '../components/faceless/faceless-player'
 import { FacelessSceneList } from '../components/faceless/faceless-scene-list'
 import { FacelessExportBar } from '../components/faceless/faceless-export-bar'
 import { CapCutGuide } from '../components/faceless/cap-cut-guide'
+import { RequireAuth } from '../components/auth/require-auth'
 
 export default function FacelessPage() {
   const s = useFacelessState()
 
   return (
+    <RequireAuth>
     <div className="relative mx-auto flex w-full max-w-[1200px] flex-col gap-6 px-4 pb-16 pt-4 sm:px-8">
 
       {/* Neon Halo Background */}
@@ -66,7 +68,10 @@ export default function FacelessPage() {
             <FacelessExportBar
               downloading={s.downloading} downloadVoiceOff={s.downloadVoiceOff}
               downloadAllVideos={s.downloadAllVideos} downloadFullPack={s.downloadFullPack}
-              exportScript={s.exportScript}
+              exportScript={s.exportScript} downloadSrt={s.downloadSrt}
+              musicTrack={s.musicTrack} musicSearching={s.musicSearching}
+              searchMusic={s.searchMusic} downloadMusic={s.downloadMusic}
+              duration={s.duration}
             />
           </div>
         </div>
@@ -75,5 +80,6 @@ export default function FacelessPage() {
       {/* CapCut Guide */}
       <CapCutGuide />
     </div>
+    </RequireAuth>
   )
 }

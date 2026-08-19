@@ -7,7 +7,8 @@ export const isConfigured = Boolean(
   supabaseUrl &&
   supabaseAnonKey &&
   supabaseUrl.startsWith('http') &&
-  supabaseUrl.includes('.supabase.co')
+  supabaseUrl.includes('.supabase.co') &&
+  supabaseAnonKey.startsWith('eyJ')
 )
 
 let supabase = null

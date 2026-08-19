@@ -23,7 +23,7 @@ export function VideoModal({ video, onClose }) {
   const hasVideo = !!video.youtubeId || true
   const ytId = video.youtubeId || '9bZkp7q19f0'
   const ytUrl = `https://www.youtube.com/watch?v=${ytId}`
-  const embedUrl = `https://www.youtube-nocookie.com/embed/${ytId}?autoplay=0&rel=0&playsinline=1&modestbranding=1&origin=${encodeURIComponent(origin)}`
+  const embedUrl = `https://www.youtube-nocookie.com/embed/${ytId}?autoplay=1&rel=0&playsinline=1&modestbranding=1&origin=${encodeURIComponent(origin)}`
 
   return (
     <div
@@ -49,8 +49,8 @@ export function VideoModal({ video, onClose }) {
         )}
       </div>
 
-      {/* THE PLAYER — robust aspect-video box */}
-      <div className="relative w-full max-w-4xl aspect-video px-4" onClick={(e) => e.stopPropagation()}>
+      {/* THE PLAYER — robust aspect-video box with high z-index */}
+      <div className="relative z-[110] w-full max-w-4xl aspect-video rounded-xl overflow-hidden bg-black shadow-2xl px-4" onClick={(e) => e.stopPropagation()}>
         {hasVideo && !ytError ? (
           <iframe
             ref={iframeRef}
@@ -60,7 +60,7 @@ export function VideoModal({ video, onClose }) {
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
             allowFullScreen
             onError={() => setYtError(true)}
-            className="absolute inset-0 h-full w-full rounded-2xl border-0 bg-black shadow-2xl shadow-indigo-500/20"
+            className="w-full h-full border-0 bg-black"
           />
         ) : ytError ? (
           <div className="flex absolute inset-0 flex-col items-center justify-center gap-3 rounded-2xl bg-zinc-800 text-center">

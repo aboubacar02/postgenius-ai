@@ -1,5 +1,7 @@
 export const config = { runtime: 'edge' }
 
+import { fetchWithKeyRotation } from './_rotate.js'
+
 export default async function handler(req) {
   if (req.method !== 'POST') return Response.json({ error: 'Method not allowed' }, { status: 405 })
 
@@ -9,9 +11,6 @@ export default async function handler(req) {
   if (!hook || hook.trim().length < 3) {
     return Response.json({ error: 'Hook requis' }, { status: 400 })
   }
-
-  const apiKey = process.env.GEMINI_API_KEY || process.env.GEMINI_API_KEYS?.split(',')[0]?.trim()
-  if (!apiKey) return Response.json({ error: 'Clé Gemini manquante' }, { status: 503 })
 
   const prompt = `Génère 5 hooks viraux de remplacement pour TikTok/Reels/Shorts à partir du hook original ci-dessous.
 
@@ -34,25 +33,11 @@ Réponds UNIQUEMENT en JSON valide, sans texte avant/après, au format exact:
 }`
 
   try {
-    const r = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent`,
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'x-goog-api-key': apiKey },
-        body: JSON.stringify({
-          contents: [{ role: 'user', parts: [{ text: prompt }] }],
-          generationConfig: { temperature: 0.8, maxOutputTokens: 1024, responseMimeType: 'application/json' }
-        }),
-        signal: AbortSignal.timeout(25000),
-      }
-    )
+    const data = await fetchWithKeyRotation({
+      contents: [{ role: 'user', parts: [{ text: prompt }] }],
+      generationConfig: { temperature: 0.8, maxOutputTokens: 1024, responseMimeType: 'application/json' }
+    }, 'gemini-3.6-flash')
 
-    if (!r.ok) {
-      const err = await r.json().catch(() => ({}))
-      return Response.json({ error: err?.error?.message || `Gemini error ${r.status}` }, { status: r.status })
-    }
-
-    const data = await r.json()
     const text = data.candidates?.[0]?.content?.parts?.[0]?.text || '{}'
     const parsed = JSON.parse(text)
     if (!Array.isArray(parsed.clones) || parsed.clones.length === 0) {

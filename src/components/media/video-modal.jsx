@@ -22,16 +22,20 @@ export function VideoModal({ video, onClose }) {
   const embedUrl = `https://www.youtube-nocookie.com/embed/${ytId}?autoplay=1&origin=${encodeURIComponent(origin)}`
 
   return (
-    <div className="fixed inset-0 z-[999] flex items-center justify-center bg-black/80 backdrop-blur-md p-4 animate-in fade-in duration-200" onClick={onClose}>
-      
+    <div 
+      className="fixed inset-0 z-[999] flex items-center justify-center bg-black/80 backdrop-blur-md p-4 animate-in fade-in duration-200" 
+      onClick={onClose}
+    >
       {/* Fond cliquable pour fermer */}
       <div className="absolute inset-0" onClick={onClose} />
 
-      {/* Conteneur de la Vidéo (Grand Format) */}
-      <div className="relative z-10 w-full max-w-5xl aspect-video rounded-2xl overflow-hidden border border-cyan-500/30 bg-slate-950 shadow-[0_0_50px_rgba(56,189,248,0.25)] flex flex-col" onClick={(e) => e.stopPropagation()}>
-        
+      {/* Conteneur de la Vidéo (Grand Format Fixé) */}
+      <div 
+        className="relative z-10 w-full max-w-5xl h-[80vh] rounded-2xl overflow-hidden border border-cyan-500/30 bg-slate-950 shadow-[0_0_50px_rgba(56,189,248,0.25)] flex flex-col" 
+        onClick={(e) => e.stopPropagation()}
+      >
         {/* Barre supérieure avec bouton Fermer */}
-        <div className="flex items-center justify-between px-4 py-3 bg-slate-900/90 border-b border-white/10">
+        <div className="flex items-center justify-between px-4 py-3 bg-slate-900/90 border-b border-white/10 shrink-0">
           <span className="text-sm font-medium text-slate-200 truncate pr-4">
             {video.title}
           </span>
@@ -55,15 +59,16 @@ export function VideoModal({ video, onClose }) {
           </div>
         </div>
 
-        {/* Reader YouTube */}
-        <iframe 
-          src={embedUrl}
-          className="w-full h-full border-0"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowFullScreen
-        />
+        {/* Zone Vidéo : flex-1 + w-full h-full pour afficher l'image correctement */}
+        <div className="relative flex-1 w-full h-full bg-black">
+          <iframe 
+            src={embedUrl}
+            className="absolute inset-0 w-full h-full border-0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+          />
+        </div>
       </div>
-
     </div>
   )
 }

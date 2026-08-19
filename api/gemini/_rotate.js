@@ -1,12 +1,13 @@
 export async function fetchWithKeyRotation(payload, modelName = 'gemini-3.6-flash') {
-  const keys = [
+  const rawKeys = [
     process.env.GEMINI_API_KEY_1,
     process.env.GEMINI_API_KEY_2,
     process.env.GEMINI_API_KEY_3,
     process.env.GEMINI_API_KEY,
-    ...(process.env.GEMINI_API_KEYS ? process.env.GEMINI_API_KEYS.split(',').map(s => s.trim()) : [])
+    process.env.GEMINI_API_KEYS
   ].filter(Boolean)
 
+  const keys = rawKeys.flatMap(k => String(k).split(',').map(s => s.trim())).filter(Boolean)
   const uniqueKeys = [...new Set(keys)]
 
   if (uniqueKeys.length === 0) {

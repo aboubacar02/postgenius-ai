@@ -92,8 +92,11 @@ Ces mots seront utilisés pour chercher des images B-roll spécifiques par mot.
       body: JSON.stringify({ prompt })
     })
     if (!res.ok) {
-      const detail = await res.json().catch(() => ({}))
-      throw new Error(detail.error || `IA indisponible (${res.status})`)
+      const rawText = await res.text().catch(() => '')
+      let detail = null
+      try { detail = JSON.parse(rawText) } catch { /* not JSON */ }
+      const msg = detail?.error || rawText.slice(0, 200) || `IA indisponible (${res.status})`
+      throw new Error(`Génération Faceless échouée : ${msg}`)
     }
     const data = await res.json()
     if (!Array.isArray(data.scenes) || data.scenes.length === 0) {

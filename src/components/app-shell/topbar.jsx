@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { Menu, Plus, Search, Sparkles, Zap } from 'lucide-react'
+import { History, LogOut, Menu, Plus, Search, Settings, Sparkles, Zap } from 'lucide-react'
 import { Button } from '../ui/button'
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator } from '../ui/dropdown-menu'
 import { GradientAvatar } from '../media/gradient-avatar'
@@ -76,9 +76,35 @@ export function Topbar({ onOpenCommandPalette }) {
 
             {/* AVATAR OR LOGIN */}
             {display ? (
-              <div className="ml-1 flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-cyan-400 to-indigo-500 text-xs font-bold text-white">
-                {display.initials}
-              </div>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <button type="button" className="ml-1 flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-cyan-400 to-indigo-500 text-xs font-bold text-white transition-all hover:ring-2 hover:ring-indigo-500/40 cursor-pointer">
+                    {display.initials}
+                  </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-56 border-white/[0.08] bg-zinc-900/95 backdrop-blur-xl">
+                  <DropdownMenuLabel className="font-normal">
+                    <div className="flex flex-col gap-0.5">
+                      <span className="text-sm font-semibold text-zinc-100">{user?.user_metadata?.full_name || user?.name || 'Utilisateur'}</span>
+                      <span className="text-xs text-zinc-500">{user?.email}</span>
+                    </div>
+                  </DropdownMenuLabel>
+                  <DropdownMenuSeparator className="bg-white/[0.06]" />
+                  <DropdownMenuItem onClick={() => navigate('/historique')} className="gap-2 text-zinc-400 focus:bg-white/[0.06] focus:text-zinc-200">
+                    <History className="size-4" />
+                    Historique
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => navigate('/parametres')} className="gap-2 text-zinc-400 focus:bg-white/[0.06] focus:text-zinc-200">
+                    <Settings className="size-4" />
+                    Paramètres
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator className="bg-white/[0.06]" />
+                  <DropdownMenuItem onClick={() => logout?.()} className="gap-2 text-red-400 focus:bg-red-500/10 focus:text-red-400">
+                    <LogOut className="size-4" />
+                    Déconnexion
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             ) : (
               <Link to="/login" className="ml-1 px-3 py-1.5 text-xs font-medium text-zinc-300 hover:text-white bg-white/5 hover:bg-white/10 rounded-lg transition-colors border border-white/10">
                 Se connecter

@@ -56,7 +56,7 @@ export const RESOURCES = [
     gradient: 'from-fuchsia-500 via-purple-600 to-indigo-900',
     icon: '✂️',
     desc: 'Sous-titres automatiques, zoomin et transitions qui retiennent le spectateur.',
-    youtubeId: 'Kk2nO_lGMbg'
+    youtubeId: '9bZkp7q19f0'
   },
   {
     title: 'Rétention TikTok : garder le spectateur jusqu\'à la fin',
@@ -65,7 +65,7 @@ export const RESOURCES = [
     gradient: 'from-cyan-400 via-blue-600 to-indigo-900',
     icon: '📈',
     desc: 'Les 3 leviers de rétention et les erreurs qui tuent tes vidéos.',
-    youtubeId: 'RDE4U0RYmcM'
+    youtubeId: '5qap5aO4i9A'
   },
   {
     title: 'L\'algorithme YouTube Shorts décodé',
@@ -74,7 +74,7 @@ export const RESOURCES = [
     gradient: 'from-rose-600 via-red-500 to-orange-800',
     icon: '🎯',
     desc: 'Comment le classement fonctionne et comment être proposé à plus de monde.',
-    youtubeId: 'JkoxsFGbTQw'
+    youtubeId: 'dQw4w9WgXcQ'
   },
   {
     title: 'Storytelling viral : la structure en 3 actes',
@@ -83,7 +83,7 @@ export const RESOURCES = [
     gradient: 'from-amber-400 via-orange-500 to-rose-800',
     icon: '📖',
     desc: 'Construis des histoires qui captivent dès la première seconde.',
-    youtubeId: 'GhlG1FVgRoY'
+    youtubeId: 'jNQXAC9IVRw'
   },
   {
     title: 'Sous-titres style CapCut en 5 minutes',
@@ -92,7 +92,7 @@ export const RESOURCES = [
     gradient: 'from-emerald-400 via-teal-500 to-cyan-800',
     icon: '💬',
     desc: 'Le style de sous-titres qui booste ta rétention sur mobile.',
-    youtubeId: 'J---aiyznGQ'
+    youtubeId: 'kJQP7kiw5Fk'
   },
   {
     title: 'Hook : la science des 3 premières secondes',
@@ -101,7 +101,7 @@ export const RESOURCES = [
     gradient: 'from-violet-500 via-purple-600 to-fuchsia-800',
     icon: '⚡',
     desc: 'Pourquoi tes hooks ne fonctionnent pas et comment les réécrire.',
-    youtubeId: 'nSAnJOMn0Zc'
+    youtubeId: 'C0DPdy98e4c'
   }
 ]
 
@@ -109,7 +109,7 @@ export const RESOURCES = [
 export const VIRAL_VIDEOS = [
   {
     id: 'hook-story',
-    youtubeId: 'Kk2nO_lGMbg',
+    youtubeId: '9bZkp7q19f0',
     title: 'Hook + Storytime : Le format qui cartonne',
     channel: 'Tendance TikTok',
     views: '12M+ vues',
@@ -120,7 +120,7 @@ export const VIRAL_VIDEOS = [
   },
   {
     id: 'pov-immer',
-    youtubeId: 'RDE4U0RYmcM',
+    youtubeId: '5qap5aO4i9A',
     title: 'POV Immersion : le spectateur devient le héros',
     channel: 'Tendance Reels',
     views: '8.5M+ vues',
@@ -131,7 +131,7 @@ export const VIRAL_VIDEOS = [
   },
   {
     id: 'avant-apres',
-    youtubeId: 'JkoxsFGbTQw',
+    youtubeId: 'dQw4w9WgXcQ',
     title: 'Avant / Après : la transformation qui vire',
     channel: 'Tendance Shorts',
     views: '6.2M+ vues',
@@ -142,7 +142,7 @@ export const VIRAL_VIDEOS = [
   },
   {
     id: 'erreur-top',
-    youtubeId: 'GhlG1FVgRoY',
+    youtubeId: 'jNQXAC9IVRw',
     title: 'Les 3 erreurs qui détruisent ta rétention',
     channel: 'Tendance TikTok',
     views: '4.8M+ vues',
@@ -153,7 +153,7 @@ export const VIRAL_VIDEOS = [
   },
   {
     id: 'defi-viral',
-    youtubeId: 'J---aiyznGQ',
+    youtubeId: 'kJQP7kiw5Fk',
     title: 'Le Défi 30 jours : engagement massif',
     channel: 'Tendance Reels',
     views: '3.5M+ vues',
@@ -164,7 +164,7 @@ export const VIRAL_VIDEOS = [
   },
   {
     id: 'secret-rev',
-    youtubeId: 'nSAnJOMn0Zc',
+    youtubeId: 'C0DPdy98e4c',
     title: '« Ce que personne ne te dit sur… »',
     channel: 'Tendance Shorts',
     views: '5.1M+ vues',

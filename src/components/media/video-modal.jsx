@@ -5,6 +5,7 @@ import { Button } from '../ui/button'
 export function VideoModal({ video, onClose }) {
   const iframeRef = useRef(null)
   const [ytError, setYtError] = useState(false)
+  const origin = typeof window !== 'undefined' ? window.location.origin : ''
 
   useEffect(() => {
     if (!video) return
@@ -21,6 +22,7 @@ export function VideoModal({ video, onClose }) {
 
   const hasVideo = !!video.youtubeId
   const ytUrl = hasVideo ? `https://www.youtube.com/watch?v=${video.youtubeId}` : null
+  const embedUrl = hasVideo ? `https://www.youtube-nocookie.com/embed/${video.youtubeId}?autoplay=1&rel=0&playsinline=1&modestbranding=1&origin=${encodeURIComponent(origin)}` : null
 
   return (
     <div
@@ -52,7 +54,7 @@ export function VideoModal({ video, onClose }) {
           <iframe
             ref={iframeRef}
             key={video.youtubeId}
-            src={`https://www.youtube-nocookie.com/embed/${video.youtubeId}?autoplay=1&rel=0&playsinline=1&modestbranding=1`}
+            src={embedUrl}
             title={video.title}
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
             allowFullScreen

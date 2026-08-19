@@ -3,19 +3,29 @@ export const config = { runtime: 'edge' }
 export default async function handler(req) {
   const url = new URL(req.url)
   const q = url.searchParams.get('q')
+  const lang = url.searchParams.get('lang') || 'fr'
   const max = Math.min(parseInt(url.searchParams.get('max') || '12', 10), 24)
   const apiKey = process.env.YOUTUBE_API_KEY
 
   if (!apiKey || !apiKey.startsWith('AIza')) {
-    return Response.json({ live: false, items: [], error: 'YouTube Search non disponible (clé API manquante). Utilise Pexels en alternative.' }, { status: 200 })
+    return Response.json({ live: false, items: [], error: 'YouTube Search non disponible (clé API manquante).' }, { status: 200 })
   }
 
   if (!q || q.trim().length < 2) {
     return Response.json({ live: true, items: [] }, { status: 200 })
   }
 
+  const query = String(q || '').trim()
+  let enrichedQuery = query
+  if (!/(tutoriel|tutorial|creator|content|montage|editing|hook|retention|growth|croissance)/i.test(query)) {
+    if (lang === 'en') enrichedQuery = `${query} content creation viral video tutorial`
+    else if (lang === 'es') enrichedQuery = `${query} creacion contenido viral tutorial`
+    else if (lang === 'pt') enrichedQuery = `${query} criacao de conteudo viral tutorial`
+    else enrichedQuery = `${query} tutoriel création de contenu TikTok reels`
+  }
+
   try {
-    const apiUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(q)}&type=video&maxResults=${max}&relevanceLanguage=fr&key=${apiKey}`
+    const apiUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(enrichedQuery)}&type=video&maxResults=${max}&relevanceLanguage=${lang}&key=${apiKey}`
 
     const r = await fetch(apiUrl, {
       headers: { Accept: 'application/json' },

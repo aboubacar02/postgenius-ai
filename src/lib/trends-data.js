@@ -56,7 +56,7 @@ export const RESOURCES = [
     gradient: 'from-fuchsia-500 via-purple-600 to-indigo-900',
     icon: '✂️',
     desc: 'Sous-titres automatiques, zoomin et transitions qui retiennent le spectateur.',
-    url: 'https://www.youtube.com/results?search_query=tutoriel+montage+capcut+tiktok+francais'
+    youtubeId: 'Kk2nO_lGMbg'
   },
   {
     title: 'Rétention TikTok : garder le spectateur jusqu\'à la fin',
@@ -65,7 +65,7 @@ export const RESOURCES = [
     gradient: 'from-cyan-400 via-blue-600 to-indigo-900',
     icon: '📈',
     desc: 'Les 3 leviers de rétention et les erreurs qui tuent tes vidéos.',
-    url: 'https://www.youtube.com/results?search_query=retention+tiktok+garder+spectateur+tutoriel'
+    youtubeId: 'RDE4U0RYmcM'
   },
   {
     title: 'L\'algorithme YouTube Shorts décodé',
@@ -74,7 +74,7 @@ export const RESOURCES = [
     gradient: 'from-rose-600 via-red-500 to-orange-800',
     icon: '🎯',
     desc: 'Comment le classement fonctionne et comment être proposé à plus de monde.',
-    url: 'https://www.youtube.com/results?search_query=algorithme+youtube+shorts+fonctionnement'
+    youtubeId: 'JkoxsFGbTQw'
   },
   {
     title: 'Storytelling viral : la structure en 3 actes',
@@ -83,7 +83,7 @@ export const RESOURCES = [
     gradient: 'from-amber-400 via-orange-500 to-rose-800',
     icon: '📖',
     desc: 'Construis des histoires qui captivent dès la première seconde.',
-    url: 'https://www.youtube.com/results?search_query=storytelling+viral+tiktok+structure'
+    youtubeId: 'GhlG1FVgRoY'
   },
   {
     title: 'Sous-titres style CapCut en 5 minutes',
@@ -92,7 +92,7 @@ export const RESOURCES = [
     gradient: 'from-emerald-400 via-teal-500 to-cyan-800',
     icon: '💬',
     desc: 'Le style de sous-titres qui booste ta rétention sur mobile.',
-    url: 'https://www.youtube.com/results?search_query=sous-titre+automatique+capcut+style+tiktok'
+    youtubeId: 'J---aiyznGQ'
   },
   {
     title: 'Hook : la science des 3 premières secondes',
@@ -101,7 +101,7 @@ export const RESOURCES = [
     gradient: 'from-violet-500 via-purple-600 to-fuchsia-800',
     icon: '⚡',
     desc: 'Pourquoi tes hooks ne fonctionnent pas et comment les réécrire.',
-    url: 'https://www.youtube.com/results?search_query=hook+3+premieres+secondes+tiktok'
+    youtubeId: 'nSAnJOMn0Zc'
   }
 ]
 

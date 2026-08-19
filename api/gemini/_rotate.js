@@ -1,4 +1,4 @@
-export async function fetchWithKeyRotation(payload, modelName = 'gemini-1.5-flash') {
+export async function fetchWithKeyRotation(payload, modelName = 'gemini-3.6-flash') {
   const rawKeys = [
     process.env.GEMINI_API_KEY_1,
     process.env.GEMINI_API_KEY_2,
@@ -27,7 +27,7 @@ export async function fetchWithKeyRotation(payload, modelName = 'gemini-1.5-flas
         method: 'POST',
         headers,
         body: JSON.stringify(payload),
-        signal: AbortSignal.timeout(25000),
+        signal: AbortSignal.timeout(40000),
       })
 
       const text = await r.text().catch(() => '')

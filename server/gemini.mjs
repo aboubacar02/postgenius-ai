@@ -8,12 +8,17 @@
 // pinned in package.json (0.1.x) predates the gemini-2.x / 2.5 model families and
 // throws "models/<name> is not found for API version v1beta" for those models.
 // Using the raw REST endpoint sidesteps the SDK model registry entirely.
-const MODELS = ['gemini-2.5-flash', 'gemini-2.0-flash', 'gemini-1.5-flash']
-const MAX_ATTEMPTS = 2
+// gemini-3.6-flash is the only model available to this API key/version.
+// Using gemini-1.5-flash / gemini-2.0-flash / gemini-2.5-flash returns 404 with
+// "This model is no longer available... please update your code to use
+// models/gemini-3.6-flash".
+const MODELS = ['gemini-3.6-flash']
+const MAX_ATTEMPTS = 1
 
-// The TTS-capable model. "gemini-3.1-flash-tts-preview" is NOT a real model —
-// use gemini-2.5-flash which supports responseModalities: ['AUDIO'].
-const TTS_MODEL = 'gemini-2.5-flash'
+// TTS_MODEL: with these API keys, gemini-3.6-flash does not return audio data
+// (it ignores responseModalities:['AUDIO']). The agent widget already falls back
+// to node-edge-tts when Gemini TTS yields no inlineData, so TTS is still usable.
+const TTS_MODEL = 'gemini-3.6-flash'
 
 export class QuotaExhaustedError extends Error {
   constructor(cause) {
@@ -49,7 +54,7 @@ async function callRest(key, body, modelName) {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(body),
-    signal: AbortSignal.timeout(25000)
+    signal: AbortSignal.timeout(40000)
   })
   return { r, apiUrl }
 }

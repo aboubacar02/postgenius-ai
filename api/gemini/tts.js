@@ -13,8 +13,9 @@ export default async function handler(req) {
   }
 
   try {
-    // "gemini-3.1-flash-tts-preview" was a hallucinated model name.
-    // use gemini-2.5-flash which supports responseModalities: ['AUDIO'].
+    // with these keys, gemini-3.6-flash ignores responseModalities:['AUDIO'].
+    // If no inlineData is returned, the caller (agent-widget.jsx) falls back to
+    // node-edge-tts, so voice output still works via the offline engine.
     const data = await fetchWithKeyRotation({
       contents: [{ role: 'user', parts: [{ text }] }],
       generationConfig: {
@@ -25,7 +26,7 @@ export default async function handler(req) {
           }
         }
       }
-    }, 'gemini-2.5-flash')
+    }, 'gemini-3.6-flash')
 
     const part = data.candidates?.[0]?.content?.parts?.[0]
     const audioData = part?.inlineData?.data

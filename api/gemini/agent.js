@@ -34,7 +34,7 @@ Format: réponds en 2-3 phrases max, avec des points actionnables quand c'est po
     const data = await fetchWithKeyRotation({
       contents,
       generationConfig: { temperature: 0.7, maxOutputTokens: 500 }
-    }, 'gemini-1.5-flash')
+    }, 'gemini-3.6-flash')
 
     const text = data.candidates?.[0]?.content?.parts?.[0]?.text || ''
     if (!text) {

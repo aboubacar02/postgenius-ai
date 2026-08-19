@@ -20,9 +20,10 @@ export function VideoModal({ video, onClose }) {
 
   if (!video) return null
 
-  const hasVideo = !!video.youtubeId
-  const ytUrl = hasVideo ? `https://www.youtube.com/watch?v=${video.youtubeId}` : null
-  const embedUrl = hasVideo ? `https://www.youtube-nocookie.com/embed/${video.youtubeId}?autoplay=1&rel=0&playsinline=1&modestbranding=1&origin=${encodeURIComponent(origin)}` : null
+  const hasVideo = !!video.youtubeId || true
+  const ytId = video.youtubeId || '9bZkp7q19f0'
+  const ytUrl = `https://www.youtube.com/watch?v=${ytId}`
+  const embedUrl = `https://www.youtube-nocookie.com/embed/${ytId}?autoplay=0&rel=0&playsinline=1&modestbranding=1&origin=${encodeURIComponent(origin)}`
 
   return (
     <div
@@ -79,10 +80,21 @@ export function VideoModal({ video, onClose }) {
       </div>
 
       {/* Meta bar below */}
-      <div className="mt-3 flex items-center gap-3 px-4 pb-4 text-xs sm:text-sm text-white/60 flex-wrap">
-        {video.channel && <span>{video.channel}</span>}
-        {video.views && <><span className="text-white/30">·</span><span>{video.views}</span></>}
-        {video.publishedAt && <><span className="text-white/30">·</span><span>{video.publishedAt}</span></>}
+      <div className="mt-4 flex items-center justify-between w-full max-w-4xl px-4 text-xs sm:text-sm text-white/60 flex-wrap gap-3">
+        <div className="flex items-center gap-3">
+          {video.channel && <span className="font-semibold text-white">{video.channel}</span>}
+          {video.views && <><span className="text-white/30">·</span><span>{video.views}</span></>}
+          {video.publishedAt && <><span className="text-white/30">·</span><span>{video.publishedAt}</span></>}
+        </div>
+        <a
+          href={ytUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center gap-1.5 rounded-full bg-indigo-600 px-4 py-2 text-xs font-bold text-white shadow-lg hover:bg-indigo-500 transition-all"
+        >
+          <span>Regarder sur YouTube</span>
+          <ExternalLink className="size-3.5" />
+        </a>
       </div>
     </div>
   )

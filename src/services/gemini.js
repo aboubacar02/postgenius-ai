@@ -155,11 +155,17 @@ async function callModel(action, jsonPrompt) {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ prompt: jsonPrompt })
   })
-  if (!res.ok) {
-    const detail = await res.json().catch(() => ({}))
-    throw new Error(detail.error || `IA indisponible (${res.status})`)
+  const text = await res.text().catch(() => '')
+  let data = {}
+  try {
+    data = JSON.parse(text)
+  } catch {
+    throw new Error(`Erreur serveur (${res.status}): ${text.slice(0, 120) || 'Réponse invalide'}`)
   }
-  return res.json()
+  if (!res.ok) {
+    throw new Error(data.error || `IA indisponible (${res.status})`)
+  }
+  return data
 }
 
 export async function generateClones(hook) {
@@ -168,11 +174,16 @@ export async function generateClones(hook) {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ hook })
   })
-  if (!res.ok) {
-    const detail = await res.json().catch(() => ({}))
-    throw new Error(detail.error || `IA indisponible (${res.status})`)
+  const text = await res.text().catch(() => '')
+  let data = {}
+  try {
+    data = JSON.parse(text)
+  } catch {
+    throw new Error(`Erreur serveur (${res.status}): ${text.slice(0, 120) || 'Réponse invalide'}`)
   }
-  const data = await res.json()
+  if (!res.ok) {
+    throw new Error(data.error || `IA indisponible (${res.status})`)
+  }
   return Array.isArray(data.clones) ? data.clones : []
 }
 

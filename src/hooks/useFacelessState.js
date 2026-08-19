@@ -161,7 +161,20 @@ export function useFacelessState() {
       const blobs = []
       for (let i = 0; i < sceneCount; i++) {
         if (!narrs[i]) continue
-        const res = await fetch(narrs[i]); blobs.push(await res.blob())
+        try {
+          const res = await fetch(narrs[i])
+          if (res.ok) blobs.push(await res.blob())
+        } catch {}
+      }
+      if (blobs.length === 0) {
+        const fullText = (script?.scenes || []).map(s => s.narration).join('\n\n')
+        const blob = new Blob([fullText], { type: 'text/plain;charset=utf-8' })
+        const a = document.createElement('a')
+        a.href = URL.createObjectURL(blob)
+        a.download = `voix-off-script-${script.title?.slice(0, 30) || 'faceless'}.txt`
+        a.click(); URL.revokeObjectURL(a.href)
+        toast.success('Script voix-off téléchargé (audio indisponible)')
+        return
       }
       const blob = new Blob(blobs, { type: 'audio/mpeg' })
       const a = document.createElement('a')
@@ -169,7 +182,11 @@ export function useFacelessState() {
       a.download = `voix-off-${script.title?.slice(0, 30) || 'faceless'}.mp3`
       a.click(); URL.revokeObjectURL(a.href)
       toast.success('Voix-off MP3 telechargee !')
-    } catch { toast.error('Erreur lors du téléchargement audio. Réessaie.') } finally { setDownloading(null) }
+    } catch (err) { 
+      toast.error(err.message || 'Erreur lors du téléchargement audio. Réessaie.') 
+    } finally { 
+      setDownloading(null) 
+    }
   }
 
   async function downloadSceneVideo(i) {

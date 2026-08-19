@@ -20,9 +20,17 @@ export async function fetchWithKeyRotation(payload, modelName = 'gemini-3.6-flas
     const key = uniqueKeys[i]
     try {
       const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent`
+      
+      const headers = { 'Content-Type': 'application/json' }
+      if (key.startsWith('AIza')) {
+        headers['x-goog-api-key'] = key
+      } else {
+        headers['Authorization'] = `Bearer ${key}`
+      }
+
       const r = await fetch(apiUrl, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'x-goog-api-key': key },
+        headers,
         body: JSON.stringify(payload),
         signal: AbortSignal.timeout(30000),
       })

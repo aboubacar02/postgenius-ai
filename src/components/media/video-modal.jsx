@@ -28,9 +28,9 @@ export function VideoModal({ video, onClose }) {
       {/* Overlay de fermeture */}
       <div className="absolute inset-0" onClick={onClose} />
 
-      {/* Conteneur vidéo FORCÉ visible */}
+      {/* Conteneur vidéo FORCÉ visible plus grand et plus haut */}
       <div 
-        className="relative z-[100000] w-full max-w-4xl h-[500px] bg-slate-950 rounded-2xl border border-cyan-500/40 shadow-[0_0_50px_rgba(56,189,248,0.3)] flex flex-col overflow-hidden"
+        className="relative z-[100000] w-full max-w-5xl h-[75vh] min-h-[560px] bg-slate-950 rounded-2xl border border-cyan-500/40 shadow-[0_0_50px_rgba(56,189,248,0.3)] flex flex-col overflow-hidden"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
@@ -47,11 +47,11 @@ export function VideoModal({ video, onClose }) {
           </button>
         </div>
 
-        {/* Player iframe avec taille explicite px */}
-        <div className="w-full h-[440px] bg-black">
+        {/* Player iframe flex-1 pour occuper toute la hauteur */}
+        <div className="relative flex-1 w-full bg-black">
           <iframe 
             src={embedUrl}
-            className="w-full h-full border-0 block"
+            className="absolute inset-0 w-full h-full border-0 block"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
           />

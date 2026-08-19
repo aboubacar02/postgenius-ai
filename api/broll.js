@@ -14,13 +14,20 @@ function getFallback(keyword = '') {
   return FALLBACK[Math.abs(hash) % FALLBACK.length]
 }
 
+const slug = (s) =>
+  String(s || 'b-roll')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+    .slice(0, 60) || 'b-roll'
+
 export default async function handler(req) {
   const url = new URL(req.url)
   const q = url.searchParams.get('q') || 'nature'
   const pexelsKey = process.env.PEXELS_API_KEY
 
   if (!pexelsKey || pexelsKey === 'ta_cle_pexels_api_key') {
-    return Response.json({ live: false, keyword: q, url: getFallback(q) })
+    return Response.json({ live: false, keyword: q, url: `https://picsum.photos/seed/${slug(q)}/720/1280` })
   }
 
   try {

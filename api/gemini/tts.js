@@ -17,14 +17,14 @@ export default async function handler(req) {
 
   try {
     const r = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-tts:generateContent`,
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-tts-preview:generateContent`,
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'x-goog-api-key': apiKey },
         body: JSON.stringify({
           contents: [{ role: 'user', parts: [{ text }] }],
           generationConfig: {
-            responseModalities: ['audio'],
+            responseModalities: ['AUDIO'],
             speechConfig: {
               voiceConfig: {
                 prebuiltVoiceConfig: { voiceName: voice }
@@ -42,12 +42,13 @@ export default async function handler(req) {
     }
 
     const data = await r.json()
-    const audioData = data.candidates?.[0]?.content?.parts?.[0]?.inlineData?.data
+    const part = data.candidates?.[0]?.content?.parts?.[0]
+    const audioData = part?.inlineData?.data
     if (!audioData) {
       return Response.json({ error: 'Pas de données audio dans la réponse' }, { status: 500 })
     }
 
-    return Response.json({ audioBase64: audioData, mimeType: 'audio/wav' })
+    return Response.json({ mimeType: part.inlineData.mimeType, base64: audioData })
   } catch (err) {
     return Response.json({ error: err.message }, { status: 502 })
   }

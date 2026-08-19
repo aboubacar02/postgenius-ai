@@ -6,6 +6,7 @@ import { useI18n } from '../../lib/i18n'
 import { chatWithAgent } from '../../services/agent'
 import { synthesizeVoice } from '../../services/gemini'
 import { EDGE_VOICES, speakWithEdge } from '../../services/voice'
+import { pcmToWav, makeAudioUrl } from '../../services/audio'
 import { NICHES } from '../../lib/niches'
 
 function Waveform() {
@@ -136,7 +137,9 @@ export function AgentWidget() {
       let audio
       try {
         const { mimeType, base64 } = await synthesizeVoice(text)
-        audio = new Audio(`data:${mimeType};base64,${base64}`)
+        audio = (mimeType || '').toLowerCase().includes('l16')
+          ? new Audio(makeAudioUrl(pcmToWav(base64)))
+          : new Audio(`data:${mimeType};base64,${base64}`)
       } catch {
         const url = await speakWithEdge(text, voiceId)
         audio = new Audio(url)

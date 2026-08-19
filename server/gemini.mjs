@@ -4,19 +4,8 @@
 // bascule immédiatement sur la suivante, sans erreur visible pour l'utilisateur.
 import { GoogleGenerativeAI } from '@google/generative-ai'
 
-const MODELS = ['gemini-flash-lite-latest', 'gemini-flash-latest']
+const MODELS = ['gemini-3.6-flash', 'gemini-3.5-flash-lite']
 const MAX_ATTEMPTS = 2
-
-const VOICE_STYLES = {
-  energetic:
-    'Speak with high energy, enthusiasm and excitement, like a top YouTube creator making a hook. Use dynamic intonation, short pauses after key words and a smile in your voice.',
-  educational:
-    'Speak calmly, clearly and pedagogically, with a confident and reassuring tone, natural rhythm and moderate pace.',
-  humor:
-    'Speak in a playful, funny and light-hearted tone, with sarcasm and comedic timing, natural pauses for laughs.',
-  professional:
-    'Speak in a polished, professional and authoritative business tone, confident and measured, with natural pacing.'
-}
 
 export class QuotaExhaustedError extends Error {
   constructor(cause) {
@@ -133,20 +122,18 @@ export function createGeminiServer(rawKeys) {
   async function synthesizeVoice({ text, voice = 'Kore', style = 'energetic' }) {
     if (!available) throw new Error('Clé Gemini serveur manquante')
 
-    const styleInstruction = VOICE_STYLES[style] || VOICE_STYLES.energetic
-    const styledText = `${styleInstruction} TTS the following text naturally:\n\n${text}`
     let lastError = null
 
     for (let k = 0; k < keys.length; k++) {
       const key = currentKey()
       try {
         const res = await fetch(
-          `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-tts:generateContent?key=${key}`,
+          `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-tts-preview:generateContent?key=${key}`,
           {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-              contents: [{ parts: [{ text: styledText }] }],
+              contents: [{ role: 'user', parts: [{ text }] }],
               generationConfig: {
                 responseModalities: ['AUDIO'],
                 speechConfig: {

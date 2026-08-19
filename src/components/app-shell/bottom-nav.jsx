@@ -54,7 +54,7 @@ export function BottomNav() {
   }, [moreOpen])
 
   return (
-    <nav className="fixed inset-x-0 bottom-0 z-40 border-t border-white/[0.07] bg-zinc-900/95 backdrop-blur-xl md:hidden">
+    <nav className="fixed inset-x-0 bottom-0 z-40 border-t border-white/[0.09] bg-[#0d0f16]/90 backdrop-blur-xl shadow-[0_-8px_30px_rgba(0,0,0,0.4)] md:hidden">
       <div className="mx-auto flex h-16 max-w-[480px] items-center justify-around px-2">
         {CORE_ITEMS.map((item) => {
           const Icon = item.icon
@@ -112,7 +112,7 @@ export function BottomNav() {
           {moreOpen && (
             <>
               <div className="fixed inset-0 z-40 bg-black/40 backdrop-blur-sm" onClick={() => setMoreOpen(false)} />
-              <div className="fade-in-up fixed inset-x-3 bottom-[76px] z-50 rounded-2xl border border-white/[0.06] bg-zinc-900/95 p-3 shadow-2xl shadow-black/50 backdrop-blur-xl">
+              <div className="fade-in-up fixed inset-x-3 bottom-[76px] z-50 rounded-2xl border border-white/[0.1] bg-[#0d0f16]/95 p-3 shadow-[0_0_40px_rgba(99,102,241,0.15)] backdrop-blur-xl">
                 <div className="mb-2 flex items-center justify-between px-2">
                   <div className="flex items-center gap-2">
                     {user ? (

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+﻿import { useState } from 'react'
 import { Eye, EyeOff, Loader2, Mail, Lock } from 'lucide-react'
 import { toast } from '../../components/ui/sonner'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '../../components/ui/card'
@@ -77,7 +77,7 @@ export function AuthCard() {
   }
 
   return (
-    <Card className="overflow-hidden border border-white/[0.06] bg-zinc-900/60 backdrop-blur-xl rounded-2xl">
+    <Card className="overflow-hidden border border-white/[0.06] bg-white/[0.04] backdrop-blur-xl rounded-2xl">
       <div className="h-1.5 bg-gradient-to-r from-indigo-500 via-purple-500 to-cyan-500" />
       <CardHeader className="p-6 pb-4">
         <CardTitle className="font-heading text-xl font-bold text-zinc-100">

@@ -49,8 +49,8 @@ export default function SettingsPage() {
           <Settings className="size-3.5" />
           {t('settings.badge')}
         </span>
-        <h1 className="text-2xl font-bold tracking-tight text-pg-text md:text-3xl">
-          {t('settings.title')}
+        <h1 className="text-2xl font-black tracking-tight text-pg-text md:text-3xl">
+          <span className="text-gradient">{t('settings.title')}</span>
         </h1>
         <p className="max-w-xl text-[15px] text-pg-muted">
           {t('settings.subtitle')}

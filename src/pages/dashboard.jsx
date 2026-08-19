@@ -47,21 +47,20 @@ export default function DashboardPage() {
     <div className="mx-auto flex w-full max-w-[1200px] flex-col gap-6 px-4 pb-16 pt-6 sm:px-8">
 
       {/* ── Hero Header ─────────────────────────────────────── */}
-      <section className="reveal relative">
+      <section className="reveal relative overflow-hidden rounded-3xl border border-white/[0.09] bg-white/[0.03] p-6 sm:p-10 backdrop-blur-xl">
+        <div className="pointer-events-none absolute -top-24 -right-16 h-[300px] w-[300px] rounded-full bg-cyan-500/15 blur-[100px]" />
+        <div className="pointer-events-none absolute -bottom-24 -left-16 h-[280px] w-[280px] rounded-full bg-purple-500/15 blur-[100px]" />
         <div className="relative z-10 flex flex-col gap-3">
-          <span className="pg-badge inline-flex w-fit items-center gap-1.5 rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-wider text-primary">
+          <span className="inline-flex w-fit items-center gap-1.5 rounded-full border border-cyan-400/25 bg-cyan-400/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-wider text-cyan-300 shadow-[0_0_16px_rgba(56,189,248,0.15)]">
             <Sparkles className="size-3" />
             {t('dashboard.badge')}
           </span>
-          <h1 className="text-2xl font-bold tracking-tight text-pg-text sm:text-3xl">
-            {t('dashboard.title')}
+          <h1 className="max-w-2xl text-3xl font-black leading-tight tracking-tight sm:text-4xl">
+            <span className="text-gradient">{t('dashboard.title')}</span>
           </h1>
           <p className="max-w-lg text-[15px] text-pg-muted">
             {t('dashboard.subtitle') || 'Generate scripts, produce faceless videos and maximize your algorithmic retention.'}
           </p>
-        </div>
-        <div className="absolute -top-20 right-0 h-[200px] w-[300px] pointer-events-none opacity-30">
-          <div className="absolute inset-0 rounded-full bg-primary/20 blur-[80px]" />
         </div>
       </section>
 

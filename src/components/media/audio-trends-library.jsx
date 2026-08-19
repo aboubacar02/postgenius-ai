@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+﻿import { useEffect, useRef, useState } from 'react'
 import { Download, ExternalLink, Loader2, Music, RefreshCw, Search, TrendingUp, X } from 'lucide-react'
 import { Button } from '../ui/button'
 import { toast } from '../ui/sonner'
@@ -93,7 +93,7 @@ export function AudioTrendsLibrary() {
   }
 
   return (
-    <div className="rounded-2xl border border-white/[0.06] bg-zinc-900/60 backdrop-blur-xl p-6 md:p-8 flex flex-col gap-6">
+    <div className="rounded-2xl border border-white/[0.06] bg-white/[0.04] backdrop-blur-xl p-6 md:p-8 flex flex-col gap-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div className="flex items-center gap-3">
           <span className="flex size-10 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 text-white shadow-lg shadow-indigo-500/20">
@@ -112,7 +112,7 @@ export function AudioTrendsLibrary() {
           <span className="text-[10px] text-zinc-600">
             Mis à jour {lastUpdate.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}
           </span>
-          <Button size="sm" variant="outline" onClick={refreshNow} disabled={loading} className="gap-1.5 rounded-full border-white/[0.08] bg-zinc-900/60 text-xs text-zinc-500 hover:text-zinc-200">
+          <Button size="sm" variant="outline" onClick={refreshNow} disabled={loading} className="gap-1.5 rounded-full border-white/[0.08] bg-white/[0.04] text-xs text-zinc-500 hover:text-zinc-200">
             <RefreshCw className={cn('size-3.5', loading && 'animate-spin')} />
           </Button>
         </div>

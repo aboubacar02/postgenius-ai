@@ -122,8 +122,8 @@ export default function ScorePage() {
             Diagnostic & Simulateur de Rétention 0-30s
           </span>
         </div>
-        <h1 className="text-2xl font-bold tracking-tight">
-          Score Viral & <span className="text-primary">Détecteur d'Accroche</span>
+        <h1 className="text-2xl font-black tracking-tight">
+          <span className="text-gradient">Score Viral</span> <span className="text-pg-text">& Détecteur d'Accroche</span>
         </h1>
         <p className="text-[15px] text-pg-muted">
           Scannez vos phrases d'accroche contre les algorithmes TikTok, Reels et Shorts. Éliminez les mots faibles et prédisez la courbe de rétention.

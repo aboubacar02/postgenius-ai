@@ -86,8 +86,8 @@ export default function HistoryPage() {
             {t('history.badge')}
           </span>
         </div>
-        <h1 className="text-2xl font-bold tracking-tight text-pg-text">
-          {t('history.title')}
+        <h1 className="text-2xl font-black tracking-tight text-pg-text">
+          <span className="text-gradient">{t('history.title')}</span>
         </h1>
         <p className="max-w-xl text-[15px] text-pg-muted">
           {t('history.subtitle')}

@@ -5,9 +5,9 @@ const buttonVariants = {
   variants: {
     variant: {
       default:
-        'bg-gradient-to-r from-primary to-purple-500 text-white shadow-[0_0_20px_rgba(99,102,241,0.3)] hover:shadow-[0_0_30px_rgba(99,102,241,0.5)] hover:scale-[1.02] active:scale-[0.98]',
+        'bg-gradient-to-r from-cyan-500 via-indigo-500 to-purple-600 text-white shadow-[0_0_20px_rgba(56,189,248,0.35)] hover:shadow-[0_0_32px_rgba(99,102,241,0.5)] hover:scale-[1.02] active:scale-[0.98]',
       outline:
-        'border border-white/[0.1] bg-white/[0.03] text-pg-text hover:bg-white/[0.06] hover:border-white/[0.15]',
+        'border border-white/[0.12] bg-white/[0.03] text-pg-text hover:bg-white/[0.06] hover:border-cyan-400/40 hover:shadow-[0_0_16px_rgba(56,189,248,0.12)]',
       secondary: 'bg-white/[0.05] text-pg-text hover:bg-white/[0.08]',
       ghost: 'hover:bg-white/[0.05] text-pg-text',
       destructive:

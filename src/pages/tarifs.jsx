@@ -36,9 +36,9 @@ export default function PricingPage() {
             {t('pricing.badge')}
           </span>
         </div>
-        <h1 className="text-2xl font-bold tracking-tight text-balance md:text-3xl">
-          {t('pricing.title')}{' '}
-          <span className="text-primary">
+        <h1 className="text-2xl font-black tracking-tight text-balance md:text-3xl">
+          <span className="text-gradient">{t('pricing.title')}</span>{' '}
+          <span className="text-pg-text">
             {t('pricing.unlimited')}
           </span>
         </h1>

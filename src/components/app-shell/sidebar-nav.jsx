@@ -37,18 +37,18 @@ export function SidebarNav({ collapsed, onToggle }) {
   return (
     <aside
       className={cn(
-        'fixed inset-y-0 left-0 z-30 hidden flex-col border-r border-white/[0.07] bg-white/[0.03] backdrop-blur-md transition-[width] duration-200 ease-[cubic-bezier(.2,.8,.2,1)] lg:flex',
+        'fixed inset-y-0 left-0 z-30 hidden flex-col border-r border-white/[0.08] bg-[#0d0f16]/70 backdrop-blur-xl transition-[width] duration-200 ease-[cubic-bezier(.2,.8,.2,1)] lg:flex',
         collapsed ? 'w-[72px]' : 'w-60'
       )}
     >
       {/* Logo */}
       <div className="flex h-14 items-center gap-2.5 px-4 border-b border-white/[0.07]">
-        <span className="pg-brand flex size-8 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-primary to-purple-500 text-white">
+        <span className="pg-brand flex size-8 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-cyan-400 via-indigo-500 to-purple-600 text-white shadow-[0_0_16px_rgba(56,189,248,0.35)]">
           <Sparkles className="size-4" />
         </span>
         {!collapsed && (
           <span className="text-[15px] font-bold tracking-tight text-pg-text">
-            PostGenius <span className="text-primary">AI</span>
+            PostGenius <span className="text-gradient">AI</span>
           </span>
         )}
       </div>
@@ -69,7 +69,7 @@ export function SidebarNav({ collapsed, onToggle }) {
                   collapsed ? 'h-9 justify-center' : 'h-9 px-2.5',
                   'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50',
                   isActive
-                    ? 'bg-primary/15 text-primary font-semibold'
+                    ? 'bg-gradient-to-r from-cyan-500/15 to-indigo-500/10 text-cyan-300 font-semibold shadow-[inset_0_0_12px_rgba(56,189,248,0.05)]'
                     : 'text-pg-muted hover:bg-white/[0.05] hover:text-pg-text'
                 )
               }
@@ -77,12 +77,12 @@ export function SidebarNav({ collapsed, onToggle }) {
               {({ isActive }) => (
                 <>
                   {isActive && (
-                    <span className="absolute left-0 top-1/2 h-5 w-[3px] -translate-y-1/2 rounded-r-full bg-primary shadow-[0_0_12px_rgba(99,102,241,0.4)]" />
+                    <span className="absolute left-0 top-1/2 h-5 w-[3px] -translate-y-1/2 rounded-r-full bg-cyan-400 shadow-[0_0_12px_rgba(56,189,248,0.6)]" />
                   )}
                   <Icon
                     className={cn(
                       'size-5 shrink-0 transition-colors duration-150',
-                      isActive ? 'text-primary' : 'text-pg-muted group-hover:text-pg-text'
+                      isActive ? 'text-cyan-300' : 'text-pg-muted group-hover:text-pg-text'
                     )}
                     strokeWidth={isActive ? 2.2 : 1.8}
                   />

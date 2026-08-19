@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+﻿import { useEffect, useState } from 'react'
 import { ArrowRight, Clock, ExternalLink, Flame, Info, Loader2, Music, Play, RefreshCw, Search, Sparkles, TrendingUp, Video, X, Zap } from 'lucide-react'
 import { Button } from '../components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card'
@@ -100,8 +100,8 @@ export default function TendancesPage() {
             {t('trending.updated')}
           </span>
         </div>
-        <h1 className="text-2xl font-bold tracking-tight text-pg-text sm:text-3xl">
-          {t('trending.title')}
+        <h1 className="text-2xl font-black tracking-tight text-pg-text sm:text-3xl">
+          <span className="text-gradient">{t('trending.title')}</span>
         </h1>
         <p className="max-w-xl text-[15px] leading-relaxed text-pg-muted">
           {t('trending.subtitle')}
@@ -119,7 +119,7 @@ export default function TendancesPage() {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Rechercher des tutoriels, tendances, musiques virales..."
-            className="h-12 w-full rounded-full border border-white/[0.08] bg-zinc-900/60 backdrop-blur-xl pl-11 pr-4 text-sm text-zinc-200 placeholder:text-zinc-600 outline-none transition-all duration-200 focus:border-indigo-500/50 focus:ring-2 focus:ring-indigo-500/20 focus:bg-zinc-800/60 focus:shadow-lg focus:shadow-indigo-500/5"
+            className="h-12 w-full rounded-full border border-white/[0.08] bg-white/[0.04] backdrop-blur-xl pl-11 pr-4 text-sm text-zinc-200 placeholder:text-zinc-600 outline-none transition-all duration-200 focus:border-indigo-500/50 focus:ring-2 focus:ring-indigo-500/20 focus:bg-white/[0.08] focus:shadow-lg focus:shadow-indigo-500/5"
           />
         </div>
         <Button type="submit" size="default" disabled={!searchQuery.trim() || searching} className="h-12 rounded-full bg-indigo-600 px-6 font-semibold text-white hover:bg-indigo-500 shadow-lg shadow-indigo-600/20 transition-all">
@@ -127,7 +127,7 @@ export default function TendancesPage() {
           <span className="hidden sm:inline">Rechercher</span>
         </Button>
         {liveMode && (
-          <Button type="button" variant="outline" size="icon" onClick={resetSearch} aria-label="Effacer" className="h-12 w-12 rounded-full border-white/[0.08] bg-zinc-900/60">
+          <Button type="button" variant="outline" size="icon" onClick={resetSearch} aria-label="Effacer" className="h-12 w-12 rounded-full border-white/[0.08] bg-white/[0.04]">
             <X className="size-4" />
           </Button>
         )}
@@ -175,7 +175,7 @@ export default function TendancesPage() {
                 key={v.youtubeId || i}
                 type="button"
                 onClick={() => setActiveVideo(v)}
-                className="reveal group relative overflow-hidden rounded-2xl border border-white/[0.06] bg-zinc-900/60 backdrop-blur-xl p-0 text-left transition-all duration-300 hover:border-indigo-500/30 hover:shadow-xl hover:shadow-black/30 hover:-translate-y-0.5"
+                className="reveal group relative overflow-hidden rounded-2xl border border-white/[0.06] bg-white/[0.04] backdrop-blur-xl p-0 text-left transition-all duration-300 hover:border-indigo-500/30 hover:shadow-xl hover:shadow-black/30 hover:-translate-y-0.5"
                 style={{ animationDelay: `${i * 50 + 100}ms` }}
               >
                 <div className="relative h-40 overflow-hidden">
@@ -233,7 +233,7 @@ export default function TendancesPage() {
           {VIRAL_FORMATS.map((f, i) => (
             <div
               key={f.name}
-              className="reveal flex shrink-0 flex-col gap-2 rounded-2xl border border-white/[0.06] bg-zinc-900/60 backdrop-blur-xl p-4 transition-all duration-300 hover:border-indigo-500/30 hover:bg-zinc-800/60 hover:-translate-y-0.5 hover:shadow-xl hover:shadow-black/20 min-w-[160px]"
+              className="reveal flex shrink-0 flex-col gap-2 rounded-2xl border border-white/[0.06] bg-white/[0.04] backdrop-blur-xl p-4 transition-all duration-300 hover:border-indigo-500/30 hover:bg-white/[0.08] hover:-translate-y-0.5 hover:shadow-xl hover:shadow-black/20 min-w-[160px]"
               style={{ animationDelay: `${i * 40}ms` }}
             >
               <span className="text-2xl">{f.emoji}</span>
@@ -252,7 +252,7 @@ export default function TendancesPage() {
               <TrendingUp className="size-3.5 text-indigo-400" />
               {t('trending.ideasToday')}
             </span>
-            <Button variant="outline" size="sm" onClick={() => setLot((l) => l + 1)} className="rounded-full border-white/[0.08] bg-zinc-900/60 backdrop-blur-xl font-semibold text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800/60">
+            <Button variant="outline" size="sm" onClick={() => setLot((l) => l + 1)} className="rounded-full border-white/[0.08] bg-white/[0.04] backdrop-blur-xl font-semibold text-zinc-400 hover:text-zinc-200 hover:bg-white/[0.08]">
               <RefreshCw data-icon="inline-start" />
               {t('trending.newBatch')}
             </Button>
@@ -267,7 +267,7 @@ export default function TendancesPage() {
               return (
                 <Card
                   key={niche.name}
-                  className="reveal overflow-hidden border border-white/[0.06] bg-zinc-900/60 backdrop-blur-xl rounded-2xl transition-all duration-300 hover:border-white/[0.12] hover:shadow-xl hover:shadow-black/20"
+                  className="reveal overflow-hidden border border-white/[0.06] bg-white/[0.04] backdrop-blur-xl rounded-2xl transition-all duration-300 hover:border-white/[0.12] hover:shadow-xl hover:shadow-black/20"
                   style={{ animationDelay: `${n * 50 + 100}ms` }}
                 >
                   <div className={`h-1.5 bg-gradient-to-r ${niche.color}`} />
@@ -322,7 +322,7 @@ export default function TendancesPage() {
             {BEST_TIMES.map((bt, i) => (
               <Card
                 key={bt.platform}
-                className="reveal overflow-hidden border border-white/[0.06] bg-zinc-900/60 backdrop-blur-xl rounded-2xl transition-all duration-300 hover:border-white/[0.12] hover:shadow-xl hover:shadow-black/20"
+                className="reveal overflow-hidden border border-white/[0.06] bg-white/[0.04] backdrop-blur-xl rounded-2xl transition-all duration-300 hover:border-white/[0.12] hover:shadow-xl hover:shadow-black/20"
                 style={{ animationDelay: `${i * 60 + 150}ms` }}
               >
                 <CardContent className="flex flex-col gap-3 p-4">
@@ -359,7 +359,7 @@ export default function TendancesPage() {
               href={r.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="reveal group relative overflow-hidden rounded-2xl border border-white/[0.06] bg-zinc-900/60 backdrop-blur-xl transition-all duration-300 hover:border-indigo-500/30 hover:shadow-xl hover:shadow-black/30 hover:-translate-y-0.5"
+              className="reveal group relative overflow-hidden rounded-2xl border border-white/[0.06] bg-white/[0.04] backdrop-blur-xl transition-all duration-300 hover:border-indigo-500/30 hover:shadow-xl hover:shadow-black/30 hover:-translate-y-0.5"
               style={{ animationDelay: `${i * 50 + 200}ms` }}
             >
               <div className={`relative flex h-32 items-center justify-center bg-gradient-to-br ${r.gradient} overflow-hidden`}>

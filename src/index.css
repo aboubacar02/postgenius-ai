@@ -271,6 +271,81 @@
     border: 1px solid rgba(255, 255, 255, 0.08);
   }
 
+  /* ── Glass card with animated gradient border (Obsidian) ── */
+  .glass-card {
+    position: relative;
+    background: rgba(255, 255, 255, 0.04);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-radius: 14px;
+    border: 1px solid transparent;
+    background-clip: padding-box;
+    transition: all 0.2s ease-out;
+  }
+  .glass-card::before {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    z-index: -1;
+    border-radius: 14px;
+    background: linear-gradient(135deg, rgba(56, 189, 248, 0.35), rgba(99, 102, 241, 0.2) 40%, rgba(168, 85, 247, 0.3));
+    opacity: 0.55;
+  }
+  .glass-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 24px rgba(56, 189, 248, 0.18);
+  }
+  .glass-card:hover::before {
+    opacity: 1;
+    background: linear-gradient(135deg, rgba(56, 189, 248, 0.6), rgba(99, 102, 241, 0.35) 40%, rgba(168, 85, 247, 0.55));
+  }
+
+  /* ── Animated aurora background ── */
+  .aurora {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    overflow: hidden;
+    background: #090A0F;
+  }
+  .aurora::before,
+  .aurora::after {
+    content: '';
+    position: absolute;
+    width: 70vmax;
+    height: 70vmax;
+    border-radius: 50%;
+    filter: blur(90px);
+    opacity: 0.5;
+  }
+  .aurora::before {
+    top: -20vmax;
+    left: -10vmax;
+    background: radial-gradient(circle, rgba(56, 189, 248, 0.35) 0%, transparent 60%);
+    animation: aurora-drift 18s ease-in-out infinite alternate;
+  }
+  .aurora::after {
+    bottom: -25vmax;
+    right: -15vmax;
+    background: radial-gradient(circle, rgba(168, 85, 247, 0.3) 0%, transparent 60%);
+    animation: aurora-drift 22s ease-in-out infinite alternate-reverse;
+  }
+  @keyframes aurora-drift {
+    0% { transform: translate(0, 0) scale(1); }
+    50% { transform: translate(6vmax, 4vmax) scale(1.15); }
+    100% { transform: translate(-4vmax, 8vmax) scale(0.95); }
+  }
+  .aurora-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(to right, rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+    background-size: 42px 42px;
+    mask-image: radial-gradient(ellipse 85% 65% at 50% 0%, black 25%, transparent 80%);
+    -webkit-mask-image: radial-gradient(ellipse 85% 65% at 50% 0%, black 25%, transparent 80%);
+  }
+
   /* ── Reveal animations ── */
   .reveal {
     animation: reveal-up 0.45s var(--ease) both;

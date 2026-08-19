@@ -105,8 +105,8 @@ export default function GeneratorPage() {
             Studio IA Canvas & Rétention
           </span>
         </div>
-        <h1 className="text-2xl font-bold tracking-tight">
-          {t('generator.title')}
+        <h1 className="text-2xl font-black tracking-tight">
+          <span className="text-gradient">{t('generator.title')}</span>
         </h1>
         <p className="text-[15px] text-pg-muted">
           {t('generator.subtitle')}

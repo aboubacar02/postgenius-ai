@@ -19,11 +19,11 @@ export function Topbar({ onOpenCommandPalette }) {
   return (
     <>
       <AppDrawer open={drawerOpen} onOpenChange={setDrawerOpen} />
-      <header className="fixed inset-x-0 top-0 z-40 h-16 border-b border-white/[0.07] bg-pg-bg/95 backdrop-blur-xl">
+      <header className="fixed inset-x-0 top-0 z-40 h-16 border-b border-white/[0.08] bg-[#090A0F]/80 backdrop-blur-xl">
         <div className="mx-auto flex h-14 w-full max-w-[1200px] items-center justify-between gap-3 px-4 md:px-8">
           {/* Mobile logo */}
           <div className="lg:hidden">
-            <Link to="/" className="pg-brand flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-primary to-purple-500 text-white">
+            <Link to="/" className="pg-brand flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-cyan-400 via-indigo-500 to-purple-600 text-white shadow-[0_0_16px_rgba(56,189,248,0.4)]">
               <Sparkles className="size-4" />
             </Link>
           </div>
@@ -47,7 +47,7 @@ export function Topbar({ onOpenCommandPalette }) {
             <button
               type="button"
               onClick={() => onOpenCommandPalette?.(true)}
-              className="hidden h-9 w-[240px] items-center gap-2.5 rounded-full border border-white/[0.08] bg-zinc-900/60 backdrop-blur-xl px-3.5 text-left text-xs text-zinc-500 transition-all duration-200 hover:border-white/[0.15] hover:bg-zinc-800/60 hover:text-zinc-400 hover:shadow-lg hover:shadow-black/10 md:flex"
+              className="hidden h-9 w-[240px] items-center gap-2.5 rounded-full border border-white/[0.09] bg-white/[0.04] backdrop-blur-xl px-3.5 text-left text-xs text-zinc-400 transition-all duration-200 hover:border-cyan-400/40 hover:bg-white/[0.06] hover:text-zinc-200 hover:shadow-[0_0_16px_rgba(56,189,248,0.12)] md:flex"
             >
               <Search className="size-3.5 text-zinc-600" />
               <span className="flex-1 font-medium">{t('topbar.search') || 'Rechercher...'}</span>
@@ -68,7 +68,7 @@ export function Topbar({ onOpenCommandPalette }) {
             {/* CTA */}
             <button
               onClick={() => navigate('/generateur')}
-              className="pg-button-primary hidden sm:inline-flex items-center gap-1.5 rounded-pg bg-gradient-to-r from-primary to-purple-500 px-3.5 py-2 text-xs font-semibold text-white shadow-[0_0_20px_rgba(99,102,241,0.3)] transition-all hover:shadow-[0_0_30px_rgba(99,102,241,0.5)] hover:scale-[1.02] active:scale-[0.98]"
+              className="pg-button-primary hidden sm:inline-flex items-center gap-1.5 rounded-pg bg-gradient-to-r from-cyan-500 via-indigo-500 to-purple-600 px-3.5 py-2 text-xs font-semibold text-white shadow-[0_0_20px_rgba(56,189,248,0.35)] transition-all hover:shadow-[0_0_32px_rgba(99,102,241,0.5)] hover:scale-[1.02] active:scale-[0.98]"
             >
               <Plus className="size-4" />
               Nouvelle vidéo
@@ -92,7 +92,7 @@ export function Topbar({ onOpenCommandPalette }) {
                       {display.initials}
                     </button>
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end" className="w-56 border-white/[0.08] bg-zinc-900/95 backdrop-blur-xl">
+                  <DropdownMenuContent align="end" className="w-56 border-white/[0.1] bg-[#0d0f16]/95 backdrop-blur-xl shadow-[0_0_24px_rgba(99,102,241,0.15)]">
                     <DropdownMenuLabel className="font-normal">
                       <div className="flex flex-col gap-0.5">
                         <span className="text-sm font-semibold text-zinc-100">{user?.user_metadata?.full_name || user?.name || 'Utilisateur'}</span>

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+﻿import { useState } from 'react'
 import { CreditCard, ShieldCheck, SlidersHorizontal, User, Settings } from 'lucide-react'
 import { toast } from '../components/ui/sonner'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '../components/ui/card'
@@ -97,7 +97,7 @@ export default function SettingsPage() {
                 </div>
               )}
 
-              <Card className="reveal-2 border border-white/[0.06] bg-pg-surface rounded-xl p-6">
+              <Card className="reveal-2 border border-white/[0.06] bg-white/[0.03] backdrop-blur-md rounded-xl p-6">
                 <CardHeader className="p-0 pb-5">
                   <CardTitle className="font-heading text-lg font-bold text-pg-text">
                     {t('settings.profileInfo')}
@@ -114,7 +114,7 @@ export default function SettingsPage() {
                       <div className="relative">
                         <div className="absolute -inset-0.5 rounded-full bg-gradient-to-br from-primary to-fuchsia-500 opacity-60 blur-sm" />
                         <Avatar className="relative size-14 border-2 border-background">
-                          <AvatarFallback className="bg-pg-surface font-bold text-pg-text">
+                          <AvatarFallback className="bg-white/[0.03] backdrop-blur-md font-bold text-pg-text">
                             {display.initials}
                           </AvatarFallback>
                         </Avatar>
@@ -173,7 +173,7 @@ export default function SettingsPage() {
           )}
 
           {tab === 'preferences' && (
-            <Card className="reveal border border-white/[0.06] bg-pg-surface rounded-xl p-6">
+            <Card className="reveal border border-white/[0.06] bg-white/[0.03] backdrop-blur-md rounded-xl p-6">
               <CardHeader className="p-0 pb-5">
                 <CardTitle className="font-heading text-lg font-bold text-pg-text">
                   {t('settings.preferences')}
@@ -268,7 +268,7 @@ export default function SettingsPage() {
 
           {tab === 'facturation' && (
             <div className="flex flex-col gap-6">
-              <Card className="reveal border border-white/[0.06] bg-pg-surface rounded-xl p-6">
+              <Card className="reveal border border-white/[0.06] bg-white/[0.03] backdrop-blur-md rounded-xl p-6">
                 <CardHeader className="p-0 pb-5">
                   <CardTitle className="font-heading text-lg font-bold text-pg-text">
                     {t('settings.currentPlan')}
@@ -336,7 +336,7 @@ export default function SettingsPage() {
                 </CardContent>
               </Card>
 
-              <Card className="reveal-1 border border-white/[0.06] bg-pg-surface rounded-xl p-6">
+              <Card className="reveal-1 border border-white/[0.06] bg-white/[0.03] backdrop-blur-md rounded-xl p-6">
                 <CardHeader className="p-0 pb-4">
                   <CardTitle className="font-heading text-lg font-bold text-pg-text">
                     {t('settings.paymentMethod')}
@@ -359,7 +359,7 @@ export default function SettingsPage() {
           )}
 
           {tab === 'securite' && (
-            <Card className="reveal border border-white/[0.06] bg-pg-surface rounded-xl p-6">
+            <Card className="reveal border border-white/[0.06] bg-white/[0.03] backdrop-blur-md rounded-xl p-6">
               <CardHeader className="p-0 pb-5">
                 <CardTitle className="font-heading text-lg font-bold text-pg-text">
                   {t('settings.security')}

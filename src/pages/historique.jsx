@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+﻿import { useMemo, useState } from 'react'
 import { Download, Copy, RotateCcw, Trash2, FolderOpen, History, Search } from 'lucide-react'
 import { Input } from '../components/ui/input'
 import { InputGroup, InputGroupAddon } from '../components/ui/input-group'
@@ -29,7 +29,7 @@ const FORMAT_KEYS = {
 function HistoryCardSkeleton({ index }) {
   return (
     <div
-      className={cn('reveal flex flex-col gap-4 rounded-xl border border-white/[0.06] bg-pg-surface p-4')}
+      className={cn('reveal flex flex-col gap-4 rounded-xl border border-white/[0.06] bg-white/[0.03] backdrop-blur-md p-4')}
       style={{ animationDelay: `${index * 80}ms` }}
     >
       <Skeleton className="aspect-video w-full rounded-xl" />
@@ -144,7 +144,7 @@ export default function HistoryPage() {
           ))}
         </div>
       ) : filtered.length === 0 ? (
-                <Empty className="border border-white/[0.06] bg-pg-surface rounded-xl py-20 reveal">
+                <Empty className="border border-white/[0.06] bg-white/[0.03] backdrop-blur-md rounded-xl py-20 reveal">
           <EmptyHeader>
             <EmptyMedia className="flex size-16 items-center justify-center rounded-xl bg-primary/10 text-primary">
               <FolderOpen className="size-12" />
@@ -179,7 +179,7 @@ export default function HistoryPage() {
                 <div
                   key={item.id}
                   className={cn(
-                    'reveal group flex flex-col gap-4 overflow-hidden border border-white/[0.06] bg-pg-surface rounded-xl p-4 transition-all duration-300 hover:border-indigo-500/30 hover:shadow-sm',
+                    'reveal group flex flex-col gap-4 overflow-hidden border border-white/[0.06] bg-white/[0.03] backdrop-blur-md rounded-xl p-4 transition-all duration-300 hover:border-indigo-500/30 hover:shadow-sm',
                   )}
                   style={{ animationDelay: `${idx * 60 + 150}ms` }}
                 >

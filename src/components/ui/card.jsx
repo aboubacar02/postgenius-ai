@@ -1,11 +1,11 @@
-import { cn } from '../../lib/utils'
+﻿import { cn } from '../../lib/utils'
 
 function Card({ className, ...props }) {
   return (
     <div
       data-slot="card"
       className={cn(
-        'group/card relative flex flex-col gap-4 overflow-hidden rounded-[14px] border border-white/[0.06] bg-pg-surface py-4 text-sm text-pg-text',
+        'group/card relative flex flex-col gap-4 overflow-hidden rounded-[14px] border border-white/[0.06] bg-white/[0.03] backdrop-blur-md py-4 text-sm text-pg-text',
         className
       )}
       {...props}

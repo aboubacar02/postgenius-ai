@@ -121,7 +121,7 @@ export default function GeneratorPage() {
 
         {/* Action Panel Sticky */}
         <div className="lg:col-span-4">
-          <div className="border border-white/[0.06] bg-pg-surface sticky top-24 flex flex-col gap-5 rounded-xl p-5 shadow-sm">
+          <div className="border border-white/[0.08] bg-white/[0.03] backdrop-blur-md sticky top-24 flex flex-col gap-5 rounded-xl p-5 shadow-[0_8px_24px_rgba(0,0,0,0.35)]">
             <div className="flex flex-col gap-1.5">
               <div className="flex items-center gap-2.5">
                 <span className="flex size-9 items-center justify-center rounded-xl bg-primary/10 text-primary">

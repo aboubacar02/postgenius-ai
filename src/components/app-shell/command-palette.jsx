@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+﻿import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import {
   ArrowRight,
@@ -177,7 +177,7 @@ export function CommandPalette({ open, onOpenChange }) {
   return (
     <div className="fixed inset-0 z-50 flex items-start justify-center p-4 pt-16 sm:pt-24 bg-black/70 backdrop-blur-sm animate-in fade-in duration-200">
       <div
-        className="w-full max-w-2xl overflow-hidden rounded-pg-xl border border-white/[0.08] bg-pg-surface/95 shadow-pg-lg modal-glow flex flex-col"
+        className="w-full max-w-2xl overflow-hidden rounded-pg-xl border border-white/[0.08] bg-white/[0.03] backdrop-blur-md/95 shadow-pg-lg modal-glow flex flex-col"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Search Header */}

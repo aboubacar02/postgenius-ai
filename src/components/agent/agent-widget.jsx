@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+﻿import { useEffect, useMemo, useRef, useState } from 'react'
 import { Bot, Loader2, Pause, Play, RefreshCw, Send, Sparkles, Square, TrendingUp, Volume2, X } from 'lucide-react'
 import { Button } from '../ui/button'
 import { cn } from '../../lib/utils'
@@ -260,7 +260,7 @@ export function AgentWidget() {
                     setVoiceId(e.target.value)
                   }}
                   aria-label={t('agent.voice')}
-                  className="max-w-32 flex-1 truncate rounded-md border-white/[0.06] bg-pg-surface px-1.5 py-0.5 text-[11px] text-pg-text outline-none focus-visible:border-primary"
+                  className="max-w-32 flex-1 truncate rounded-md border-white/[0.06] bg-white/[0.03] backdrop-blur-md px-1.5 py-0.5 text-[11px] text-pg-text outline-none focus-visible:border-primary"
                 >
                   {EDGE_VOICES.map((v) => (
                     <option key={v.id} value={v.id}>
@@ -344,7 +344,7 @@ export function AgentWidget() {
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 placeholder={t('agent.placeholder')}
-                className="h-10 min-w-0 flex-1 rounded-lg border-white/[0.06] bg-pg-surface px-3 text-sm text-pg-text outline-none placeholder:text-pg-muted focus-visible:border-primary"
+                className="h-10 min-w-0 flex-1 rounded-lg border-white/[0.06] bg-white/[0.03] backdrop-blur-md px-3 text-sm text-pg-text outline-none placeholder:text-pg-muted focus-visible:border-primary"
               />
               <Button type="submit" size="icon" disabled={!input.trim() || thinking} aria-label={t('agent.send')} className="shrink-0">
                 <Send className="size-4" />

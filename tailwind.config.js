@@ -39,19 +39,19 @@ export default {
           ring: 'var(--sidebar-ring)',
         },
         pg: {
-          bg: '#0B0F17',
+          bg: '#090A0F',
           surface: '#111827',
           surface2: '#161D2A',
           surface3: '#1E293B',
           primary: '#6366F1',
           primaryLight: '#818CF8',
-          purple: '#8B5CF6',
-          cyan: '#06B6D4',
+          cyan: '#38BDF8',
+          purple: '#A855F7',
           green: '#10B981',
           amber: '#F59E0B',
           rose: '#EC4899',
           red: '#EF4444',
-          text: '#F8FAFC',
+          text: '#FFFFFF',
           muted: '#94A3B8',
           subtle: '#64748B',
         },
@@ -66,9 +66,10 @@ export default {
 
       boxShadow: {
         'pg-sm': '0 1px 2px rgba(0,0,0,.2)',
-        'pg-md': '0 8px 24px rgba(0,0,0,.22)',
-        'pg-lg': '0 20px 50px rgba(0,0,0,.32)',
+        'pg-md': '0 8px 24px rgba(0,0,0,.35)',
+        'pg-lg': '0 20px 50px rgba(0,0,0,.4)',
         'pg-indigo': '0 10px 30px rgba(99,102,241,.12)',
+        'pg-glow': '0 0 20px rgba(56,189,248,0.2)',
       },
 
       borderRadius: {

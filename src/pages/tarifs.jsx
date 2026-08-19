@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+﻿import { useEffect, useState } from 'react'
 import { Sparkles } from 'lucide-react'
 import { toast } from '../components/ui/sonner'
 import { PRICING_PLANS } from '../lib/mock-data'
@@ -55,7 +55,7 @@ export default function PricingPage() {
       </div>
 
       {/* Payment methods */}
-      <Card className="reveal-3 border border-white/[0.06] bg-pg-surface rounded-xl p-6">
+      <Card className="reveal-3 border border-white/[0.06] bg-white/[0.03] backdrop-blur-md rounded-xl p-6">
         <CardHeader className="p-0 pb-4">
           <div className="flex flex-wrap items-center gap-2">
             <CardTitle className="text-sm font-bold">{t('pricing.methodsTitle')}</CardTitle>

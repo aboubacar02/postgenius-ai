@@ -6,27 +6,27 @@
   :root {
     color-scheme: dark;
 
-    --background: #0B0F17;
-    --foreground: #F8FAFC;
+    --background: #090A0F;
+    --foreground: #FFFFFF;
 
     --card: #111827;
-    --card-foreground: #F8FAFC;
+    --card-foreground: #FFFFFF;
     --popover: #111827;
-    --popover-foreground: #F8FAFC;
+    --popover-foreground: #FFFFFF;
 
     --primary: #6366F1;
     --primary-foreground: #FFFFFF;
 
-    --secondary: #1E293B;
-    --secondary-foreground: #CBD5E1;
+    --secondary: #A855F7;
+    --secondary-foreground: #FFFFFF;
     --muted: #1E293B;
     --muted-foreground: #94A3B8;
     --accent: #1E293B;
-    --accent-foreground: #F8FAFC;
+    --accent-foreground: #FFFFFF;
 
     --destructive: #EF4444;
     --destructive-foreground: #FFFFFF;
-    --tertiary: #06B6D4;
+    --tertiary: #38BDF8;
     --success: #10B981;
     --warning: #F59E0B;
 
@@ -35,19 +35,19 @@
     --ring: #6366F1;
 
     --surface-variant: #161D2A;
-    --surface-container: #0B0F17;
-    --on-surface: #F8FAFC;
+    --surface-container: #090A0F;
+    --on-surface: #FFFFFF;
     --on-surface-variant: #94A3B8;
     --outline-variant: rgba(255, 255, 255, 0.08);
 
     --radius: 0.625rem;
 
     --sidebar: #111827;
-    --sidebar-foreground: #F8FAFC;
+    --sidebar-foreground: #FFFFFF;
     --sidebar-primary: #6366F1;
     --sidebar-primary-foreground: #FFFFFF;
     --sidebar-accent: #1E293B;
-    --sidebar-accent-foreground: #F8FAFC;
+    --sidebar-accent-foreground: #FFFFFF;
     --sidebar-border: rgba(255, 255, 255, 0.07);
     --sidebar-ring: #6366F1;
 
@@ -159,8 +159,8 @@
   /* ── Alpha color utilities (dark) ── */
   .bg-card-40 { background: rgba(17, 24, 39, 0.4); }
   .bg-card-60 { background: rgba(17, 24, 39, 0.6); }
-  .bg-background-40 { background: rgba(11, 15, 23, 0.4); }
-  .bg-background-70 { background: rgba(11, 15, 23, 0.7); }
+  .bg-background-40 { background: rgba(9, 10, 15, 0.4); }
+  .bg-background-70 { background: rgba(9, 10, 15, 0.7); }
   .bg-primary-10 { background: rgba(99, 102, 241, 0.1); }
   .bg-primary-15 { background: rgba(99, 102, 241, 0.15); }
   .bg-primary-20 { background: rgba(99, 102, 241, 0.2); }
@@ -170,7 +170,8 @@
   .bg-muted-40 { background: rgba(30, 41, 59, 0.4); }
   .bg-muted-50 { background: rgba(30, 41, 59, 0.5); }
   .bg-muted-60 { background: rgba(30, 41, 59, 0.6); }
-  .bg-secondary-40 { background: rgba(30, 41, 59, 0.4); }
+  .bg-secondary-40 { background: rgba(168, 85, 247, 0.4); }
+  .bg-secondary-10 { background: rgba(168, 85, 247, 0.1); }
   .bg-success-10 { background: rgba(16, 185, 129, 0.1); }
   .bg-success-20 { background: rgba(16, 185, 129, 0.2); }
   .bg-warning-10 { background: rgba(245, 158, 11, 0.1); }
@@ -181,7 +182,7 @@
   .bg-input-50 { background: rgba(255, 255, 255, 0.05); }
   .bg-input-80 { background: rgba(255, 255, 255, 0.08); }
   .bg-sidebar-80 { background: rgba(17, 24, 39, 0.8); }
-  .bg-foreground-60 { background: rgba(248, 250, 252, 0.6); }
+  .bg-foreground-60 { background: rgba(255, 255, 255, 0.6); }
 
   /* ── Border alpha utilities ── */
   .border-primary-30 { border-color: rgba(99, 102, 241, 0.3); }
@@ -219,42 +220,47 @@
   .stroke-warning { stroke: var(--warning); }
   .stroke-destructive { stroke: var(--destructive); }
 
-  /* ── Card surfaces (dark premium) ── */
+  /* ── Card surfaces (Obsidian Glass) ── */
   .glass {
-    background: rgba(17, 24, 39, 0.85);
-    border: 1px solid rgba(255, 255, 255, 0.06);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.22);
-    backdrop-filter: blur(12px);
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
   }
 
   .glass-surface {
-    background: rgba(17, 24, 39, 0.6);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
   }
 
   .glass-interactive {
-    background: rgba(17, 24, 39, 0.7);
-    border: 1px solid rgba(255, 255, 255, 0.06);
-    transition: all 0.2s var(--ease);
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    transition: all 0.2s ease-out;
   }
   .glass-interactive:hover {
-    border-color: rgba(99, 102, 241, 0.3);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.22);
+    border-color: rgba(56, 189, 248, 0.4);
+    box-shadow: 0 0 20px rgba(56, 189, 248, 0.2);
   }
 
   /* ── Glow card ── */
   .glow-card {
     position: relative;
-    background: rgba(17, 24, 39, 0.7);
-    border: 1px solid rgba(255, 255, 255, 0.06);
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 14px;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.22);
-    transition: transform 0.2s var(--ease), border-color 0.2s ease, box-shadow 0.2s var(--ease);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    transition: transform 0.2s ease-out, border-color 0.2s ease-out, box-shadow 0.2s ease-out;
   }
   .glow-card:hover {
     transform: translateY(-2px);
-    border-color: rgba(99, 102, 241, 0.25);
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.32);
+    border-color: rgba(56, 189, 248, 0.35);
+    box-shadow: 0 0 20px rgba(56, 189, 248, 0.2);
   }
   .glow-card::before,
   .glow-card::after {
@@ -262,7 +268,7 @@
   }
 
   .premium-edge {
-    border: 1px solid rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.08);
   }
 
   /* ── Reveal animations ── */
@@ -331,7 +337,7 @@
 
   /* ── Text gradient (brand) ── */
   .text-gradient {
-    background: linear-gradient(135deg, #6366F1 0%, #8B5CF6 50%, #06B6D4 100%);
+    background: linear-gradient(135deg, #38BDF8 0%, #6366F1 50%, #A855F7 100%);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
@@ -346,7 +352,7 @@
 
   /* ── Modal shadow ── */
   .modal-glow {
-    box-shadow: 0 20px 60px -12px rgba(0, 0, 0, 0.5), 0 0 80px rgba(139, 92, 246, 0.15);
+    box-shadow: 0 20px 60px -12px rgba(0, 0, 0, 0.5), 0 0 80px rgba(99, 102, 241, 0.15);
   }
 
   /* ── Grid pattern ── */

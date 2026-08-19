@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from 'react'
+﻿import { createContext, useContext, useState } from 'react'
 import { cn } from '../../lib/utils'
 
 const TabsContext = createContext(null)
@@ -17,7 +17,7 @@ function TabsList({ className, ...props }) {
     <div
       role="tablist"
       data-slot="tabs-list"
-      className={cn('inline-flex w-fit items-center justify-center rounded-lg border border-white/[0.08] bg-pg-surface p-[3px] text-pg-muted', className)}
+      className={cn('inline-flex w-fit items-center justify-center rounded-lg border border-white/[0.08] bg-white/[0.03] backdrop-blur-md p-[3px] text-pg-muted', className)}
       {...props}
     />
   )

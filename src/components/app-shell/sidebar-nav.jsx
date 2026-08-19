@@ -1,4 +1,4 @@
-import { NavLink, Link } from 'react-router-dom'
+﻿import { NavLink, Link } from 'react-router-dom'
 import {
   ChevronsLeft,
   ChevronsRight,
@@ -37,7 +37,7 @@ export function SidebarNav({ collapsed, onToggle }) {
   return (
     <aside
       className={cn(
-        'fixed inset-y-0 left-0 z-30 hidden flex-col border-r border-white/[0.07] bg-pg-surface transition-[width] duration-200 ease-[cubic-bezier(.2,.8,.2,1)] lg:flex',
+        'fixed inset-y-0 left-0 z-30 hidden flex-col border-r border-white/[0.07] bg-white/[0.03] backdrop-blur-md transition-[width] duration-200 ease-[cubic-bezier(.2,.8,.2,1)] lg:flex',
         collapsed ? 'w-[72px]' : 'w-60'
       )}
     >

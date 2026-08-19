@@ -14,7 +14,7 @@ export default async function handler(req) {
     const data = await fetchWithKeyRotation({
       contents: [{ role: 'user', parts: [{ text: prompt }] }],
       generationConfig: { temperature: 0.8, maxOutputTokens: 4096, responseMimeType: 'application/json' }
-    }, 'gemini-3.6-flash')
+    }, 'gemini-1.5-flash')
 
     const text = data.candidates?.[0]?.content?.parts?.[0]?.text || '{}'
     const parsed = JSON.parse(text)

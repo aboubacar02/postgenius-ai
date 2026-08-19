@@ -4,7 +4,7 @@
 // bascule immédiatement sur la suivante, sans erreur visible pour l'utilisateur.
 import { GoogleGenerativeAI } from '@google/generative-ai'
 
-const MODELS = ['gemini-3.6-flash', 'gemini-3.5-flash-lite']
+const MODELS = ['gemini-1.5-flash', 'gemini-2.0-flash']
 const MAX_ATTEMPTS = 2
 
 export class QuotaExhaustedError extends Error {

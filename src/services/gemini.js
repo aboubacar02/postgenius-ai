@@ -1,7 +1,7 @@
 // Appels côté client : TOUTES les requêtes passent par le proxy serveur /api/gemini/*.
 // La clé API Gemini reste côté serveur et n'est jamais embarquée dans le bundle.
 
-export const MODELS = ['gemini-3.6-flash', 'gemini-3.5-flash-lite']
+export const MODELS = ['gemini-1.5-flash', 'gemini-2.0-flash']
 export const MAX_ATTEMPTS = 2
 
 const NETWORK_LABELS = {

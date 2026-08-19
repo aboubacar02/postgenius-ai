@@ -1,4 +1,4 @@
-export async function fetchWithKeyRotation(payload, modelName = 'gemini-3.6-flash') {
+export async function fetchWithKeyRotation(payload, modelName = 'gemini-1.5-flash') {
   const rawKeys = [
     process.env.GEMINI_API_KEY_1,
     process.env.GEMINI_API_KEY_2,

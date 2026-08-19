@@ -1,4 +1,4 @@
-export const config = { runtime: 'edge' }
+import { fetchWithKeyRotation } from './_rotate.js'
 
 export default async function handler(req) {
   if (req.method !== 'POST') {
@@ -10,12 +10,6 @@ export default async function handler(req) {
 
   if (!messages.length) {
     return Response.json({ error: 'Messages requis' }, { status: 400 })
-  }
-
-  const apiKey = process.env.GEMINI_API_KEY || process.env.GEMINI_API_KEYS?.split(',')[0]?.trim()
-
-  if (!apiKey) {
-    return Response.json({ error: 'Clé Gemini manquante — ajoute GEMINI_API_KEYS dans Vercel.' }, { status: 503 })
   }
 
   const systemPrompt = `Tu es Post Genius, un assistant IA spécialisé dans la création de contenu viral pour les réseaux sociaux (TikTok, Instagram Reels, YouTube Shorts).
@@ -37,23 +31,11 @@ Format: réponds en 2-3 phrases max, avec des points actionnables quand c'est po
   ]
 
   try {
-    const r = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent`,
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'x-goog-api-key': apiKey },
-        body: JSON.stringify({ contents, generationConfig: { temperature: 0.7, maxOutputTokens: 500 } }),
-        signal: AbortSignal.timeout(30000),
-      }
-    )
+    const data = await fetchWithKeyRotation({
+      contents,
+      generationConfig: { temperature: 0.7, maxOutputTokens: 500 }
+    }, 'gemini-1.5-flash')
 
-    if (!r.ok) {
-      const err = await r.json().catch(() => ({}))
-      console.error('Gemini agent error:', r.status, err?.error?.message)
-      return Response.json({ error: err?.error?.message || `Gemini error ${r.status}` }, { status: 502 })
-    }
-
-    const data = await r.json()
     const text = data.candidates?.[0]?.content?.parts?.[0]?.text || ''
     if (!text) {
       return Response.json({ error: 'Gemini a renvoyé une réponse vide' }, { status: 502 })

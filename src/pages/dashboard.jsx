@@ -51,10 +51,10 @@ export default function DashboardPage() {
         <div className="relative z-10 flex flex-col gap-3">
           <span className="pg-badge inline-flex w-fit items-center gap-1.5 rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-wider text-primary">
             <Sparkles className="size-3" />
-            {t('dashboard.badge') || 'Dashboard'}
+            {t('dashboard.badge')}
           </span>
           <h1 className="text-2xl font-bold tracking-tight text-pg-text sm:text-3xl">
-            {t('dashboard.title') || 'Welcome back'}
+            {t('dashboard.title')}
           </h1>
           <p className="max-w-lg text-[15px] text-pg-muted">
             {t('dashboard.subtitle') || 'Generate scripts, produce faceless videos and maximize your algorithmic retention.'}
@@ -91,7 +91,7 @@ export default function DashboardPage() {
       {items.length > 0 && (
         <section className="grid grid-cols-1 gap-3 sm:grid-cols-3 reveal-2">
           <div className="rounded-pg-lg border border-white/[0.06] bg-pg-surface p-4">
-            <span className="text-[12px] font-medium text-pg-muted">{t('dashboard.totalScripts') || 'Scripts générés'}</span>
+            <span className="text-[12px] font-medium text-pg-muted">{t('dashboard.totalScripts')}</span>
             <span className="mt-1 block text-2xl font-extrabold tracking-tight text-indigo-400">{items.length}</span>
           </div>
           <div className="rounded-pg-lg border border-white/[0.06] bg-pg-surface p-4">
@@ -138,10 +138,10 @@ export default function DashboardPage() {
             </span>
             <div className="flex flex-col gap-1">
               <span className="text-sm font-bold text-pg-text">
-                {t('dashboard.emptyTitle') || 'Aucune création pour le moment'}
+                {t('dashboard.emptyTitle')}
               </span>
               <span className="text-xs text-pg-muted">
-                {t('dashboard.emptyDesc') || 'Générez votre premier script pour commencer.'}
+                {t('dashboard.emptyDesc')}
               </span>
             </div>
           </Link>

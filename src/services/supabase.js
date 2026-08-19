@@ -3,19 +3,29 @@ import { createClient } from '@supabase/supabase-js'
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
 
-const isConfigured = Boolean(
-  supabaseUrl && 
-  supabaseAnonKey && 
-  supabaseUrl !== 'https://your-project.supabase.co'
-);
+export const isConfigured = Boolean(
+  supabaseUrl &&
+  supabaseAnonKey &&
+  supabaseUrl.startsWith('http') &&
+  supabaseUrl.includes('.supabase.co')
+)
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+let supabase = null
+if (isConfigured) {
+  try {
+    supabase = createClient(supabaseUrl, supabaseAnonKey)
+  } catch {
+    supabase = null
+  }
+}
 
+export { supabase }
 export const CREDITS_PER_DAY = 5
 
 // ── localStorage fallback ─────────────────────────────────
 const LS_SCRIPTS_KEY = 'pg-generated-scripts'
 const LS_CREDITS_KEY = 'pg-credits'
+const LS_USER_KEY = 'pg-local-user'
 
 function lsGetScripts() {
   try { return JSON.parse(localStorage.getItem(LS_SCRIPTS_KEY) || '[]') } catch { return [] }
@@ -35,6 +45,18 @@ function lsSetCredits(used) {
   try {
     const today = new Date().toISOString().slice(0, 10)
     localStorage.setItem(LS_CREDITS_KEY, JSON.stringify({ date: today, used }))
+  } catch {}
+}
+
+export function getLocalUser() {
+  try {
+    return JSON.parse(localStorage.getItem(LS_USER_KEY) || 'null')
+  } catch { return null }
+}
+export function setLocalUser(user) {
+  try {
+    if (user) localStorage.setItem(LS_USER_KEY, JSON.stringify(user))
+    else localStorage.removeItem(LS_USER_KEY)
   } catch {}
 }
 

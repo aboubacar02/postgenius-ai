@@ -170,7 +170,7 @@ export default function TendancesPage() {
               <button
                 key={r.title}
                 type="button"
-                onClick={() => setActiveVideo(r)}
+                onClick={() => window.open(`https://www.youtube.com/watch?v=${r.youtubeId}`, '_blank', 'noopener,noreferrer')}
                 className="reveal group relative overflow-hidden rounded-2xl border border-white/[0.08] bg-white/[0.04] backdrop-blur-xl p-0 text-left transition-all duration-300 hover:border-indigo-500/40 hover:shadow-2xl hover:shadow-indigo-500/10 hover:-translate-y-1"
                 style={{ animationDelay: `${i * 40}ms` }}
               >
@@ -217,7 +217,7 @@ export default function TendancesPage() {
               <button
                 key={v.youtubeId || i}
                 type="button"
-                onClick={() => setActiveVideo(v)}
+                onClick={() => window.open(`https://www.youtube.com/watch?v=${v.youtubeId}`, '_blank', 'noopener,noreferrer')}
                 className="reveal group relative overflow-hidden rounded-2xl border border-white/[0.08] bg-white/[0.04] backdrop-blur-xl p-0 text-left transition-all duration-300 hover:border-indigo-500/40 hover:shadow-2xl hover:shadow-indigo-500/10 hover:-translate-y-1"
                 style={{ animationDelay: `${i * 50 + 100}ms` }}
               >

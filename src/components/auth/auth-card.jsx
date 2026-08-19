@@ -34,6 +34,8 @@ export function AuthCard() {
   const [loading, setLoading] = useState(false)
   const [googleLoading, setGoogleLoading] = useState(false)
   const [error, setError] = useState(null)
+  const [pendingConfirm, setPendingConfirm] = useState(false)
+  const [resending, setResending] = useState(false)
 
   async function submit(e) {
     e.preventDefault()
@@ -50,7 +52,10 @@ export function AuthCard() {
     } catch (err) {
       const msg = err.message || 'Une erreur est survenue.'
       if (msg === 'confirmation-required') {
-        setError('Compte créé ! Confirme ton adresse email en cliquant sur le lien envoyé, puis connecte-toi.')
+        setPendingConfirm(true)
+        setError('Compte créé ! Un e-mail de confirmation vient de t\'être envoyé. Clique sur le lien pour valider ton adresse, puis connecte-toi (pense à vérifier les spams).')
+        setMode('login')
+        setConfirmPassword('')
       } else if (msg.includes('Email not confirmed') || msg.includes('email_not_confirmed')) {
         setError('Vérifie ta boîte mail et confirme ton adresse email avant de te connecter.')
       } else if (msg.includes('Invalid login credentials')) {
@@ -62,6 +67,20 @@ export function AuthCard() {
       }
     } finally {
       setLoading(false)
+    }
+  }
+
+  async function resendConfirmation() {
+    if (!email || resending) return
+    setResending(true)
+    setError(null)
+    try {
+      await signUp(email, password)
+      setError('E-mail de confirmation renvoyé. Clique sur le lien reçu pour activer ton compte.')
+    } catch {
+      setError('Impossible de renvoyer l\'e-mail pour le moment.')
+    } finally {
+      setResending(false)
     }
   }
 
@@ -184,15 +203,26 @@ export function AuthCard() {
           </FieldGroup>
 
           {error && (
-            <div className="rounded-xl border border-red-500/30 bg-red-500/10 px-3 py-2 text-xs font-medium text-red-400">
-              {error}
+            <div className="flex flex-col gap-2 rounded-xl border border-amber-500/30 bg-amber-500/10 px-3 py-2 text-xs font-medium text-amber-300">
+              <span>{error}</span>
+              {pendingConfirm && (
+                <button
+                  type="button"
+                  onClick={resendConfirmation}
+                  disabled={resending}
+                  className="flex w-fit items-center gap-1.5 rounded-lg bg-white/[0.06] px-2.5 py-1 text-[11px] font-bold text-amber-200 transition-colors hover:bg-white/[0.1] disabled:opacity-50"
+                >
+                  {resending ? <Loader2 className="size-3 animate-spin" /> : <Mail className="size-3" />}
+                  Renvoyer l'e-mail de confirmation
+                </button>
+              )}
             </div>
           )}
 
           <div className="flex flex-col gap-3 pt-1 sm:flex-row sm:items-center sm:justify-between">
             <button
               type="button"
-              onClick={() => { setMode((m) => (m === 'login' ? 'register' : 'login')); setError(null); }}
+              onClick={() => { setMode((m) => (m === 'login' ? 'register' : 'login')); setError(null); setPendingConfirm(false); }}
               className="text-xs font-semibold text-indigo-400 hover:text-indigo-300 transition-colors"
             >
               {mode === 'login' ? 'Créer un compte' : 'Déjà un compte ? Se connecter'}

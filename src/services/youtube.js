@@ -6,5 +6,5 @@ export async function searchYoutube(q, max = 12, lang = 'fr') {
     const detail = await res.json().catch(() => ({}))
     throw new Error(detail.error || `YouTube indisponible (${res.status})`)
   }
-  return res.json()
+  return res.json().catch(() => null)
 }

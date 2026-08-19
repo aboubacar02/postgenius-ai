@@ -23,7 +23,7 @@ export async function chatWithAgent(messages) {
       const detail = await res.json().catch(() => ({}))
       throw new Error(detail.error || `Agent indisponible (${res.status})`)
     }
-    const data = await res.json()
+    const data = await res.json().catch(() => ({}))
     return String(data.reply || '').trim()
   } catch (err) {
     console.error('Agent error:', err.message)

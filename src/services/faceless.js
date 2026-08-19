@@ -92,17 +92,23 @@ Ces mots seront utilisés pour chercher des images B-roll spécifiques par mot.
       body: JSON.stringify({ prompt })
     })
     if (!res.ok) {
-      const rawText = await res.text().catch(() => '')
-      let detail = null
-      try { detail = JSON.parse(rawText) } catch { /* not JSON */ }
-      const msg = detail?.error || rawText.slice(0, 200) || `IA indisponible (${res.status})`
-      throw new Error(`Génération Faceless échouée : ${msg}`)
-    }
-    const data = await res.json()
-    if (!Array.isArray(data.scenes) || data.scenes.length === 0) {
-      throw new Error('Script invalide')
-    }
-    return { ...data, scenes: data.scenes.slice(0, sceneCount), source: 'ai' }
+       const rawText = await res.text().catch(() => '')
+       let detail = null
+       try { detail = JSON.parse(rawText) } catch { /* not JSON */ }
+       const msg = detail?.error || rawText.slice(0, 200) || `IA indisponible (${res.status})`
+       throw new Error(`Génération Faceless échouée : ${msg}`)
+     }
+     const rawText = await res.text().catch(() => '')
+     let data = null
+     try {
+       data = JSON.parse(rawText)
+     } catch {
+       throw new Error(`Réponse invalide du serveur (${res.status})`)
+     }
+     if (!Array.isArray(data.scenes) || data.scenes.length === 0) {
+       throw new Error('Script invalide')
+     }
+     return { ...data, scenes: data.scenes.slice(0, sceneCount), source: 'ai' }
   } catch (err) {
     throw new Error(`Génération du script impossible : ${err.message}`)
   }
@@ -130,11 +136,11 @@ function getFallbackImage(keyword = '') {
   return BROLL_FALLBACK_COLLECTION[index]
 }
 
-export async function fetchBroll(keyword) {
+ export async function fetchBroll(keyword) {
   try {
     const res = await fetch(`/api/broll?q=${encodeURIComponent(keyword)}`)
     if (res.ok) {
-      const data = await res.json()
+      const data = await res.json().catch(() => ({}))
       if (data?.url) return data
     }
   } catch {
@@ -147,7 +153,7 @@ export async function fetchBrollVideo(keyword) {
   try {
     const res = await fetch(`/api/broll/video?q=${encodeURIComponent(keyword)}`)
     if (res.ok) {
-      const data = await res.json()
+      const data = await res.json().catch(() => ({}))
       if (data?.videoUrl || data?.imageUrl) return data
     }
   } catch {

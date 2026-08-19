@@ -6,8 +6,8 @@ export default async function handler(req) {
   const max = Math.min(parseInt(url.searchParams.get('max') || '12', 10), 24)
   const apiKey = process.env.YOUTUBE_API_KEY
 
-  if (!apiKey) {
-    return Response.json({ error: 'Clé API YouTube manquante', items: [] }, { status: 500 })
+  if (!apiKey || !apiKey.startsWith('AIza')) {
+    return Response.json({ error: 'YouTube Music non disponible (clé API manquante).', items: [] }, { status: 200 })
   }
 
   try {
@@ -20,7 +20,7 @@ export default async function handler(req) {
 
     if (!r.ok) {
       const err = await r.json().catch(() => ({}))
-      return Response.json({ error: err?.error?.message || `YouTube error ${r.status}`, items: [] }, { status: r.status })
+      return Response.json({ error: err?.error?.message || `YouTube error ${r.status}`, items: [] }, { status: 200 })
     }
 
     const data = await r.json()
@@ -59,7 +59,7 @@ export default async function handler(req) {
 
     return Response.json({ live: true, items }, { status: 200 })
   } catch (err) {
-    return Response.json({ error: err.message, items: [] }, { status: 502 })
+    return Response.json({ error: err.message, items: [] }, { status: 200 })
   }
 }
 

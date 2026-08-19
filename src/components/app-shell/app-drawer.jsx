@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { NavLink, useLocation } from 'react-router-dom'
-import { Clapperboard, Flame, Gauge, History, LayoutDashboard, Sparkles, User, Wallet, X, Zap } from 'lucide-react'
+import { Clapperboard, Flame, Gauge, History, LayoutDashboard, LogOut, Sparkles, User, Wallet, X, Zap } from 'lucide-react'
 import { GradientAvatar } from '../media/gradient-avatar'
 import { ThemeToggle } from '../theme-toggle'
 import { useApp } from '../../lib/app-context'
@@ -34,7 +34,7 @@ const NAV_SECTIONS = [
 ]
 
 export function AppDrawer({ open, onOpenChange }) {
-  const { user, creditsLeft, creditsTotal, plan } = useApp()
+  const { user, creditsLeft, creditsTotal, plan, logout } = useApp()
   const { t, lang, setLang } = useI18n()
   const location = useLocation()
 
@@ -171,6 +171,16 @@ export function AppDrawer({ open, onOpenChange }) {
             <Sparkles className="size-4" />
             {t('topbar.newProject')}
           </NavLink>
+          {user && (
+            <button
+              type="button"
+              onClick={() => { logout?.(); onOpenChange?.(false) }}
+              className="mt-2 flex w-full items-center justify-center gap-2 rounded-lg border border-red-500/20 bg-red-500/5 px-3 py-2.5 text-sm font-medium text-red-400 transition-colors hover:bg-red-500/10"
+            >
+              <LogOut className="size-4" />
+              Déconnexion
+            </button>
+          )}
         </div>
       </div>
     </div>

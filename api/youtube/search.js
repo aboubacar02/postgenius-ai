@@ -6,8 +6,8 @@ export default async function handler(req) {
   const max = Math.min(parseInt(url.searchParams.get('max') || '12', 10), 24)
   const apiKey = process.env.YOUTUBE_API_KEY
 
-  if (!apiKey) {
-    return Response.json({ live: false, error: 'Clé API YouTube manquante côté serveur.' }, { status: 500 })
+  if (!apiKey || !apiKey.startsWith('AIza')) {
+    return Response.json({ live: false, items: [], error: 'YouTube Search non disponible (clé API manquante). Utilise Pexels en alternative.' }, { status: 200 })
   }
 
   if (!q || q.trim().length < 2) {
@@ -25,8 +25,8 @@ export default async function handler(req) {
     if (!r.ok) {
       const err = await r.json().catch(() => ({}))
       return Response.json(
-        { live: false, error: err?.error?.message || `YouTube API error ${r.status}` },
-        { status: r.status }
+        { live: false, items: [], error: err?.error?.message || `YouTube API error ${r.status}` },
+        { status: 200 }
       )
     }
 
@@ -34,7 +34,6 @@ export default async function handler(req) {
 
     const ids = (data.items || []).map((v) => v.id.videoId).filter(Boolean)
 
-    // Fetch view counts in one batch
     let viewMap = {}
     if (ids.length > 0) {
       const statsUrl = `https://www.googleapis.com/youtube/v3/videos?part=statistics&id=${ids.join(',')}&key=${apiKey}`
@@ -67,8 +66,8 @@ export default async function handler(req) {
     return Response.json({ live: true, items }, { status: 200 })
   } catch (err) {
     return Response.json(
-      { live: false, error: `Erreur réseau: ${err.message}` },
-      { status: 502 }
+      { live: false, items: [], error: `Erreur réseau: ${err.message}` },
+      { status: 200 }
     )
   }
 }

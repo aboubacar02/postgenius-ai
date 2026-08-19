@@ -96,7 +96,7 @@ export function useFacelessState() {
       const data = await generateFacelessScript({ topic: topic.trim(), niche, duration })
       setScript(data); setIsGenerated(true)
       toast.success('Script & scenes generes !')
-    } catch { toast.error(t('generator.failToast')) } finally { setBusy(false) }
+    } catch (err) { toast.error(err.message || t('generator.failToast')) } finally { setBusy(false) }
   }
 
   async function ensureNarration(i) {

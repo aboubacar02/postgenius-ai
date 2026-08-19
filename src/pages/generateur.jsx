@@ -85,7 +85,7 @@ export default function GeneratorPage() {
       if (err.message === 'crédits') {
         toast.error(t('generator.noCreditsToast'))
       } else {
-        toast.error(t('generator.failToast'))
+        toast.error(err.message || t('generator.failToast'))
       }
     } finally {
       setLoading(false)

@@ -80,7 +80,7 @@ export function Topbar({ onOpenCommandPalette }) {
                 {display.initials}
               </div>
             ) : (
-              <Link to="/parametres" className="ml-1 px-3 py-1.5 text-xs font-medium text-zinc-300 hover:text-white bg-white/5 hover:bg-white/10 rounded-lg transition-colors border border-white/10">
+              <Link to="/login" className="ml-1 px-3 py-1.5 text-xs font-medium text-zinc-300 hover:text-white bg-white/5 hover:bg-white/10 rounded-lg transition-colors border border-white/10">
                 Se connecter
               </Link>
             )}

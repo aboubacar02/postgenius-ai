@@ -7,6 +7,7 @@ import {
   History,
   LayoutDashboard,
   LogOut,
+  LogIn,
   MoreHorizontal,
   Settings,
   Sparkles,
@@ -114,12 +115,18 @@ export function BottomNav() {
               <div className="fade-in-up fixed inset-x-3 bottom-[76px] z-50 rounded-2xl border border-white/[0.06] bg-zinc-900/95 p-3 shadow-2xl shadow-black/50 backdrop-blur-xl">
                 <div className="mb-2 flex items-center justify-between px-2">
                   <div className="flex items-center gap-2">
-                    <div className="flex size-8 items-center justify-center rounded-full bg-gradient-to-br from-cyan-400 to-indigo-500 text-xs font-bold text-white">
-                      {display.initials}
-                    </div>
+                    {user ? (
+                      <div className="flex size-8 items-center justify-center rounded-full bg-gradient-to-br from-cyan-400 to-indigo-500 text-xs font-bold text-white">
+                        {display.initials}
+                      </div>
+                    ) : (
+                      <div className="flex size-8 items-center justify-center rounded-full bg-white/[0.08] text-zinc-400">
+                        <LogIn className="size-4" />
+                      </div>
+                    )}
                     <div className="flex flex-col">
                       <span className="text-sm font-semibold text-zinc-100">{user?.name || 'Utilisateur'}</span>
-                      <span className="text-[11px] text-zinc-500">{user?.email || 'Mode local'}</span>
+                      <span className="text-[11px] text-zinc-500">{user?.email || 'Non connecté'}</span>
                     </div>
                   </div>
                   <button type="button" onClick={() => setMoreOpen(false)} className="flex size-8 items-center justify-center rounded-lg text-zinc-500 transition-colors hover:bg-white/[0.06] hover:text-zinc-300">
@@ -152,14 +159,25 @@ export function BottomNav() {
                 </div>
 
                 <div className="border-t border-white/[0.06] pt-2">
-                  <button
-                    type="button"
-                    onClick={() => { logout?.(); setMoreOpen(false); }}
-                    className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-red-400 transition-colors hover:bg-red-500/10"
-                  >
-                    <LogOut className="size-4 shrink-0" />
-                    Déconnexion
-                  </button>
+                  {user ? (
+                    <button
+                      type="button"
+                      onClick={() => { logout?.(); setMoreOpen(false); }}
+                      className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-red-400 transition-colors hover:bg-red-500/10"
+                    >
+                      <LogOut className="size-4 shrink-0" />
+                      Déconnexion
+                    </button>
+                  ) : (
+                    <NavLink
+                      to="/login"
+                      onClick={() => setMoreOpen(false)}
+                      className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-indigo-400 transition-colors hover:bg-indigo-500/10"
+                    >
+                      <LogOut className="size-4 shrink-0 rotate-180" />
+                      Se connecter
+                    </NavLink>
+                  )}
                 </div>
               </div>
             </>

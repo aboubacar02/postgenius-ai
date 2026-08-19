@@ -19,6 +19,7 @@ const TendancesPage = lazy(() => import('./pages/tendances'))
 const PricingPage = lazy(() => import('./pages/tarifs'))
 const SettingsPage = lazy(() => import('./pages/parametres'))
 const FacelessPage = lazy(() => import('./pages/faceless'))
+const LoginPage = lazy(() => import('./pages/login'))
 
 function PageLoader() {
   return (
@@ -58,6 +59,8 @@ function AppShell() {
               <Route path="/faceless" element={<FacelessPage />} />
               <Route path="/tarifs" element={<PricingPage />} />
               <Route path="/parametres" element={<SettingsPage />} />
+              <Route path="/login" element={<LoginPage />} />
+              <Route path="/register" element={<LoginPage />} />
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
           </Suspense>

@@ -88,8 +88,14 @@ export const PRICING_PLANS = [
     name: 'Starter',
     price: 0,
     period: 'toujours',
-    description: 'Pour tester le générateur sans engagement.',
-    features: ['5 scripts / jour', '1 format de sortie', 'Score viral basique', 'Historique 7 jours'],
+    description: 'Tout le studio IA inclus, limité à 5 scripts par jour.',
+    features: [
+      '5 scripts / jour',
+      'Tous les formats & tons',
+      'Score viral + suggestions IA',
+      'Studio Faceless : timeline, sous-titres & voix-off',
+      'Export pack CapCut (MP3, MP4, SRT) & historique illimité'
+    ],
     cta: 'Commencer gratuitement'
   },
   {
@@ -97,15 +103,14 @@ export const PRICING_PLANS = [
     name: 'Pro',
     price: 29,
     period: 'mois',
-    description: 'Pour les créateurs qui publient chaque semaine.',
+    description: 'Pour les créateurs qui publient chaque semaine — 20 scripts par jour.',
     featured: true,
     features: [
       '20 scripts / jour',
       'Tous les formats & tons',
-      'Score viral avancé + suggestions',
-      'Timeline, sous-titres & hashtags',
-      'Historique illimité',
-      'Export audio & vignettes'
+      'Score viral + suggestions IA',
+      'Studio Faceless : timeline, sous-titres & voix-off',
+      'Export pack CapCut (MP3, MP4, SRT) & historique illimité'
     ],
     cta: 'Passer en Pro'
   },
@@ -114,13 +119,13 @@ export const PRICING_PLANS = [
     name: 'Studio',
     price: 79,
     period: 'mois',
-    description: 'Pour les agences et équipes multi-comptes.',
+    description: 'Pour les agences et équipes — 500 scripts par jour (quasi illimité).',
     features: [
-      'Scripts illimités',
-      '5 sièges équipe',
-      'Banque de marque personnalisée',
-      'Accès API',
-      'Support prioritaire'
+      '500 scripts / jour',
+      'Tous les formats & tons',
+      'Score viral + suggestions IA',
+      'Studio Faceless : timeline, sous-titres & voix-off',
+      'Export pack CapCut (MP3, MP4, SRT) & historique illimité'
     ],
     cta: 'Passer en Studio'
   }

@@ -27,7 +27,7 @@ export async function fetchWithKeyRotation(payload, modelName = 'gemini-3.6-flas
         method: 'POST',
         headers,
         body: JSON.stringify(payload),
-        signal: AbortSignal.timeout(30000),
+        signal: AbortSignal.timeout(5000),
       })
 
       const text = await r.text().catch(() => '')

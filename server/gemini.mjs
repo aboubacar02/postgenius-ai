@@ -2,10 +2,18 @@
 // Les clés sont fournies par la factory (jamais exposées au client). Si une clé
 // atteint son quota (429 / quota exceeded / resource exhausted), le serveur
 // bascule immédiatement sur la suivante, sans erreur visible pour l'utilisateur.
-import { GoogleGenerativeAI } from '@google/generative-ai'
-
-const MODELS = ['gemini-1.5-flash', 'gemini-2.0-flash']
+//
+// NOTE: we use a direct REST `?key=` fetch (mirroring the Vercel Edge helpers in
+// api/gemini/_rotate.js) instead of the @google/generative-ai SDK. The SDK version
+// pinned in package.json (0.1.x) predates the gemini-2.x / 2.5 model families and
+// throws "models/<name> is not found for API version v1beta" for those models.
+// Using the raw REST endpoint sidesteps the SDK model registry entirely.
+const MODELS = ['gemini-2.5-flash', 'gemini-2.0-flash', 'gemini-1.5-flash']
 const MAX_ATTEMPTS = 2
+
+// The TTS-capable model. "gemini-3.1-flash-tts-preview" is NOT a real model —
+// use gemini-2.5-flash which supports responseModalities: ['AUDIO'].
+const TTS_MODEL = 'gemini-2.5-flash'
 
 export class QuotaExhaustedError extends Error {
   constructor(cause) {
@@ -21,7 +29,7 @@ function isQuotaError(err) {
   return (
     status === 429 ||
     status === 403 ||
-    /429|quota|resource.?exhausted|rate.?limit|too many/i.test(msg)
+    /429|quota|resource.?exhausted|rate.?limit|too many|quota exceeded/i.test(msg)
   )
 }
 
@@ -33,6 +41,17 @@ function parseKeys(raw) {
     .split(',')
     .map((k) => k.trim())
     .filter(Boolean)
+}
+
+async function callRest(key, body, modelName) {
+  const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${encodeURIComponent(key)}`
+  const r = await fetch(apiUrl, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+    signal: AbortSignal.timeout(25000)
+  })
+  return { r, apiUrl }
 }
 
 export function createGeminiServer(rawKeys) {
@@ -52,14 +71,24 @@ export function createGeminiServer(rawKeys) {
 
     for (let k = 0; k < keys.length; k++) {
       const key = currentKey()
-      const genAI = new GoogleGenerativeAI(key)
       let quotaHit = false
 
       for (let attempt = 0; attempt < MAX_ATTEMPTS && !quotaHit; attempt++) {
-        const model = genAI.getGenerativeModel({ model: MODELS[attempt % MODELS.length] })
+        const modelName = MODELS[attempt % MODELS.length]
         try {
-          const result = await model.generateContent(jsonPrompt)
-          const response = result.response.text()
+          const { r, apiUrl } = await callRest(key, {
+            contents: [{ role: 'user', parts: [{ text: jsonPrompt }] }]
+          }, modelName)
+
+          if (!r.ok) {
+            const data = await r.json().catch(() => ({}))
+            const err = new Error(data?.error?.message || `Gemini error ${r.status}`)
+            err.status = r.status
+            throw err
+          }
+
+          const data = await r.json()
+          const response = data.candidates?.[0]?.content?.parts?.[0]?.text || ''
           const cleaned = response
             .replace(/```json|```/g, '')
             .trim()
@@ -78,8 +107,6 @@ export function createGeminiServer(rawKeys) {
       }
 
       if (!quotaHit && lastError) {
-        // Erreur non liée au quota (modèle, JSON…) : pas la peine d'épuiser
-        // toutes les clés, on remonte l'erreur directement.
         throw lastError
       }
     }
@@ -94,14 +121,25 @@ export function createGeminiServer(rawKeys) {
 
     for (let k = 0; k < keys.length; k++) {
       const key = currentKey()
-      const genAI = new GoogleGenerativeAI(key)
       let quotaHit = false
 
       for (let attempt = 0; attempt < MAX_ATTEMPTS && !quotaHit; attempt++) {
-        const model = genAI.getGenerativeModel({ model: MODELS[attempt % MODELS.length] })
+        const modelName = MODELS[attempt % MODELS.length]
         try {
-          const result = await model.generateContent(prompt)
-          return result.response.text()
+          const { r } = await callRest(key, {
+            contents: [{ role: 'user', parts: [{ text: prompt }] }],
+            generationConfig: { temperature: 0.7, maxOutputTokens: 500 }
+          }, modelName)
+
+          if (!r.ok) {
+            const data = await r.json().catch(() => ({}))
+            const err = new Error(data?.error?.message || `Gemini error ${r.status}`)
+            err.status = r.status
+            throw err
+          }
+
+          const data = await r.json()
+          return data.candidates?.[0]?.content?.parts?.[0]?.text || ''
         } catch (err) {
           lastError = err
           if (isQuotaError(err)) {
@@ -127,35 +165,27 @@ export function createGeminiServer(rawKeys) {
     for (let k = 0; k < keys.length; k++) {
       const key = currentKey()
       try {
-        const res = await fetch(
-          `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-tts-preview:generateContent?key=${key}`,
-          {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              contents: [{ role: 'user', parts: [{ text }] }],
-              generationConfig: {
-                responseModalities: ['AUDIO'],
-                speechConfig: {
-                  voiceConfig: {
-                    prebuiltVoiceConfig: { voiceName: voice }
-                  }
-                }
+        const body = {
+          contents: [{ role: 'user', parts: [{ text }] }],
+          generationConfig: {
+            responseModalities: ['AUDIO'],
+            speechConfig: {
+              voiceConfig: {
+                prebuiltVoiceConfig: { voiceName: voice }
               }
-            })
+            }
           }
-        )
+        }
+        const { r } = await callRest(key, body, TTS_MODEL)
 
-        if (!res.ok) {
-          const body = await res.json().catch(() => ({}))
-          const err = new Error(
-            `TTS failed: ${res.status} ${String(body?.error?.message || '')}`
-          )
-          err.status = res.status
+        if (!r.ok) {
+          const data = await r.json().catch(() => ({}))
+          const err = new Error(`TTS failed: ${r.status} ${String(data?.error?.message || '')}`)
+          err.status = r.status
           throw err
         }
 
-        const json = await res.json()
+        const json = await r.json()
         const part = json.candidates?.[0]?.content?.parts?.[0]
         if (!part?.inlineData?.data) throw new Error('TTS: aucune donnée audio')
 

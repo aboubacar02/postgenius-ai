@@ -2,6 +2,7 @@ import { createContext, useCallback, useContext, useEffect, useState } from 'rea
 import { getCurrentSession, onAuthChange, signIn as realSignIn, signUp as realSignUp, signOut as realSignOut, updateProfile } from '../services/auth'
 import {
   CREDITS_PER_DAY,
+  supabase,
   getCreditsUsed,
   incrementCreditsUsed,
   saveGeneratedScript,
@@ -92,6 +93,22 @@ export function AppProvider({ children }) {
     getCurrentSession().then(setSession).catch(() => {})
     const sub = onAuthChange((s) => setSession(s))
     return () => sub?.unsubscribe?.()
+  }, [])
+
+  useEffect(() => {
+    const hash = window.location.hash
+    if (hash && hash.includes('access_token') && supabase) {
+      supabase.auth.setSession({
+        access_token: new URLSearchParams(hash.slice(1)).get('access_token'),
+        refresh_token: new URLSearchParams(hash.slice(1)).get('refresh_token'),
+      }).then(({ data, error }) => {
+        if (!error && data.session) {
+          setSession(data.session)
+          window.location.hash = ''
+          window.location.href = window.location.pathname
+        }
+      })
+    }
   }, [])
 
   const refreshQuota = useCallback(async (uid) => {
@@ -263,9 +280,13 @@ export function AppProvider({ children }) {
   }, [])
 
   const signUp = useCallback(async (email, password) => {
-    const s = await realSignUp(email, password)
-    setSession(s)
-    return s
+    const data = await realSignUp(email, password)
+    if (data?.session) {
+      setSession(data.session)
+    } else if (data?.user) {
+      throw new Error('confirmation-required')
+    }
+    return data
   }, [])
 
   const logout = useCallback(async () => {

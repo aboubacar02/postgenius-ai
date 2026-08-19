@@ -69,11 +69,11 @@ export async function signUp(email, password) {
       aud: 'authenticated'
     }
     setLocalUser(localUser)
-    return { user: localUser }
+    return { user: localUser, session: { user: localUser } }
   }
   const { data, error } = await supabase.auth.signUp({ email, password })
   if (error) throw error
-  return data.session
+  return data
 }
 
 export async function signOut() {

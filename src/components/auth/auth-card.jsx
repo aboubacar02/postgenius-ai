@@ -48,7 +48,18 @@ export function AuthCard() {
       else await signUp(email, password)
       toast.success(mode === 'login' ? 'Connexion réussie !' : 'Compte créé avec succès !')
     } catch (err) {
-      setError(err.message || 'Une erreur est survenue.')
+      const msg = err.message || 'Une erreur est survenue.'
+      if (msg === 'confirmation-required') {
+        setError('Compte créé ! Confirme ton adresse email en cliquant sur le lien envoyé, puis connecte-toi.')
+      } else if (msg.includes('Email not confirmed') || msg.includes('email_not_confirmed')) {
+        setError('Vérifie ta boîte mail et confirme ton adresse email avant de te connecter.')
+      } else if (msg.includes('Invalid login credentials')) {
+        setError('Email ou mot de passe incorrect.')
+      } else if (msg.includes('User already registered')) {
+        setError('Un compte existe déjà avec cet email. Connecte-toi.')
+      } else {
+        setError(msg)
+      }
     } finally {
       setLoading(false)
     }

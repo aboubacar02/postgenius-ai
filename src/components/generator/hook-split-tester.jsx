@@ -47,7 +47,7 @@ export function HookSplitTester({ topic, onSelectHook, selectedHook }) {
             Moteur de Split-Testing Hooks A/B/C
           </h3>
         </div>
-        <span className="font-mono text-[11px] font-bold text-primary">IA Prédictive</span>
+        <span className="font-mono text-[11px] font-bold text-primary">Estimation basée sur les benchmarks</span>
       </div>
 
       <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-3">

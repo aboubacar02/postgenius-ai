@@ -1,15 +1,12 @@
-import { supabase, isConfigured, getLocalUser, setLocalUser } from './supabase'
+import { supabase, isConfigured } from './supabase'
 
 export async function getCurrentSession() {
-  if (!isConfigured || !supabase) {
-    const local = getLocalUser()
-    return local ? { user: local } : null
-  }
+  if (!isConfigured || !supabase) return null
   try {
     const { data } = await supabase.auth.getSession()
     return data.session
   } catch {
-    return getLocalUser() ? { user: getLocalUser() } : null
+    return null
   }
 }
 
@@ -26,14 +23,7 @@ export function onAuthChange(callback) {
 
 export async function signIn(email, password) {
   if (!isConfigured || !supabase) {
-    const localUser = {
-      id: 'local-' + btoa(email).replace(/[^a-zA-Z0-9]/g, '').slice(0, 16),
-      email,
-      user_metadata: { full_name: email.split('@')[0] },
-      aud: 'authenticated'
-    }
-    setLocalUser(localUser)
-    return { user: localUser }
+    throw new Error('Authentification indisponible : Supabase n\'est pas configuré.')
   }
   const { data, error } = await supabase.auth.signInWithPassword({ email, password })
   if (error) throw error
@@ -42,15 +32,7 @@ export async function signIn(email, password) {
 
 export async function signInWithGoogle() {
   if (!isConfigured || !supabase) {
-    const localUser = {
-      id: 'local-google-' + Date.now(),
-      email: 'utilisateur@gmail.com',
-      user_metadata: { full_name: 'Utilisateur Google' },
-      aud: 'authenticated'
-    }
-    setLocalUser(localUser)
-    window.location.reload()
-    return
+    throw new Error('Authentification Google indisponible : Supabase n\'est pas configuré.')
   }
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: 'google',
@@ -62,14 +44,7 @@ export async function signInWithGoogle() {
 
 export async function signUp(email, password) {
   if (!isConfigured || !supabase) {
-    const localUser = {
-      id: 'local-' + btoa(email).replace(/[^a-zA-Z0-9]/g, '').slice(0, 16),
-      email,
-      user_metadata: { full_name: email.split('@')[0] },
-      aud: 'authenticated'
-    }
-    setLocalUser(localUser)
-    return { user: localUser, session: { user: localUser } }
+    throw new Error('Inscription indisponible : Supabase n\'est pas configuré.')
   }
   const { data, error } = await supabase.auth.signUp({ email, password })
   if (error) throw error
@@ -78,29 +53,21 @@ export async function signUp(email, password) {
 
 export async function signOut() {
   if (!isConfigured || !supabase) {
-    setLocalUser(null)
-    return
+    throw new Error('Déconnexion indisponible : Supabase n\'est pas configuré.')
   }
   const { error } = await supabase.auth.signOut()
   if (error) throw error
 }
 
 export async function updatePassword(newPassword) {
-  if (!isConfigured || !supabase) return getLocalUser()
+  if (!isConfigured || !supabase) throw new Error('Supabase n\'est pas configuré.')
   const { data, error } = await supabase.auth.updateUser({ password: newPassword })
   if (error) throw error
   return data.user
 }
 
 export async function updateProfile(metadata) {
-  if (!isConfigured || !supabase) {
-    const local = getLocalUser()
-    if (local) {
-      local.user_metadata = { ...local.user_metadata, ...metadata }
-      setLocalUser(local)
-    }
-    return local
-  }
+  if (!isConfigured || !supabase) throw new Error('Supabase n\'est pas configuré.')
   const { data, error } = await supabase.auth.updateUser({ data: metadata })
   if (error) throw error
   return data.user

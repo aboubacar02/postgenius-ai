@@ -1,5 +1,5 @@
 import { createContext, useCallback, useContext, useEffect, useState } from 'react'
-import { getCurrentSession, onAuthChange, signIn as realSignIn, signUp as realSignUp, signOut as realSignOut, updateProfile } from '../services/auth'
+import { getCurrentSession, onAuthChange, signIn as realSignIn, signUp as realSignUp, signOut as realSignOut } from '../services/auth'
 import {
   CREDITS_PER_DAY,
   supabase,
@@ -7,17 +7,15 @@ import {
   incrementCreditsUsed,
   saveGeneratedScript,
   fetchGeneratedScripts,
-  deleteGeneratedScript
+  deleteGeneratedScript,
+  fetchSubscription,
+  upsertSubscription
 } from '../services/supabase'
 import { generateScript as callGemini, analyzeHook as callAnalyze } from '../services/gemini'
 import { captureReferrer } from '../services/referral'
 import {
-  generateScript as localGenerate,
   toV0Script,
-  computeViralScore,
-  LIGHTING_DEFAULT,
-  CAMERA_DEFAULT,
-  BROLL_DEFAULT
+  computeViralScore
 } from './generator'
 
 export const DAILY_TOTAL = CREDITS_PER_DAY
@@ -136,6 +134,12 @@ export function AppProvider({ children }) {
     if (session?.user) {
       refreshQuota(session.user.id)
       refreshHistory(session.user.id)
+      fetchSubscription(session.user.id).then((sub) => {
+        if (sub && PLAN_NAMES.includes(sub.plan)) {
+          setPlanState(sub.plan)
+          try { localStorage.setItem('pg-plan', sub.plan) } catch {}
+        }
+      }).catch(() => {})
     } else {
       setCreditsUsed(0)
       setHistory([])
@@ -165,7 +169,7 @@ export function AppProvider({ children }) {
       }
       if (session?.user) {
         try {
-          await updateProfile({ plan: next })
+          await upsertSubscription(session.user.id, { plan: next })
         } catch (e) {
           console.warn('Plan non synchronisé sur Supabase', e)
         }
@@ -180,39 +184,8 @@ export function AppProvider({ children }) {
       if (creditsLeft <= 0 && user && !recharge) {
         throw new Error('crédits')
       }
-      let result
-      try {
-        const real = await callGemini(network, topic, tone, { format, duration, audience, cta, market })
-        result = toV0Script(real, { network, topic, duration })
-      } catch (e) {
-        console.warn('Gemini indisponible, repli sur le générateur local', e)
-        const local = localGenerate({ network, topic, tone, format, duration, audience, cta, market })
-        const v = computeViralScore({ aiScore: null, analysis: null, hook: local.hooks[0] || local.script[0] })
-        const variant = {
-          angle: 'Angle principal',
-          title: local.title,
-          hook: local.hooks[0] || local.script[0],
-          hooks: local.hooks,
-          script: local.script,
-          subtitles: local.subtitles,
-          hashtags: local.hashtags,
-          viralScore: v.score,
-          aiScore: v.aiScore,
-          localScore: v.localScore,
-          analysis: v.analysis,
-          metrics: v.metrics,
-          factors: v.metrics,
-          suggestions: v.suggestions
-        }
-        result = {
-          ...local,
-          ...v,
-          lighting: LIGHTING_DEFAULT,
-          camera: CAMERA_DEFAULT,
-          brolls: BROLL_DEFAULT,
-          variants: [variant]
-        }
-      }
+      const real = await callGemini(network, topic, tone, { format, duration, audience, cta, market })
+      const result = toV0Script(real, { network, topic, duration })
       if (user) {
         try {
           if (!recharge) await incrementCreditsUsed(user.id)

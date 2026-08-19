@@ -162,6 +162,20 @@ async function callModel(action, jsonPrompt) {
   return res.json()
 }
 
+export async function generateClones(hook) {
+  const res = await fetch('/api/gemini/clones', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ hook })
+  })
+  if (!res.ok) {
+    const detail = await res.json().catch(() => ({}))
+    throw new Error(detail.error || `IA indisponible (${res.status})`)
+  }
+  const data = await res.json()
+  return Array.isArray(data.clones) ? data.clones : []
+}
+
 export async function generateScript(network, topic, tone = 'energetic', options = {}) {
   const networkName = NETWORK_LABELS[network] || network
   const toneLabel = TONE_LABELS[tone] || TONE_LABELS.energetic

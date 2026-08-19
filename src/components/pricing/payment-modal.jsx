@@ -39,15 +39,24 @@ export function PaymentModal({ open, plan, currency, methods, onClose, onSuccess
         amount: plan.price
       })
 
+      // Passerelle réelle : redirige vers la page de paiement sécurisée.
       if (session.status === 'pending' && (session.authorization_url || session.payment_url || session.approval_url)) {
         const url = session.authorization_url || session.payment_url || session.approval_url
-        toast.info(t('pricing.paymentRedirect'))
-        window.open(url, '_blank', 'noopener,noreferrer')
+        setReference(session.reference)
+        window.location.href = url
+        return
+      }
+
+      // Aucune clé de passerelle configurée côté serveur : on le signale clairement.
+      if (session.sandbox || session.status === 'success') {
+        setReference(session.reference)
+        setStep('sandbox')
+        return
       }
 
       setReference(session.reference)
       setStep('success')
-    } catch {
+    } catch (err) {
       toast.error(t('pricing.paymentFail'))
       setStep('choose')
     }
@@ -170,6 +179,33 @@ export function PaymentModal({ open, plan, currency, methods, onClose, onSuccess
               }}
             >
               {t('pricing.activate', { plan: plan.name })}
+            </Button>
+          </div>
+        )}
+
+        {step === 'sandbox' && (
+          <div className="flex flex-col items-center gap-4 py-4 text-center">
+            <span className="flex size-14 items-center justify-center rounded-full bg-warning-20 text-warning">
+              <ShieldCheck className="size-7" />
+            </span>
+            <div className="flex flex-col gap-1">
+              <p className="text-base font-semibold text-foreground">
+                Paiement en attente
+              </p>
+              <p className="text-xs text-muted-foreground">
+                {t('pricing.reference')} : <span className="font-mono text-primary">{reference}</span>
+              </p>
+              <p className="text-xs leading-relaxed text-muted-foreground">
+                Aucune passerelle de paiement n'est configurée (clé Stripe/Paystack manquante). Ajoute la clé sur le serveur pour activer le paiement réel.
+              </p>
+            </div>
+            <Button
+              size="lg"
+              variant="outline"
+              className="w-full"
+              onClick={onClose}
+            >
+              Fermer
             </Button>
           </div>
         )}

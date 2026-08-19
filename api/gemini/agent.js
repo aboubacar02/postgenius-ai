@@ -15,7 +15,7 @@ export default async function handler(req) {
   const apiKey = process.env.GEMINI_API_KEY || process.env.GEMINI_API_KEYS?.split(',')[0]?.trim()
 
   if (!apiKey) {
-    return Response.json({ error: 'Clé Gemini manquante — ajoute GEMINI_API_KEYS dans Vercel.', reply: getFallbackReply(messages) }, { status: 200 })
+    return Response.json({ error: 'Clé Gemini manquante — ajoute GEMINI_API_KEYS dans Vercel.' }, { status: 503 })
   }
 
   const systemPrompt = `Tu es Post Genius, un assistant IA spécialisé dans la création de contenu viral pour les réseaux sociaux (TikTok, Instagram Reels, YouTube Shorts).
@@ -50,28 +50,17 @@ Format: réponds en 2-3 phrases max, avec des points actionnables quand c'est po
     if (!r.ok) {
       const err = await r.json().catch(() => ({}))
       console.error('Gemini agent error:', r.status, err?.error?.message)
-      return Response.json({ error: err?.error?.message || `Gemini error ${r.status}`, reply: getFallbackReply(messages) }, { status: 200 })
+      return Response.json({ error: err?.error?.message || `Gemini error ${r.status}` }, { status: 502 })
     }
 
     const data = await r.json()
     const text = data.candidates?.[0]?.content?.parts?.[0]?.text || ''
-    return Response.json({ reply: text || getFallbackReply(messages) })
+    if (!text) {
+      return Response.json({ error: 'Gemini a renvoyé une réponse vide' }, { status: 502 })
+    }
+    return Response.json({ reply: text })
   } catch (err) {
     console.error('Gemini agent fetch error:', err.message)
-    return Response.json({ error: err.message, reply: getFallbackReply(messages) }, { status: 200 })
+    return Response.json({ error: err.message }, { status: 502 })
   }
-}
-
-function getFallbackReply(messages) {
-  const last = messages[messages.length - 1]?.content?.toLowerCase() || ''
-  if (last.includes('hook') || last.includes('accroche')) {
-    return 'Voici 3 hooks viraux testés : 1) "Personne ne te dit ça mais..." (curiosity gap), 2) "J\'ai perdu 10K abonnés en 1 jour" (choc), 3) "Arrête de faire cette erreur" (direct). Teste-les dans les 2 premières secondes !'
-  }
-  if (last.includes('tiktok') || last.includes('reel')) {
-    return 'Pour TikTok/Reels : rythme rapide (cut toutes les 2-3s), texte à l\'écran, musique tendance, et un hook dans la première seconde. Les meilleurs créateurs postent 2-3 fois par jour.'
-  }
-  if (last.includes('script') || last.includes('scénario')) {
-    return 'Structure de script viral : 1) Hook (0-3s), 2) Problème (3-10s), 3) Solution (10-25s), 4) CTA (25-30s). Garde ça simple et dense.'
-  }
-  return 'Je suis Post Genius ! Pose-moi une question sur le contenu viral, les hooks, les stratégies TikTok/YouTube/Reels, ou le montage CapCut.'
 }

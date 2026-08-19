@@ -4,7 +4,7 @@ import { createGeminiServer, QuotaExhaustedError } from '../server/gemini.mjs'
 import { loadServerEnv } from '../server/env.mjs'
 
 const WINDOW_MS = 60_000
-const LIMITS = { script: 6, analyze: 12, tts: 5, agent: 10 }
+const LIMITS = { script: 6, analyze: 12, clones: 10, tts: 5, agent: 10 }
 const MAX_PROMPT = 30000
 const MAX_TEXT = 6000
 const MAX_BODY = 128 * 1024
@@ -122,9 +122,9 @@ export default function geminiProxy() {
         }
 
         try {
-          if (action === 'script' || action === 'analyze') {
+          if (action === 'script' || action === 'analyze' || action === 'clones') {
             const prompt = String(body.prompt || '')
-            if (!prompt || prompt.length > MAX_PROMPT) {
+            if (!prompt && action !== 'clones') {
               return send(res, 400, { error: 'Prompt trop long' })
             }
             const data = await server.generateContent(prompt)

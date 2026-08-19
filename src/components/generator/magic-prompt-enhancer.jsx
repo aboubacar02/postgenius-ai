@@ -3,40 +3,34 @@ import { Wand2, ArrowRight, Loader2 } from 'lucide-react'
 import { Button } from '../ui/button'
 import { cn } from '../../lib/utils'
 
-const ENHANCED_PRESETS = [
-  {
-    type: 'Contre-Intuitif',
-    badge: '💥 Choc & Rupture',
-    text: (topic) => `Pourquoi 99% des gens se trompent totalement sur « ${topic || 'ce sujet'} » (et la méthode exacte qui fonctionne en 2026)`
-  },
-  {
-    type: 'Secret / Exclusif',
-    badge: '🤫 Révélation',
-    text: (topic) => `Ce que les experts refusent de vous dire sur « ${topic || 'ce domaine'} » : J’ai testé pendant 30 jours pour voir la vérité.`
-  },
-  {
-    type: 'Défi 7 Jours',
-    badge: '⏱️ Défi Actionnable',
-    text: (topic) => `Comment maîtriser « ${topic || 'ce sujet'} » en seulement 7 jours avec 10 minutes par jour (Guide étape par étape).`
-  }
-]
-
 export function MagicPromptEnhancer({ currentTopic, onApply }) {
   const [loading, setLoading] = useState(false)
   const [enhancedOptions, setEnhancedOptions] = useState(null)
+  const [error, setError] = useState(null)
 
-  function handleEnhance() {
+  async function handleEnhance() {
     if (!currentTopic?.trim()) return
     setLoading(true)
-    setTimeout(() => {
-      setEnhancedOptions(
-        ENHANCED_PRESETS.map((p) => ({
-          ...p,
-          prompt: p.text(currentTopic)
-        }))
-      )
+    setError(null)
+    try {
+      const res = await fetch('/api/gemini/clones', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ hook: currentTopic })
+      })
+      if (!res.ok) {
+        const detail = await res.json().catch(() => ({}))
+        throw new Error(detail.error || `IA indisponible (${res.status})`)
+      }
+      const data = await res.json()
+      const clones = Array.isArray(data.clones) ? data.clones : []
+      if (clones.length === 0) throw new Error('Aucune suggestion générée')
+      setEnhancedOptions(clones.map((c) => ({ badge: c.tag || 'Angle IA', prompt: c.hook })))
+    } catch (err) {
+      setError(err.message || 'IA indisponible, réessaie plus tard.')
+    } finally {
       setLoading(false)
-    }, 450)
+    }
   }
 
   return (
@@ -52,6 +46,10 @@ export function MagicPromptEnhancer({ currentTopic, onApply }) {
           <span>✨ Améliorer le sujet avec l'IA</span>
         </button>
       </div>
+
+      {error && (
+        <p className="text-[11px] text-rose-400">{error}</p>
+      )}
 
       {enhancedOptions && (
         <div className="flex flex-col gap-2 rounded-2xl border border-primary/30 bg-primary/5 p-3 animate-in fade-in slide-in-from-top-2 duration-200">

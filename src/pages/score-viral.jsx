@@ -1,4 +1,4 @@
-import { useState } from 'react'
+﻿import { useState } from 'react'
 import {
   ArrowRight,
   Check,
@@ -9,6 +9,7 @@ import {
   Gauge,
   Lightbulb,
   ListChecks,
+  Loader2,
   ShieldAlert,
   Sparkles,
   Wand2,
@@ -25,6 +26,7 @@ import { RetentionSimulatorChart } from '../components/score/retention-simulator
 import { toast } from '../components/ui/sonner'
 import { useApp } from '../lib/app-context'
 import { useI18n } from '../lib/i18n'
+import { generateClones } from '../services/gemini'
 import { cn } from '../lib/utils'
 
 const EXAMPLES = ['score.example1', 'score.example2', 'score.example3']
@@ -64,9 +66,28 @@ export default function ScorePage() {
   const [hook, setHook] = useState('')
   const [result, setResult] = useState(null)
   const [analyzing, setAnalyzing] = useState(false)
+  const [clonesLoading, setClonesLoading] = useState(false)
+  const [hookClones, setHookClones] = useState([])
   const [copiedClone, setCopiedClone] = useState(null)
 
   const detectedWeaknesses = WEAK_PATTERNS.filter((p) => p.regex.test(hook))
+
+  async function loadClones(text) {
+    const value = (text ?? hook).trim()
+    if (!value) {
+      setHookClones([])
+      return
+    }
+    setClonesLoading(true)
+    try {
+      const clones = await generateClones(value)
+      setHookClones(clones)
+    } catch {
+      setHookClones([])
+    } finally {
+      setClonesLoading(false)
+    }
+  }
 
   async function doAnalyze(text) {
     const value = text ?? hook
@@ -75,46 +96,11 @@ export default function ScorePage() {
     setAnalyzing(true)
     try {
       setResult(await analyze(value))
+      loadClones(value)
     } finally {
       setAnalyzing(false)
     }
   }
-
-  // Generate 5 viral clone hooks based on current topic
-  const hookClones = hook.trim()
-    ? [
-        {
-          tag: 'Contre-Intuitif',
-          hook: `Pourquoi tout ce qu'on vous a raconté sur « ${hook.slice(0, 32)}... » est complètement faux.`,
-          boost: '+22 pts',
-          score: 94
-        },
-        {
-          tag: "Secret d\u2019Élite",
-          hook: `Le secret que 99% des gens ignorent sur « ${hook.slice(0, 30)}... » (voici la preuve).`,
-          boost: '+18 pts',
-          score: 92
-        },
-        {
-          tag: 'Erreur Fatale',
-          hook: `L'erreur numéro 1 qui détruit vos chances avec « ${hook.slice(0, 30)}... » en 2026.`,
-          boost: '+24 pts',
-          score: 95
-        },
-        {
-          tag: 'Défi 30 Jours',
-          hook: `J'ai testé « ${hook.slice(0, 32)}... » pendant 30 jours sans m'arrêter, et voici ce qui s'est passé.`,
-          boost: '+16 pts',
-          score: 90
-        },
-        {
-          tag: 'Urgence Psychologique',
-          hook: `Si vous faites encore « ${hook.slice(0, 30)}... », arrêtez tout de suite avant qu'il ne soit trop tard.`,
-          boost: '+26 pts',
-          score: 96
-        }
-      ]
-    : []
 
   function copyAndTestHook(cloneText, idx) {
     setHook(cloneText)
@@ -148,7 +134,7 @@ export default function ScorePage() {
       <div className="grid gap-8 lg:grid-cols-12">
         {/* Formulaire Hook */}
         <div className="flex flex-col gap-6 lg:col-span-5">
-          <Card className="border border-white/[0.06] bg-pg-surface rounded-xl p-6">
+          <Card className="border border-white/[0.06] bg-white/[0.03] backdrop-blur-md rounded-xl p-6">
             <CardHeader className="p-0 pb-4">
               <CardTitle className="font-heading text-lg font-bold text-pg-text">
                 {t('score.yourHook')}
@@ -169,7 +155,7 @@ export default function ScorePage() {
                     onChange={(e) => setHook(e.target.value)}
                     placeholder="ex: Pourquoi 99% des gens échouent en freelance en 2026..."
                     rows={4}
-                    className="min-h-32 resize-none rounded-2xl border-white/[0.06] bg-pg-surface p-4 text-sm leading-relaxed text-pg-text placeholder:text-pg-muted focus-visible:border-primary"
+                    className="min-h-32 resize-none rounded-2xl border-white/[0.06] bg-white/[0.03] backdrop-blur-md p-4 text-sm leading-relaxed text-pg-text placeholder:text-pg-muted focus-visible:border-primary"
                   />
                   <div className="flex items-center justify-between pt-1">
                     <FieldDescription className="text-xs text-pg-muted">
@@ -238,7 +224,7 @@ export default function ScorePage() {
           {/* Courbe de Rétention 0-30s */}
           <RetentionSimulatorChart score={result?.score || (hook.trim() ? 75 : 82)} />
 
-          <Card className="border border-white/[0.06] bg-pg-surface rounded-xl p-6 md:p-8">
+          <Card className="border border-white/[0.06] bg-white/[0.03] backdrop-blur-md rounded-xl p-6 md:p-8">
             <CardHeader className="p-0 pb-6">
               <div className="flex items-center justify-between">
                 <div>
@@ -276,7 +262,7 @@ export default function ScorePage() {
               ) : (
                 <div className="reveal flex flex-col gap-6">
                   {/* Jauge Principale */}
-                  <div className="flex flex-col items-center gap-2 rounded-2xl border border-white/[0.06] bg-pg-surface p-6">
+                  <div className="flex flex-col items-center gap-2 rounded-2xl border border-white/[0.06] bg-white/[0.03] backdrop-blur-md p-6">
                     <ScoreGauge score={result.score} />
                     <div className="flex items-center gap-3 pt-2 text-[11px] font-semibold uppercase tracking-wider text-pg-muted">
                       {result.aiScore != null && (
@@ -334,16 +320,30 @@ export default function ScorePage() {
                   </div>
 
                   {/* 5 Clones Viraux de Remplacement */}
-                  {hookClones.length > 0 && (
+                  {(hookClones.length > 0 || clonesLoading) && (
                     <div className="flex flex-col gap-3 rounded-2xl border border-primary/30 bg-primary/5 p-4.5">
                       <div className="flex items-center justify-between">
                         <span className="flex items-center gap-1.5 eyebrow text-primary">
                           <Wand2 className="size-3.5" />
                           5 Clones Ultra-Viraux de Remplacement
                         </span>
-                        <span className="font-mono text-[11px] text-pg-muted">1-clic pour tester</span>
+                        {clonesLoading ? (
+                          <span className="flex items-center gap-1 font-mono text-[11px] text-pg-muted">
+                            <Loader2 className="size-3 animate-spin" />
+                            Génération IA…
+                          </span>
+                        ) : (
+                          <span className="font-mono text-[11px] text-pg-muted">1-clic pour tester</span>
+                        )}
                       </div>
 
+                      {clonesLoading ? (
+                        <div className="flex flex-col gap-2">
+                          {[0, 1, 2].map((i) => (
+                            <div key={i} className="h-14 animate-pulse rounded-xl border border-white/[0.06] bg-white/[0.03]" />
+                          ))}
+                        </div>
+                      ) : (
                       <div className="flex flex-col gap-2">
                         {hookClones.map((c, i) => (
                           <div
@@ -376,6 +376,7 @@ export default function ScorePage() {
                           </div>
                         ))}
                       </div>
+                      )}
                     </div>
                   )}
 

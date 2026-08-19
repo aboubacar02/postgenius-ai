@@ -1,15 +1,41 @@
-export const config = { runtime: 'edge' }
+import { createPaymentsServer } from '../../server/payments.mjs'
 
-export default async function handler(req) {
-  if (req.method !== 'POST') return Response.json({ error: 'Method not allowed' }, { status: 405 })
+export const config = { runtime: 'nodejs' }
 
-  const body = await req.json().catch(() => ({}))
-  const { plan, amount, currency } = body
+export default async function handler(req, res) {
+  if (req.method !== 'POST') {
+    res.status(405).json({ error: 'Method not allowed' })
+    return
+  }
 
-  return Response.json({
-    success: true,
-    message: `Paiement de ${amount || 0} ${currency || 'EUR'} pour le plan ${plan || 'unknown'} enregistré.`,
-    redirect: null,
-    paymentId: `demo_${Date.now()}`
-  })
+  let body
+  try {
+    body = typeof req.body === 'string' ? JSON.parse(req.body) : (req.body || {})
+  } catch {
+    res.status(400).json({ error: 'Requête invalide' })
+    return
+  }
+
+  const amount = Number(body.amount)
+  if (!Number.isFinite(amount) || amount < 0 || amount > 10000) {
+    res.status(400).json({ error: 'Montant invalide' })
+    return
+  }
+
+  const server = createPaymentsServer(process.env)
+
+  try {
+    const session = await server.init({
+      provider: String(body.provider || 'auto'),
+      method: String(body.method || ''),
+      plan: String(body.plan || ''),
+      amount,
+      currency: String(body.currency || 'EUR'),
+      email: String(body.email || '')
+    })
+    res.status(200).json(session)
+  } catch (err) {
+    console.error('Payments error:', err.message || err)
+    res.status(502).json({ error: 'Paiement indisponible pour le moment' })
+  }
 }

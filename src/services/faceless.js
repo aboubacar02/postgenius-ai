@@ -51,46 +51,6 @@ function slugify(keyword) {
     .join(' ')
 }
 
-function buildFallbackScript({ topic, duration }) {
-  const sceneCount = Math.max(4, Math.min(10, Math.round(duration / 3)))
-  const beats = [
-    `Tu vas découvrir ${topic.toLowerCase()}... et ça va changer ta façon de voir les choses.`,
-    'Oublie tout ce qu’on t’a raconté jusqu’ici.',
-    'La plupart des gens se trompent depuis le début.',
-    'Voici la vérité, sans filtre.',
-    'Le détail que personne ne remarque, c’est celui-là.',
-    'Quand j’ai enfin compris ça, tout a basculé.',
-    'Ça semble petit, mais l’impact est énorme.',
-    'Teste-le dès aujourd’hui, tu verras la différence.',
-    'Ne fais pas la même erreur que tout le monde.',
-    'Et si tu commençais maintenant ?'
-  ].slice(0, sceneCount)
-  const keyword = slugify(topic)
-  const captions = [
-    'CE QUE PERSONNE NE DIT',
-    'OUBLIE CE QUE TU CROIS',
-    'L’ERREUR FATALE',
-    'LA VÉRITÉ SANS FILTRE',
-    'LE DÉTAIL CACHÉ',
-    'TOUT A BASCULÉ',
-    'L’IMPACT ÉNORME',
-    'TESTE-LE AUJOURD’HUI',
-    'NE FAIS PAS CETTE ERREUR',
-    'COMMENCE MAINTENANT'
-  ].slice(0, sceneCount)
-  return {
-    title: `${topic} — le secret que personne ne t'a dit`,
-    hook: beats[0],
-    scenes: beats.map((narration, i) => ({
-      narration,
-      caption: captions[i],
-      visual: `Plan B-roll illustrant : ${topic} (${i + 1})`,
-      imageKeyword: `${keyword} ${i + 1}`
-    })),
-    hashtags: ['#shorts', '#viral', '#motivation', '#faceless', '#astuce']
-  }
-}
-
 export async function generateFacelessScript({ topic, niche, duration }) {
   const sceneCount = Math.max(4, Math.min(10, Math.round(duration / 3)))
   const prompt = `
@@ -140,8 +100,8 @@ Ces mots seront utilisés pour chercher des images B-roll spécifiques par mot.
       throw new Error('Script invalide')
     }
     return { ...data, scenes: data.scenes.slice(0, sceneCount), source: 'ai' }
-  } catch {
-    return { ...buildFallbackScript({ topic, duration }), source: 'template' }
+  } catch (err) {
+    throw new Error(`Génération du script impossible : ${err.message}`)
   }
 }
 

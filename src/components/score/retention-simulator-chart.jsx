@@ -50,7 +50,7 @@ export function RetentionSimulatorChart({ score = 75 }) {
             </CardTitle>
           </div>
           <CardDescription className="text-xs text-muted-foreground">
-            Prédiction algorithmique de l'attention seconde par seconde
+            Estimation de l'attention (basée sur benchmarks, pas sur données réelles)
           </CardDescription>
         </div>
 

@@ -106,6 +106,38 @@ export async function incrementCreditsUsed(userId) {
   lsSetCredits(lsGetCredits() + 1)
 }
 
+// ── Subscriptions ────────────────────────────────────────
+
+export async function fetchSubscription(userId) {
+  if (supabase) {
+    try {
+      const { data, error } = await supabase
+        .from('subscriptions')
+        .select('plan, status, expires_at')
+        .eq('user_id', userId)
+        .maybeSingle()
+      if (error) throw error
+      return data || null
+    } catch {
+      return null
+    }
+  }
+  return null
+}
+
+export async function upsertSubscription(userId, { plan, provider = '', reference = '', status = 'active' }) {
+  if (!supabase) return null
+  try {
+    const { data, error } = await supabase
+      .from('subscriptions')
+      .upsert({ user_id: userId, plan, provider, reference, status, started_at: new Date().toISOString() }, { onConflict: 'user_id' })
+    if (error) throw error
+    return data
+  } catch {
+    return null
+  }
+}
+
 // ── History ───────────────────────────────────────────────
 
 export async function saveGeneratedScript(userId, network, topic, result) {

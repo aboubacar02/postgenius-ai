@@ -1,7 +1,7 @@
 // Service de paiement côté client.
 // Les clés réelles (Stripe / PayPal / Paystack / CinetPay) vivent UNIQUEMENT côté
-// serveur : l'app POSTe sur /api/payments/init et le serveur retourne soit une
-// session réelle (URL de paiement), soit une simulation sandbox (aucune charge).
+// serveur : l'app POSTe sur /api/payments/init et le serveur retourne une
+// session réelle (URL de paiement) ou une erreur explicite.
 
 export const PAYMENT_PROVIDERS = [
   { id: 'stripe', name: 'Stripe', desc: 'Cartes Visa, Mastercard, Apple Pay (international)' },
@@ -17,28 +17,16 @@ export function methodToProvider(method) {
   return 'stripe'
 }
 
-function makeReference() {
-  return `PG-${Date.now().toString(36).toUpperCase()}-${Math.random().toString(36).slice(2, 8).toUpperCase()}`
-}
-
-function fakeWait(ms) {
-  return new Promise((resolve) => setTimeout(resolve, 900))
-}
-
-// Point d'entrée unique — provider : 'auto' | 'stripe' | 'paypal' | 'paystack' | 'cinetpay' | 'simulation'
+// Point d'entrée unique — provider : 'auto' | 'stripe' | 'paypal' | 'paystack' | 'cinetpay'
 export async function createPaymentSession({ provider = 'auto', method, plan, currency, amount, email }) {
-  try {
-    const res = await fetch('/api/payments/init', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ provider, method, plan, currency, amount: Number(amount) || 0, email })
-    })
-    if (res.ok) return res.json()
-  } catch {
-    /* serveur indisponible : repli simulation locale ci-dessous */
+  const res = await fetch('/api/payments/init', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ provider, method, plan, currency, amount: Number(amount) || 0, email })
+  })
+  const data = await res.json().catch(() => ({}))
+  if (!res.ok) {
+    throw new Error(data.error || `Paiement indisponible (${res.status})`)
   }
-
-  // Repli : simulation locale (aucune clé côté client, aucun débit réel).
-  await fakeWait()
-  return { provider: 'simulation', reference: makeReference(), status: 'success', sandbox: true, method, plan }
+  return data
 }

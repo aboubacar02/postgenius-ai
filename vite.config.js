@@ -18,10 +18,6 @@ export default defineConfig(({ mode }) => {
       youtubeProxy(),
       brollProxy()
     ],
-    define: {
-      'process.env.YOUTUBE_API_KEY': JSON.stringify(env.YOUTUBE_API_KEY || env.VITE_YOUTUBE_API_KEY),
-      'import.meta.env.YOUTUBE_API_KEY': JSON.stringify(env.YOUTUBE_API_KEY || env.VITE_YOUTUBE_API_KEY),
-    },
     server: {
       host: true,
       port: 5173,

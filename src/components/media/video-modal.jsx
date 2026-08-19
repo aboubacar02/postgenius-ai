@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { X, ExternalLink } from 'lucide-react'
+import { Button } from '../ui/button'
 
 export function VideoModal({ video, onClose }) {
   const iframeRef = useRef(null)
@@ -23,7 +24,7 @@ export function VideoModal({ video, onClose }) {
 
   return (
     <div
-      className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-black/95 backdrop-blur-xl p-4 sm:p-6"
+      className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-black/95 backdrop-blur-xl"
       onClick={onClose}
     >
       {/* Close button — top right */}
@@ -36,8 +37,8 @@ export function VideoModal({ video, onClose }) {
       </button>
 
       {/* Video title — above the player */}
-      <div className="mb-4 flex items-center gap-3 px-4 text-center max-w-2xl">
-        <h2 className="text-base sm:text-lg font-bold text-white line-clamp-1">{video.title}</h2>
+      <div className="mb-4 flex items-center gap-3 px-4 text-center">
+        <h2 className="text-lg font-bold text-white line-clamp-1">{video.title}</h2>
         {ytUrl && (
           <a href={ytUrl} target="_blank" rel="noopener noreferrer" className="shrink-0 text-white/50 hover:text-white">
             <ExternalLink className="size-4" />
@@ -45,23 +46,21 @@ export function VideoModal({ video, onClose }) {
         )}
       </div>
 
-      {/* THE PLAYER — robust aspect-video container */}
-      <div className="w-full max-w-4xl" onClick={(e) => e.stopPropagation()}>
+      {/* THE PLAYER — robust aspect-video box */}
+      <div className="relative w-full max-w-4xl aspect-video px-4" onClick={(e) => e.stopPropagation()}>
         {hasVideo && !ytError ? (
-          <div className="relative aspect-video w-full overflow-hidden rounded-2xl bg-black shadow-2xl border border-white/10">
-            <iframe
-              ref={iframeRef}
-              key={video.youtubeId}
-              src={`https://www.youtube-nocookie.com/embed/${video.youtubeId}?autoplay=1&rel=0&playsinline=1&modestbranding=1`}
-              title={video.title}
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-              allowFullScreen
-              onError={() => setYtError(true)}
-              className="absolute inset-0 size-full border-0 bg-black"
-            />
-          </div>
+          <iframe
+            ref={iframeRef}
+            key={video.youtubeId}
+            src={`https://www.youtube-nocookie.com/embed/${video.youtubeId}?autoplay=1&rel=0&playsinline=1&modestbranding=1`}
+            title={video.title}
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowFullScreen
+            onError={() => setYtError(true)}
+            className="absolute inset-0 h-full w-full rounded-2xl border-0 bg-black shadow-2xl shadow-indigo-500/20"
+          />
         ) : ytError ? (
-          <div className="flex aspect-video w-full flex-col items-center justify-center gap-3 rounded-2xl bg-zinc-800 text-center p-6">
+          <div className="flex absolute inset-0 flex-col items-center justify-center gap-3 rounded-2xl bg-zinc-800 text-center">
             <span className="text-5xl">⚠️</span>
             <p className="text-white/70">Impossible de charger la vidéo YouTube.</p>
             {ytUrl && (
@@ -71,15 +70,15 @@ export function VideoModal({ video, onClose }) {
             )}
           </div>
         ) : (
-          <div className={`flex aspect-video w-full items-center justify-center rounded-2xl bg-gradient-to-br ${video.gradient || 'from-zinc-700 to-zinc-900'}`}>
+          <div className={`flex absolute inset-0 items-center justify-center rounded-2xl bg-gradient-to-br ${video.gradient || 'from-zinc-700 to-zinc-900'}`}>
             <span className="text-8xl">{video.icon || '🎬'}</span>
           </div>
         )}
       </div>
 
       {/* Meta bar below */}
-      <div className="mt-4 flex items-center gap-3 px-4 pb-2 text-xs sm:text-sm text-white/60 flex-wrap justify-center">
-        {video.channel && <span className="font-semibold text-white/80">{video.channel}</span>}
+      <div className="mt-3 flex items-center gap-3 px-4 pb-4 text-xs sm:text-sm text-white/60 flex-wrap">
+        {video.channel && <span>{video.channel}</span>}
         {video.views && <><span className="text-white/30">·</span><span>{video.views}</span></>}
         {video.publishedAt && <><span className="text-white/30">·</span><span>{video.publishedAt}</span></>}
       </div>

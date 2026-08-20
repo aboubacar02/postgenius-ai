@@ -1,3 +1,5 @@
+export const config = { runtime: 'edge', maxDuration: 60 }
+
 import { fetchWithKeyRotation } from './_rotate.js'
 
 export default async function handler(req) {
@@ -33,7 +35,7 @@ Format: réponds en 2-3 phrases max, avec des points actionnables quand c'est po
   try {
     const data = await fetchWithKeyRotation({
       contents,
-      generationConfig: { temperature: 0.7, maxOutputTokens: 500 }
+      generationConfig: { temperature: 0.7, maxOutputTokens: 500, thinkingConfig: { thinkingBudget: 512 } }
     }, 'gemini-3.6-flash')
 
     const text = data.candidates?.[0]?.content?.parts?.[0]?.text || ''

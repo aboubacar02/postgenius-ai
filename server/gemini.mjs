@@ -81,8 +81,9 @@ export function createGeminiServer(rawKeys) {
       for (let attempt = 0; attempt < MAX_ATTEMPTS && !quotaHit; attempt++) {
         const modelName = MODELS[attempt % MODELS.length]
         try {
-          const { r, apiUrl } = await callRest(key, {
-            contents: [{ role: 'user', parts: [{ text: jsonPrompt }] }]
+           const { r, apiUrl } = await callRest(key, {
+            contents: [{ role: 'user', parts: [{ text: jsonPrompt }] }],
+            generationConfig: { thinkingConfig: { thinkingBudget: 1024 } }
           }, modelName)
 
           if (!r.ok) {
@@ -133,7 +134,7 @@ export function createGeminiServer(rawKeys) {
         try {
           const { r } = await callRest(key, {
             contents: [{ role: 'user', parts: [{ text: prompt }] }],
-            generationConfig: { temperature: 0.7, maxOutputTokens: 500 }
+            generationConfig: { temperature: 0.7, maxOutputTokens: 500, thinkingConfig: { thinkingBudget: 512 } }
           }, modelName)
 
           if (!r.ok) {

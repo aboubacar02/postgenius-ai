@@ -1,4 +1,4 @@
-export const config = { runtime: 'edge' }
+export const config = { runtime: 'edge', maxDuration: 60 }
 
 import { fetchWithKeyRotation } from './_rotate.js'
 
@@ -13,7 +13,7 @@ export default async function handler(req) {
   try {
     const data = await fetchWithKeyRotation({
       contents: [{ role: 'user', parts: [{ text: prompt }] }],
-      generationConfig: { temperature: 0.8, maxOutputTokens: 4096, responseMimeType: 'application/json' }
+      generationConfig: { temperature: 0.8, maxOutputTokens: 4096, responseMimeType: 'application/json', thinkingConfig: { thinkingBudget: 1024 } }
     }, 'gemini-3.6-flash')
 
     const text = data.candidates?.[0]?.content?.parts?.[0]?.text || '{}'
